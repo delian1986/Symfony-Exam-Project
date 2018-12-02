@@ -1,0 +1,44 @@
+# To get started with security, check out the documentation:
+# https://symfony.com/doc/current/security.html
+security:
+  encoders:
+    # Our user class and the algorithm we'll use to encode passwords
+    # http://symfony.com/doc/current/book/security.html#encoding-the-user-s-password
+    ShopBundle\Entity\User: bcrypt
+
+  # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+  providers:
+
+    own_provider:
+      entity:
+        class: ShopBundle:User
+        property: email
+
+  firewalls:
+    # disables authentication for assets and the profiler, adapt it according to your needs
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+
+    main:
+      logout_on_user_change: true
+      provider: own_provider
+      anonymous: ~
+      # activate different ways to authenticate
+
+      # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+      #http_basic: ~
+
+      # https://symfony.com/doc/current/security/form_login_setup.html
+      form_login:
+        login_path: security_login
+        check_path: security_login
+        csrf_token_generator: security.csrf.token_manager
+      pattern:    ^/
+      logout:
+        path: security_logout
+        target: homepage
+
+  role_hierarchy:
+    ROLE_EDITOR:       ROLE_USER
+    ROLE_ADMIN: [ROLE_EDITOR, ROLE_ALLOWED_TO_SWITCH]

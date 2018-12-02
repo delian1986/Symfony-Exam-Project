@@ -1,2 +1,4 @@
-# Symfony-Final-Project
-symfony project for php web 2018
+.checkout
+=========
+
+A Symfony project created on December 2, 2018, 8:13 am.
