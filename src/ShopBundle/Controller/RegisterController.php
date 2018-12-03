@@ -30,9 +30,11 @@ class RegisterController extends Controller
 
             $roleRepository = $this->getDoctrine()->getRepository(Role::class);
 
+
          //   If there is no users in DB first one should be ADMIN all others are USERS
             if (0=== $this->getCountOfRegisteredUsers()) {
                 $userRole = $roleRepository->findOneBy(['name' => 'ROLE_ADMIN']);
+
             } else {
                 $userRole = $roleRepository->findOneBy(['name' => 'ROLE_USER']);
             }

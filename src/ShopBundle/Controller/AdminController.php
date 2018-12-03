@@ -3,8 +3,11 @@
 namespace ShopBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use ShopBundle\Entity\AdminHelper;
 use ShopBundle\Entity\Product;
+use ShopBundle\Form\AdminAddCashType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -23,5 +26,26 @@ class AdminController extends Controller
         return $this->render('admin/index.html.twig');
     }
 
+    /**
+     * @IsGranted("ROLE_ADMIN")
+     * @Route("/add-initial-cash",name="add_initial_cash")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function addInitialCashToUsers(Request $request){
+        $initialCash=new AdminHelper();
+        $form=$this->createForm(AdminAddCashType::class,$initialCash);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()){
+            $em=$this->getDoctrine()->getManager();
+            $em->persist($initialCash);
+            $em->flush();
+
+            return $this->redirectToRoute('shop_admin_index');
+        }
+
+
+        return $this->render('admin/add_cash.html.twig',['form'=>$form->createView()]);
+    }
 }
