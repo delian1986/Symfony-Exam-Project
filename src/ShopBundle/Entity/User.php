@@ -48,7 +48,7 @@ class User implements UserInterface, \Serializable
      * @var float
      * @ORM\Column(name="balance", type="decimal", precision=10, scale=2)
      */
-    private $balance=100;
+    private $balance;
 
     /**
      * @var ArrayCollection

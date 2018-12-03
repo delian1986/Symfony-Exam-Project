@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class AdminController
  * @package ShopBundle\Controller
  * @Route("/admin")
- * @IsGranted("ROLE_EDITOR")
+ * @IsGranted("ROLE_ADMIN")
  */
 class AdminController extends Controller
 {
@@ -27,7 +27,6 @@ class AdminController extends Controller
     }
 
     /**
-     * @IsGranted("ROLE_ADMIN")
      * @Route("/add-initial-cash",name="add_initial_cash")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
@@ -39,6 +38,13 @@ class AdminController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()){
             $em=$this->getDoctrine()->getManager();
+            $oldInitialCash=$em->getRepository(AdminHelper::class)->getOldInitialCash();
+
+            //remove old initial cash
+            $em->remove($oldInitialCash);
+            $em->flush();
+
+            //set new initial cash
             $em->persist($initialCash);
             $em->flush();
 

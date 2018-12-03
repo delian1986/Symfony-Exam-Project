@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AdminHelper
  *
- * @ORM\Table(name="admin")
- * @ORM\Entity(repositoryClass="ShopBundle\Repository\AdminRepository")
+ * @ORM\Table(name="admin_helper")
+ * @ORM\Entity(repositoryClass="ShopBundle\Repository\AdminHelperRepository")
  */
 class AdminHelper
 {
@@ -22,7 +22,7 @@ class AdminHelper
     private $id;
 
     /**
-     * @var string
+     * @var float
      *
      * @ORM\Column(name="initial_cash", type="decimal", precision=10, scale=2)
      */
@@ -42,11 +42,11 @@ class AdminHelper
     /**
      * Set initialCash.
      *
-     * @param string $initialCash
+     * @param float $initialCash
      *
      * @return AdminHelper
      */
-    public function setInitialCash($initialCash)
+    public function setInitialCash(float $initialCash)
     {
         $this->initialCash = $initialCash;
 
@@ -62,4 +62,6 @@ class AdminHelper
     {
         return $this->initialCash;
     }
+
+
 }

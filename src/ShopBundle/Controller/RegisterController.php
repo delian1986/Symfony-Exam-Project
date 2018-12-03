@@ -2,6 +2,7 @@
 
 namespace ShopBundle\Controller;
 
+use ShopBundle\Entity\AdminHelper;
 use ShopBundle\Entity\Role;
 use ShopBundle\Entity\User;
 use ShopBundle\Form\UserType;
@@ -34,11 +35,15 @@ class RegisterController extends Controller
          //   If there is no users in DB first one should be ADMIN all others are USERS
             if (0=== $this->getCountOfRegisteredUsers()) {
                 $userRole = $roleRepository->findOneBy(['name' => 'ROLE_ADMIN']);
-
+                $this->setUpFirstUserRegister();
             } else {
                 $userRole = $roleRepository->findOneBy(['name' => 'ROLE_USER']);
             }
 
+            $initialCash=$this->getDoctrine()->getRepository(AdminHelper::class)
+                ->getInitialCashValue();
+
+            $user->setBalance($initialCash);
             $user->addRole($userRole);
 
             $em = $this->getDoctrine()->getManager();
@@ -56,5 +61,13 @@ class RegisterController extends Controller
     private function getCountOfRegisteredUsers()
     {
         return count($this->getDoctrine()->getRepository(User::class)->findAll());
+    }
+
+    private function setUpFirstUserRegister(){
+        $adminHelper=new AdminHelper();
+        $adminHelper->setInitialCash(0.00);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($adminHelper);
+        $em->flush();
     }
 }
