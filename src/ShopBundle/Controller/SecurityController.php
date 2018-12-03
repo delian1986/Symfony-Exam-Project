@@ -24,7 +24,7 @@ class SecurityController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function logout(){
-        return $this->render('default/index.html.twig');
+        return $this->render('home/index.html.twig');
     }
 
 }

@@ -32,7 +32,7 @@
                         {% if app.user %}
                             <li>
                                 {% if is_granted('ROLE_EDITOR') %}
-                                    <a href="#">ADMIN</a>
+                                    <a href="{{ path('shop_admin_index') }}">ADMIN</a>
                                 {% endif %}
                             </li>
                             <li>
@@ -72,7 +72,8 @@
 {% block footer %}
     <footer>
         <div class="container modal-footer">
-            <a href="https://softuni.bg" target="_blank"><p>PHP Web Course September 2018 -Software University</p></a>
+            {#<a href="https://softuni.bg" target="_blank"><p>PHP Web Course September 2018 -Software University</p></a>#}
+            <p>PHP Web Course September 2018 -Software University</p>
         </div>
     </footer>
 {% endblock %}

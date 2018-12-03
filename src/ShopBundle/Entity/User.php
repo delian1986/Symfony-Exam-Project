@@ -40,9 +40,15 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="fullName", type="string", length=255)
+     * @ORM\Column(name="full_name", type="string", length=255)
      */
     private $fullName;
+
+    /**
+     * @var float
+     * @ORM\Column(name="balance", type="decimal", precision=10, scale=2, options={"default" = 100})
+     */
+    private $balance;
 
     /**
      * @var ArrayCollection
@@ -54,9 +60,23 @@ class User implements UserInterface, \Serializable
      */
     private $roles;
 
+    /**
+     * @var ArrayCollection|Product
+     * * One product has many features. This is the inverse side.
+     * @ORM\OneToMany(targetEntity="ShopBundle\Entity\Product", mappedBy="owner", cascade={"remove"})
+     */
+    private $products;
+
+    /**
+     * One Customer has One Cart.
+     * @ORM\OneToOne(targetEntity="ShopBundle\Entity\Cart", mappedBy="user")
+     */
+    private $cart;
+
     public function __construct()
     {
         $this->roles = new ArrayCollection();
+        $this->products=new ArrayCollection();
     }
 
     /**
@@ -131,6 +151,7 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+
     /**
      * Get fullName
      *
@@ -140,6 +161,60 @@ class User implements UserInterface, \Serializable
     {
         return $this->fullName;
     }
+
+    /**
+     * @return ArrayCollection|Product
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * @param ArrayCollection|Product $products
+     * @return User
+     */
+    public function setProducts(Product $products): User
+    {
+        $this->products[]= $products;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCart()
+    {
+        return $this->cart;
+    }
+
+    /**
+     * @param mixed $cart
+     * @return User
+     */
+    public function setCart($cart): User
+    {
+        $this->cart = $cart;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBalance(): float
+    {
+        return $this->balance;
+    }
+
+    /**
+     * @param float $balance
+     */
+    public function setBalance(float $balance): void
+    {
+        $this->balance = $balance;
+    }
+
+
 
     /**
      * @return bool
