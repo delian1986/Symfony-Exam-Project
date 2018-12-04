@@ -11,6 +11,10 @@
 
                     <legend>Login</legend>
 
+                    {% for flashMessage in app.session.flashbag.get('success') %}
+                        {{ flashMessage }}
+                    {% endfor %}
+
                     {% if error %}
                         <div class="col-sm-12 alert-danger">
                             {{ error.message }}

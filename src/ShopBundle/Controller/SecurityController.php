@@ -15,15 +15,18 @@ class SecurityController extends Controller
      */
     public function login(AuthenticationUtils $authenticationUtils)
     {
-        return $this->render('security/login.html.twig',['error'=>$authenticationUtils->getLastAuthenticationError(),
-                            'lastUserName'=>$authenticationUtils->getLastUsername()]);
+        return $this->render('security/login.html.twig', [
+            'error' => $authenticationUtils->getLastAuthenticationError(),
+            'lastUserName' => $authenticationUtils->getLastUsername()
+        ]);
     }
 
     /**
      * @Route("/logout" , name="security_logout")
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function logout(){
+    public function logout()
+    {
         return $this->render('home/index.html.twig');
     }
 

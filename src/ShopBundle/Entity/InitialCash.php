@@ -5,12 +5,12 @@ namespace ShopBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AdminHelper
+ * InitialCash
  *
- * @ORM\Table(name="admin_helper")
- * @ORM\Entity(repositoryClass="ShopBundle\Repository\AdminHelperRepository")
+ * @ORM\Table(name="initial_cash")
+ * @ORM\Entity(repositoryClass="ShopBundle\Repository\InitialCashRepository")
  */
-class AdminHelper
+class InitialCash
 {
     /**
      * @var int
@@ -44,7 +44,7 @@ class AdminHelper
      *
      * @param float $initialCash
      *
-     * @return AdminHelper
+     * @return InitialCash
      */
     public function setInitialCash(float $initialCash)
     {

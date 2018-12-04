@@ -3,9 +3,9 @@
 namespace ShopBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use ShopBundle\Entity\AdminHelper;
+use ShopBundle\Entity\InitialCash;
 use ShopBundle\Entity\Product;
-use ShopBundle\Form\AdminAddCashType;
+use ShopBundle\Form\AddInitialCashType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,8 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Route("/admin")
  * @IsGranted("ROLE_ADMIN")
  */
-
-
 class AdminController extends Controller
 {
     /**
@@ -33,14 +31,15 @@ class AdminController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addInitialCashToUsers(Request $request){
-        $initialCash=new AdminHelper();
-        $form=$this->createForm(AdminAddCashType::class,$initialCash);
+    public function addInitialCashToUsers(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $initialCash = $em->getRepository(InitialCash::class)->getOldInitialCash();
+        $form = $this->createForm(AddInitialCashType::class, $initialCash);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
-            $em=$this->getDoctrine()->getManager();
-            $oldInitialCash=$em->getRepository(AdminHelper::class)->getOldInitialCash();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $oldInitialCash = $em->getRepository(InitialCash::class)->getOldInitialCash();
 
             //remove old initial cash
             $em->remove($oldInitialCash);
@@ -54,6 +53,6 @@ class AdminController extends Controller
         }
 
 
-        return $this->render('admin/add_cash.html.twig',['form'=>$form->createView()]);
+        return $this->render('admin/add_cash.html.twig', ['form' => $form->createView()]);
     }
 }
