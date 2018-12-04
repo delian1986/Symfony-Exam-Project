@@ -13,7 +13,7 @@ class ProductController extends Controller
 {
     /**
      * @Route("/add-product", name="product_add")
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */

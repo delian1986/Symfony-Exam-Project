@@ -13,10 +13,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RegisterController extends Controller
 {
+
+    //initial cash for all users unless it is changed from admin panel
+    const INITIAL_CASH = 0.00;
+
     /**
      * @Route("/register",name="user_register")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function register(Request $request)
     {
@@ -31,16 +36,15 @@ class RegisterController extends Controller
 
             $roleRepository = $this->getDoctrine()->getRepository(Role::class);
 
-
-         //   If there is no users in DB first one should be ADMIN all others are USERS
-            if (0=== $this->getCountOfRegisteredUsers()) {
-                $userRole = $roleRepository->findOneBy(['name' => 'ROLE_ADMIN']);
+            //   If there is no users in DB first one should be ADMIN all others are USERS
+            if (0 === $this->getCountOfRegisteredUsers()) {
                 $this->setUpFirstUserRegister();
+                $userRole = $roleRepository->findOneBy(['name' => 'ROLE_ADMIN']);
             } else {
                 $userRole = $roleRepository->findOneBy(['name' => 'ROLE_USER']);
             }
 
-            $initialCash=$this->getDoctrine()->getRepository(AdminHelper::class)
+            $initialCash = $this->getDoctrine()->getRepository(AdminHelper::class)
                 ->getInitialCashValue();
 
             $user->setBalance($initialCash);
@@ -58,16 +62,44 @@ class RegisterController extends Controller
     /**
      * @return int
      */
-    private function getCountOfRegisteredUsers()
+    private function getCountOfRegisteredUsers(): int
     {
         return count($this->getDoctrine()->getRepository(User::class)->findAll());
     }
 
-    private function setUpFirstUserRegister(){
-        $adminHelper=new AdminHelper();
-        $adminHelper->setInitialCash(0.00);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($adminHelper);
-        $em->flush();
+    /**
+     * This function handle
+     * @return void
+     */
+    private function setUpFirstUserRegister(): void
+    {
+        // add default initial cash to new registered users if table is not empty
+        $adminHelper = new AdminHelper();
+        $adminHelper->setInitialCash(self::INITIAL_CASH);
+
+        //if initial cash is empty
+        if (0 === count($this->getDoctrine()->getRepository(AdminHelper::class)->findAll())) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($adminHelper);
+            $em->flush();
+        }
+
+        //adding roles to role table if its empty
+        if (0 === count($this->getDoctrine()->getRepository(Role::class)->findAll())) {
+            $roles = [
+                'ROLE_ADMIN',
+                'ROLE_EDITOR',
+                'ROLE_USER'
+            ];
+
+            $em = $this->getDoctrine()->getManager();
+            for ($i = 0; $i < count($roles); $i++) {
+                $role = new Role();
+                $role->setName($roles[$i]);
+                $em->persist($role);
+                $em->flush();
+            }
+        }
+
     }
 }

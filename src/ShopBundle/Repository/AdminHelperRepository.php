@@ -22,8 +22,8 @@ class AdminHelperRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function getOldInitialCash(){
-        $qb = $this->createQueryBuilder('a')
-                    ->select('a.initialCash');
+        $qb = $this->createQueryBuilder('a');
+
         return $qb->getQuery()->getResult()[0];
     }
 
