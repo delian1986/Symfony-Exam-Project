@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+
+    <div class="container body-content span=8 offset=2">
+        <div class="well">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-notice">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            {{ form_start(form) }}
+
+            {{ form_row(form.name) }}
+
+            {{ form_row(form.Save) }}
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+

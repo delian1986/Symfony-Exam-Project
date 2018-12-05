@@ -51,25 +51,25 @@ class User implements UserInterface, \Serializable
     private $balance;
 
     /**
-     * @var ArrayCollection
+     * @var Role|ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\Role")
-     * @ORM\JoinTable(name="users_roles"
-     *      ,joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
-     *     ,inverseJoinColumns={@ORM\JoinColumn(name="role_id",referencedColumnName="id")})
+     * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\Role", inversedBy="users")
+     * @ORM\JoinTable(name="users_roles")
      */
     private $roles;
 
     /**
      * @var ArrayCollection|Product
-     * * One product has many features. This is the inverse side.
+     * One user has many products. This is the inverse side.
      * @ORM\OneToMany(targetEntity="ShopBundle\Entity\Product", mappedBy="owner", cascade={"remove"})
      */
     private $products;
 
     /**
-     * One Customer has One Cart.
-     * @ORM\OneToOne(targetEntity="ShopBundle\Entity\Cart", mappedBy="user")
+     * @var ArrayCollection|Product
+     *
+     * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\Product", inversedBy="userCart")
+     * @ORM\JoinTable(name="users_carts")
      */
     private $cart;
 

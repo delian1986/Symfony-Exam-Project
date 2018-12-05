@@ -53,6 +53,6 @@ class AdminController extends Controller
         }
 
 
-        return $this->render('admin/add_cash.html.twig', ['form' => $form->createView()]);
+        return $this->render('admin/initial_cash/add_cash.html.twig', ['form' => $form->createView()]);
     }
 }

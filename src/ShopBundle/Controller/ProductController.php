@@ -33,6 +33,6 @@ class ProductController extends Controller
 
             return $this->redirectToRoute("homepage");
         }
-        return $this->render('product/create.html.twig', ['form' => $form->createView()]);
+        return $this->render('admin/products:create.html.twig', ['form' => $form->createView()]);
     }
 }

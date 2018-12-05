@@ -30,7 +30,8 @@ class Role
     private $name;
 
     /**
-     * @var ArrayCollection
+     * @var User[]|ArrayCollection
+     *
      * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\User", mappedBy="roles")
      */
     private $users;

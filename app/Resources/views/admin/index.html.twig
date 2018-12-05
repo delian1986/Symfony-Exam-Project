@@ -1,5 +1,12 @@
-{% extends 'base.html.twig'%}
+{% extends 'base.html.twig' %}
 {% block main %}
-    <a href="{{ path('product_add') }}">Add Product</a>
-    <a href="{{ path('add_initial_cash') }}">Add Cash</a>
+    <div class="container body-content span=8 offset=2">
+        <div class="well">
+            <div class="row">
+                <a href="{{ path('product_add') }}">Add Product</a>
+                <a href="{{ path('add_initial_cash') }}">Add Cash</a>
+                <a href="{{ path('category_add') }}">Add Category</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}

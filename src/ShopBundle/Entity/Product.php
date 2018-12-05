@@ -2,6 +2,7 @@
 
 namespace ShopBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -43,6 +44,12 @@ class Product
     private $quantity;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $createdAt;
+
+    /**
      * @var string
      * @ORM\Column(name="description", type="string", length=255)
      */
@@ -63,6 +70,21 @@ class Product
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
      */
     private $category;
+
+    /**
+     * @var ArrayCollection|Product
+     *
+     * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\User", mappedBy="cart")
+     * @ORM\JoinTable(name="users_carts")
+     */
+    private $userCart;
+
+
+
+    public function __construct()
+    {
+        $this->createdAt= new \DateTime();
+    }
 
     /**
      * Get id.
@@ -185,7 +207,7 @@ class Product
     /**
      * @return string
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }

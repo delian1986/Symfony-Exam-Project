@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    <div class="container body-content span=8 offset=2">
+        <div class="well">
+            <legend>New Product</legend>
+            {{ form_start(form) }}
+
+            {{ form_row(form.name) }}
+            {{ form_row(form.price) }}
+            {{ form_row(form.quantity) }}
+            {{ form_row(form.description) }}
+            {{ form_row(form.category) }}
+            {{ form_row(form.Save) }}
+
+            {{ form_row(form._token) }}
+
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+{% endblock %}

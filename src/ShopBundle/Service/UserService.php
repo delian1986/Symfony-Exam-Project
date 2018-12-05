@@ -6,14 +6,14 @@ namespace ShopBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use ShopBundle\Entity\User;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 class UserService implements UserServiceInterface
 {
-
     private $manager;
     private $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager, \Doctrine\Common\Persistence\ManagerRegistry $manager)
+    public function __construct(EntityManagerInterface $entityManager, ManagerRegistry $manager)
     {
         $this->entityManager = $entityManager;
         $this->manager = $manager;
