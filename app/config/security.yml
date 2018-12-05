@@ -41,4 +41,4 @@ security:
 
   role_hierarchy:
     ROLE_EDITOR:       ROLE_USER
-    ROLE_ADMIN: [ROLE_EDITOR, ROLE_ALLOWED_TO_SWITCH]
+    ROLE_ADMIN: [ROLE_EDITOR]

@@ -36,13 +36,13 @@ class RegisterController extends Controller
 
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
-        return $this->render('user/register.html.twig',['form'=>$form->createView()]);
+        return $this->render('user/register.html.twig', ['form' => $form->createView()]);
     }
 
     /**
-
      * @Route("/register", name="user_register_proceed", methods={"POST"})
      * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function proceedRegister(Request $request)
@@ -75,9 +75,9 @@ class RegisterController extends Controller
             $em->persist($user);
             $em->flush();
 
-            $this->addFlash("success","You have registered successfully!");
+            $this->addFlash("success", "{$user->getUsername()} have registered successfully!");
 
-            return $this->redirectToRoute('security_login');
         }
+        return $this->redirectToRoute('security_login');
     }
 }

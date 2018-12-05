@@ -1,7 +1,8 @@
 <?php
 
-namespace ShopBundle\Controller;
+namespace ShopBundle\Controller\Admin;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ShopBundle\Entity\Product;
 use ShopBundle\Form\ProductType;
@@ -9,10 +10,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class ProductController
+ * @package ShopBundle\Controller
+ * @Route("product")
+ *  @IsGranted("ROLE_ADMIN")
+
+ */
 class ProductController extends Controller
 {
     /**
-     * @Route("/add-product", name="product_add")
+     * @Route("/add", name="product_add")
      * @Security("is_granted('ROLE_ADMIN')")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response

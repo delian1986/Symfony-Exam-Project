@@ -24,7 +24,7 @@ class UserService implements UserServiceInterface
         $allRegisteredUsers=count($this->manager->getRepository(User::class)
                                     ->findAll());
 
-        if (0 > ($allRegisteredUsers)) {
+        if ($allRegisteredUsers > 0) {
             return false;
         }
 

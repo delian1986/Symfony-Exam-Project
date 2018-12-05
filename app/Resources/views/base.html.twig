@@ -31,10 +31,14 @@
                     <ul class="nav navbar-nav navbar-right">
                         {% if app.user %}
                             <li>
-                                {% if is_granted('ROLE_EDITOR') %}
-                                    <a href="{{ path('shop_admin_index') }}">ADMIN</a>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="{{ path('admin_index') }}">ADMIN</a>
                                 {% endif %}
                             </li>
+                            <li>
+                                <a href="{{ path('cart_show') }}"><span class="fa fa-shopping-cart"> Cart({{ app.user.cart|length }} products)</span></a>
+                            </li>
+
                             <li>
                                 <a href="{{ path('security_logout') }}">
                                     Logout

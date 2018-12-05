@@ -8,20 +8,18 @@
                     {# @var product \ShopBundle\Entity\Product#}
                     {% for product in products %}
                         <div class="col-md-6">
-                            <article>
-                                <header>
-                                    <h2>{{ product.name }}</h2>
-                                </header>
+                            <header>
+                                <h2>{{ product.name }}</h2>
+                            </header>
 
-                                <p>
-                                    {{ product.price }}
-                                </p>
+                            <p>
+                                {{ product.price }}
+                            </p>
 
-                                <small class="author">
-                                    {{ product.owner.fullName }}
-                                </small>
-
-                            </article>
+                            <small class="author">
+                                {{ product.owner.fullName }}
+                            </small>
+                            <a href="{{ path('cart_add',{'id':product.id}) }}" class="btn btn-primary btn-sm">Add to cart</a>
                         </div>
                     {% endfor %}
                 </div>

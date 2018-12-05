@@ -66,7 +66,7 @@ class User implements UserInterface, \Serializable
     private $products;
 
     /**
-     * @var ArrayCollection|Product
+     * @var ArrayCollection|Product[]
      *
      * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\Product", inversedBy="userCart")
      * @ORM\JoinTable(name="users_carts")
@@ -77,6 +77,7 @@ class User implements UserInterface, \Serializable
     {
         $this->roles = new ArrayCollection();
         $this->products=new ArrayCollection();
+        $this->cart=new ArrayCollection();
     }
 
     /**
@@ -181,7 +182,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection|Product
      */
     public function getCart()
     {
@@ -189,13 +190,11 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @param mixed $cart
-     * @return User
+     * @param ArrayCollection|Product
      */
-    public function setCart($cart): User
+    public function setCart($cart)
     {
-        $this->cart = $cart;
-        return $this;
+        $this->cart= $cart;
     }
 
     /**
