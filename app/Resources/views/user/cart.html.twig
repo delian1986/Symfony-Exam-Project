@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+
+    {# @var product \ShopBundle\Entity\LineItem#}
+    {% for product in cart %}
+        Name:{{ product.product.name}} <br/>
+        Price: {{ product.product.price }} <br/>
+        Quantity: {{ product.quantity }}<br/>
+
+    {% endfor %}
+    <hr>
+    Total: {{ app.user.cartTotal }}
+
+    {% if app.user.cart|length >0 %}
+        <form method="post" style="display: inline-block">
+            <a href="{{ path("cart_checkout") }}" class="btn btn-primary"
+               role="button"> Check Out</a>
+        </form>
+    {% endif %}
+{% endblock %}
+
