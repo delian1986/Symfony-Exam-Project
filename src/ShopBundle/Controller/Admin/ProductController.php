@@ -13,8 +13,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class ProductController
  * @package ShopBundle\Controller
- * @Route("product")
- *  @IsGranted("ROLE_ADMIN")
+ * @Route("admin/product")
+ * @IsGranted("ROLE_ADMIN")
 
  */
 class ProductController extends Controller
@@ -41,6 +41,6 @@ class ProductController extends Controller
 
             return $this->redirectToRoute("homepage");
         }
-        return $this->render('admin/products:create.html.twig', ['form' => $form->createView()]);
+        return $this->render('admin/products/create.html.twig', ['form' => $form->createView()]);
     }
 }

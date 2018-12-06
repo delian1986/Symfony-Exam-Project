@@ -2,7 +2,6 @@
 
 namespace ShopBundle\Controller\Admin;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ShopBundle\Entity\InitialCash;
 use ShopBundle\Form\AddInitialCashType;
@@ -14,15 +13,15 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class InitialCashController
  * @package ShopBundle\Controller
  * @Route("initial-cash")
- * @Security("is_granted('ROLE_ADMIN')")
  *
- * Initial cash for all users. The default value of 0.00 is set by Fixture
+ * Initial cash for new registered users. The default value of 0.00 is set by DataFixtures/AppFixtures.php
  */
 class InitialCashController extends Controller
 {
     /**
      * @Route("/add",name="add_initial_cash")
      * @param Request $request
+     * @Security("is_granted('ROLE_ADMIN')")
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function addInitialCashToUsers(Request $request)
@@ -38,13 +37,12 @@ class InitialCashController extends Controller
             $initialCashRows = count($em->getRepository(InitialCash::class)->findAll());
 
             if ($initialCashRows === 1) {
-                $oldInitialCash = $em->getRepository(InitialCash::class)->getOldInitialCash();
 
-                //remove old initial cash
-                $em->remove($oldInitialCash);
+                //remove old initial cash value
+                $em->remove($initialCash);
                 $em->flush();
 
-                //set new initial cash
+                //set new initial cash value
                 $em->persist($initialCash);
                 $em->flush();
 

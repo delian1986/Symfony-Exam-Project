@@ -71,16 +71,6 @@ class Product
      */
     private $category;
 
-    /**
-     * @var ArrayCollection|Product
-     *
-     * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\User", mappedBy="cart")
-     * @ORM\JoinTable(name="users_carts")
-     */
-    private $userCart;
-
-
-
     public function __construct()
     {
         $this->createdAt= new \DateTime();

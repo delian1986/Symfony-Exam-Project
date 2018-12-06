@@ -3,7 +3,9 @@
 namespace ShopBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use ShopBundle\Entity\LineItem;
 use ShopBundle\Entity\Product;
+use ShopBundle\Entity\User;
 use ShopBundle\Service\CartServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,7 +32,7 @@ class CartController extends Controller
     /**
      * @Route("/add/{id}", name="cart_add")
      *
-     * @param $product
+     * @param Product $product
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      */
@@ -38,7 +40,10 @@ class CartController extends Controller
     public function cartAdd(Product $product)
     {
         $user = $this->getUser();
-        $this->cartService->addToCart($product, $user);
+        $lineItem=new LineItem();
+        $lineItem->setProduct($product);
+        $lineItem->setQuantity(1);
+        $this->cartService->addToCart($lineItem, $user);
 
         return $this->redirectToRoute('homepage');
     }
@@ -49,6 +54,18 @@ class CartController extends Controller
      */
     public function cartShow()
     {
-        
+        /** @var User $user */
+        $user=$this->getUser();
+        $cartProducts=$user->getCart();
+
+        return $this->render('user/cart.html.twig',['cart'=>$cartProducts]);
+    }
+
+    /**
+     * @Route("/checkout")
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     */
+    public function cartCheckOut(){
+
     }
 }

@@ -5,7 +5,7 @@ namespace ShopBundle\Service;
 
 
 use Doctrine\ORM\EntityManagerInterface;
-use ShopBundle\Entity\Product;
+use ShopBundle\Entity\LineItem;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use ShopBundle\Entity\User;
 
@@ -21,13 +21,12 @@ class CartService implements CartServiceInterface
         $this->manager = $manager;
     }
 
-    public function addToCart(Product $product, User $user): bool
+    public function addToCart(LineItem $lineItem, User $user): void
     {
-        $user->getCart()->add($product);
+        $user->getCart()->add($lineItem);
         $em=$this->manager->getManager();
-        $em->persist($product);
+        $em->persist($lineItem);
         $em->flush();
 
-        return true;
     }
 }

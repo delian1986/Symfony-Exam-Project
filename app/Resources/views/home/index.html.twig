@@ -19,7 +19,7 @@
                             <small class="author">
                                 {{ product.owner.fullName }}
                             </small>
-                            <a href="{{ path('cart_add',{'id':product.id}) }}" class="btn btn-primary btn-sm">Add to cart</a>
+                            <a href="{{ path('product_details',{'id':product.id}) }}" class="btn btn-primary btn-sm">Details</a>
                         </div>
                     {% endfor %}
                 </div>
