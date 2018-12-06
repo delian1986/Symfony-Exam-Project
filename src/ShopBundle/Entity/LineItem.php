@@ -5,10 +5,11 @@ namespace ShopBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
 
 /**
- * LineItem
+ * LineItem represents single product item
  *
  * @ORM\Table(name="line_items")
  * @ORM\Entity(repositoryClass="ShopBundle\Repository\LineItemRepository")
@@ -40,9 +41,11 @@ class LineItem
     private $product;
 
     /**
-     * @var float
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ShopBundle\Entity\Order", mappedBy="user")
      */
-    private $total;
+    private $userOrders;
 
     /**
      * @var ArrayCollection|Product[]
@@ -93,6 +96,23 @@ class LineItem
 
         return $this;
     }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getUserOrders(): ArrayCollection
+    {
+        return $this->userOrders;
+    }
+
+    /**
+     * @param ArrayCollection $userOrders
+     */
+    public function setUserOrders(ArrayCollection $userOrders): void
+    {
+        $this->userOrders = $userOrders;
+    }
+
 
     /**
      * Get quantity.

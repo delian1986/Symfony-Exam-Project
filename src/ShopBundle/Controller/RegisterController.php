@@ -30,8 +30,8 @@ class RegisterController extends Controller
      */
     public function register()
     {
-        if ($this->get("security.authorization_checker")->isGranted("ROLE_USER")) {
-            return $this->redirectToRoute("homepage");
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('homepage');
         }
 
         $user = new User();

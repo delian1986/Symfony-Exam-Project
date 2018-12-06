@@ -73,11 +73,18 @@ class User implements UserInterface, \Serializable
      */
     private $cart;
 
+    /**
+     * @var ArrayCollection|Order
+     * @ORM\OneToMany(targetEntity="ShopBundle\Entity\Order", mappedBy="user")
+     */
+    private $orders;
+
     public function __construct()
     {
         $this->roles = new ArrayCollection();
         $this->products=new ArrayCollection();
         $this->cart=new ArrayCollection();
+        $this->orders=new ArrayCollection();
     }
 
     /**
@@ -212,6 +219,24 @@ class User implements UserInterface, \Serializable
     {
         $this->balance = $balance;
     }
+
+    /**
+     * @return ArrayCollection|Order
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+    /**
+     * @param ArrayCollection|Order $orders
+     */
+    public function setOrders($orders): void
+    {
+        $this->orders = $orders;
+    }
+
+
 
     public function getCartTotal(){
         $total=0.00;
