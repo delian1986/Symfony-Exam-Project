@@ -30,25 +30,15 @@ class Order
     private $dateCreated;
 
     /**
-     * @var LineItem
-     *
-     * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\LineItem", inversedBy="product")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $products;
-
-    /**
-     * @var User $user
-     *
-     * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\User", inversedBy="orders")
+     * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\User",inversedBy="orders")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
 
+
     public function __construct()
     {
         $this->dateCreated = new \DateTime();
-        $this->items=new ArrayCollection();
     }
 
 
@@ -87,51 +77,22 @@ class Order
     }
 
     /**
-     * @return ArrayCollection|LineItem
+     * @return mixed
      */
-    public function getItems()
-    {
-        return $this->items;
-    }
-
-    /**
-     * @param ArrayCollection|LineItem $items
-     */
-    public function setItems($items): void
-    {
-        $this->items = $items;
-    }
-
-    /**
-     * @return User
-     */
-    public function getUser(): User
+    public function getUser()
     {
         return $this->user;
     }
 
     /**
-     * @param User $user
+     * @param mixed $user
      */
-    public function setUser(User $user): void
+    public function setUser($user): void
     {
         $this->user = $user;
     }
 
-    /**
-     * @return LineItem
-     */
-    public function getProducts(): LineItem
-    {
-        return $this->products;
-    }
 
-    /**
-     * @param LineItem $products
-     */
-    public function setProducts(LineItem $products): void
-    {
-        $this->products = $products;
-    }
+
 
 }

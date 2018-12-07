@@ -4,6 +4,7 @@ namespace ShopBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ShopBundle\Entity\LineItem;
+use ShopBundle\Entity\Order;
 use ShopBundle\Entity\Product;
 use ShopBundle\Entity\User;
 use ShopBundle\Service\CartServiceInterface;
@@ -62,10 +63,22 @@ class CartController extends Controller
     }
 
     /**
-     * @Route("/checkout")
+     * @Route("/checkout", name="cart_checkout")
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      */
     public function cartCheckOut(){
+        /** @var User $user */
+        $user=$this->getUser();
+        $order=new Order();
+        $order->setUser($user);
+        $user->setOrders($order);
 
+        $em=$this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->persist($order);
+
+        $em->flush();
+
+        $this->redirectToRoute('cart_show');
     }
 }

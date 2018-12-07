@@ -5,7 +5,6 @@ namespace ShopBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
 
 /**
@@ -41,14 +40,7 @@ class LineItem
     private $product;
 
     /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="ShopBundle\Entity\Order", mappedBy="user")
-     */
-    private $userOrders;
-
-    /**
-     * @var ArrayCollection|Product[]
+     * @var ArrayCollection|LineItem
      *
      * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\User", mappedBy="cart")
      * @ORM\JoinTable(name="users_carts")
@@ -100,17 +92,17 @@ class LineItem
     /**
      * @return ArrayCollection
      */
-    public function getUserOrders(): ArrayCollection
+    public function getOrders(): ArrayCollection
     {
-        return $this->userOrders;
+        return $this->orders;
     }
 
     /**
-     * @param ArrayCollection $userOrders
+     * @param ArrayCollection $orders
      */
-    public function setUserOrders(ArrayCollection $userOrders): void
+    public function setOrders(ArrayCollection $orders): void
     {
-        $this->userOrders = $userOrders;
+        $this->orders = $orders;
     }
 
 
@@ -131,4 +123,22 @@ class LineItem
     {
         return $this->getProduct()->getPrice() * $this->quantity;
     }
+
+    /**
+     * @return ArrayCollection|LineItem
+     */
+    public function getUserCart()
+    {
+        return $this->userCart;
+    }
+
+    /**
+     * @param ArrayCollection|LineItem $userCart
+     */
+    public function setUserCart($userCart): void
+    {
+        $this->userCart = $userCart;
+    }
+
+
 }
