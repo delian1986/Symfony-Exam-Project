@@ -41,7 +41,7 @@ class CartController extends Controller
     public function cartAdd(Product $product)
     {
         $user = $this->getUser();
-        $lineItem=new LineItem();
+        $lineItem = new LineItem();
         $lineItem->setProduct($product);
         $lineItem->setQuantity(1);
         $this->cartService->addToCart($lineItem, $user);
@@ -56,28 +56,34 @@ class CartController extends Controller
     public function cartShow()
     {
         /** @var User $user */
-        $user=$this->getUser();
-        $cartProducts=$user->getCart();
+        $user = $this->getUser();
+        $cartProducts = $user->getCart();
 
-        return $this->render('user/cart.html.twig',['cart'=>$cartProducts]);
+        return $this->render('user/cart.html.twig', ['cart' => $cartProducts]);
     }
 
     /**
      * @Route("/checkout", name="cart_checkout")
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      */
-    public function cartCheckOut(){
+    public function cartCheckOut()
+    {
         /** @var User $user */
-        $user=$this->getUser();
-        $order=new Order();
-        $order->setUser($user);
-        $user->setOrders($order);
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $products = $user->getCart();
 
-        $em=$this->getDoctrine()->getManager();
-        $em->persist($user);
-        $em->persist($order);
+        /** @var LineItem $product */
+        foreach ($products as $product) {
+            $order = new Order();
+            $order->setUser($user);
+            $order->setLineItems($product);
+            $em->persist($order);
+            $em->flush();
+        }
 
-        $em->flush();
+
+
 
         $this->redirectToRoute('cart_show');
     }

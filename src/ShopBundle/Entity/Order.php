@@ -30,10 +30,21 @@ class Order
     private $dateCreated;
 
     /**
+     * @var User
+     *
      * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\User",inversedBy="orders")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id",nullable=false)
      */
     private $user;
+
+    /**
+     * @var LineItem
+     *
+     * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\LineItem")
+     * @ORM\JoinColumn(name="line_item_id", referencedColumnName="id",nullable=false)
+     */
+    private $lineItem;
+
 
 
     public function __construct()
@@ -92,7 +103,20 @@ class Order
         $this->user = $user;
     }
 
+    /**
+     * @return LineItem
+     */
+    public function getLineItem()
+    {
+        return $this->lineItem;
+    }
 
-
+    /**
+     * @param LineItem
+     */
+    public function setLineItems(LineItem $lineItem): void
+    {
+        $this->lineItem = $lineItem;
+    }
 
 }

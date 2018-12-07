@@ -27,6 +27,5 @@ class CartService implements CartServiceInterface
         $em=$this->manager->getManager();
         $em->persist($lineItem);
         $em->flush();
-
     }
 }
