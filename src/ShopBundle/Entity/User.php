@@ -68,7 +68,7 @@ class User implements UserInterface, \Serializable
     /**
      * @var ArrayCollection|Product[]
      *
-     * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\LineItem", inversedBy="userCart")
+     * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\Product", inversedBy="userCart")
      * @ORM\JoinTable(name="users_carts")
      */
     private $cart;
@@ -189,7 +189,7 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return ArrayCollection|LineItem
+     * @return ArrayCollection|Product
      */
     public function getCart()
     {
@@ -197,11 +197,11 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @param ArrayCollection|LineItem
+     * @param ArrayCollection|Product $cart
      */
     public function setCart($cart)
     {
-        $this->cart= $cart;
+        $this->cart = $cart;
     }
 
     /**
@@ -241,12 +241,13 @@ class User implements UserInterface, \Serializable
     public function getCartTotal(){
         $total=0.00;
 
-        /** @var LineItem $item */
         foreach ($this->getCart() as $item){
             $total += $item->getProduct()->getPrice();
         }
         return $total;
     }
+
+    
 
 
     /**

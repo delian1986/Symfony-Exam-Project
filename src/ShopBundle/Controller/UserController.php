@@ -28,22 +28,17 @@ class UserController extends Controller
 
     /**
      * @Route("/resell/{id}",name="item_resell")
-     * @param LineItem $lineItem
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function itemResellAction(LineItem $lineItem){
+    public function itemResellAction(){
+        /** @var User $user */
         $user=$this->getUser();
-        $product=new Product();
-        $product->setName($lineItem->getProduct()->getName());
-        $product->setPrice($lineItem->getProduct()->getPrice());
-        $product->setOwner($user);
-        $product->setCategory($lineItem->getProduct()->getCategory());
-        $product->setQuantity(1);
-        $product->setDescription($lineItem->getProduct()->getDescription());
+        $products=$user->getCart();
 
-        $em=$this->getDoctrine()->getManager();
-        $em->persist($product);
-        $em->flush();
+        /** @var Product $product */
+        foreach ($products as $product){
+            $newProductToSell=new Product();
+        }
 
         return $this->redirectToRoute('homepage');
     }

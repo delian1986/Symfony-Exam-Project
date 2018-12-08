@@ -2,13 +2,12 @@
 
 namespace ShopBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Order
  *
- * @ORM\Table(name="users_orders")
+ * @ORM\Table(name="orders")
  * @ORM\Entity(repositoryClass="ShopBundle\Repository\OrderRepository")
  */
 class Order
@@ -23,33 +22,38 @@ class Order
     private $id;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="dateCreated", type="datetime")
+     * @var string[] $products
+     * @ORM\Column(type="json_array")
      */
-    private $dateCreated;
+    private $products;
 
     /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\User",inversedBy="orders")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id",nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $user;
 
     /**
-     * @var LineItem
+     * @var float $total
      *
-     * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\LineItem")
-     * @ORM\JoinColumn(name="line_item_id", referencedColumnName="id",nullable=false)
+     * @ORM\Column(type="float", nullable=false)
      */
-    private $lineItem;
+    private $total;
+
+    /**
+     * @var \DateTime $createdAt
+     *
+     * @ORM\Column(type="datetime")
+     */
+    private $dateCreated;
 
 
 
     public function __construct()
     {
-        $this->dateCreated = new \DateTime();
+        $this->dateCreated = new \DateTime('now');
     }
 
 
@@ -103,20 +107,33 @@ class Order
         $this->user = $user;
     }
 
-    /**
-     * @return LineItem
-     */
-    public function getLineItem()
+    public function getProducts()
     {
-        return $this->lineItem;
+        return $this->products;
+    }
+
+    public function setProducts(array $products)
+    {
+        $this->products = $products;
     }
 
     /**
-     * @param LineItem
+     * @return float
      */
-    public function setLineItems(LineItem $lineItem): void
+    public function getTotal(): float
     {
-        $this->lineItem = $lineItem;
+        return $this->total;
     }
+
+    /**
+     * @param float $total
+     */
+    public function setTotal(float $total): void
+    {
+        $this->total = $total;
+    }
+
+
+
 
 }

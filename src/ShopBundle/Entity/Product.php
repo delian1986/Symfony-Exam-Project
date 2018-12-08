@@ -66,14 +66,24 @@ class Product
 
     /**
      * @var Category
-     * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\Category")
+     * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\Category", inversedBy="products")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
      */
     private $category;
 
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\User", mappedBy="cart")
+     * @ORM\JoinTable(name="users_carts")
+     */
+    private $userCart;
+
+
     public function __construct()
     {
-        $this->createdAt= new \DateTime();
+        $this->createdAt= new \DateTime('now');
     }
 
     /**
@@ -212,10 +222,38 @@ class Product
         return $this;
     }
 
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     */
+    public function setCreatedAt(\DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
 
 
+    /**
+     * @return ArrayCollection
+     */
+    public function getOrders(): ArrayCollection
+    {
+        return $this->orders;
+    }
 
-
+    /**
+     * @param ArrayCollection $orders
+     */
+    public function setOrders(ArrayCollection $orders): void
+    {
+        $this->orders = $orders;
+    }
 
 
 }

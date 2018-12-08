@@ -3,32 +3,28 @@
 
 namespace ShopBundle\Service;
 
-
-use Doctrine\ORM\EntityManagerInterface;
-use ShopBundle\Entity\User;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use ShopBundle\Repository\UserRepository;
 
 class UserService implements UserServiceInterface
 {
-    private $manager;
-    private $entityManager;
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, ManagerRegistry $manager)
+    public function __construct(UserRepository $userRepository)
     {
-        $this->entityManager = $entityManager;
-        $this->manager = $manager;
+        $this->userRepository = $userRepository;
     }
 
     public function isFirstRegistration(): bool
     {
-        $allRegisteredUsers=count($this->manager->getRepository(User::class)
-                                    ->findAll());
+        $allRegisteredUsers = $this->userRepository->findAll();
 
-        if ($allRegisteredUsers > 0) {
+        if (null === $allRegisteredUsers) {
             return false;
         }
 
         return true;
     }
-
 }

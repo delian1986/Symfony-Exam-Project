@@ -3,8 +3,6 @@
 namespace ShopBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use ShopBundle\Entity\LineItem;
-use ShopBundle\Entity\Order;
 use ShopBundle\Entity\Product;
 use ShopBundle\Entity\User;
 use ShopBundle\Service\CartServiceInterface;
@@ -40,11 +38,10 @@ class CartController extends Controller
 
     public function cartAdd(Product $product)
     {
-        $user = $this->getUser();
-        $lineItem = new LineItem();
-        $lineItem->setProduct($product);
-        $lineItem->setQuantity(1);
-        $this->cartService->addToCart($lineItem, $user);
+        /** @var User $user */
+        $user=$this->getUser();
+        var_dump($user->getCart()); exit;
+        $this->cartService->addToCart($product,$user);
 
         return $this->redirectToRoute('homepage');
     }
@@ -73,14 +70,8 @@ class CartController extends Controller
         $em = $this->getDoctrine()->getManager();
         $products = $user->getCart();
 
-        /** @var LineItem $product */
-        foreach ($products as $product) {
-            $order = new Order();
-            $order->setUser($user);
-            $order->setLineItems($product);
-            $em->persist($order);
-            $em->flush();
-        }
+
+
 
 
 

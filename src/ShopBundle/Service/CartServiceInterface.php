@@ -4,12 +4,12 @@
 namespace ShopBundle\Service;
 
 
-use ShopBundle\Entity\LineItem;
+use ShopBundle\Entity\Product;
 use ShopBundle\Entity\User;
 
 interface CartServiceInterface
 {
-    public function addToCart(LineItem $lineItem, User $user):void;
+    public function addToCart(Product $product, User $user):void;
 
 
 }
