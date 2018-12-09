@@ -2,11 +2,12 @@
 
 namespace ShopBundle\Controller;
 
-use ShopBundle\Entity\InitialCash;
 use ShopBundle\Entity\Role;
 use ShopBundle\Entity\User;
 use ShopBundle\Form\UserType;
 
+use ShopBundle\Service\InitialCashServiceInterface;
+use ShopBundle\Service\RoleServiceInterface;
 use ShopBundle\Service\UserServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,10 +19,16 @@ class RegisterController extends Controller
      * @var UserServiceInterface
      */
     private $userService;
+    private $initialCashService;
+    private $roleService;
 
-    public function __construct(UserServiceInterface $userService)
+    public function __construct(UserServiceInterface $userService,
+                                InitialCashServiceInterface $initialCashService,
+                                RoleServiceInterface $roleService)
     {
         $this->userService = $userService;
+        $this->initialCashService= $initialCashService;
+        $this->roleService=$roleService;
     }
 
     /**
@@ -43,7 +50,6 @@ class RegisterController extends Controller
      * @Route("/register", name="user_register_proceed", methods={"POST"})
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function proceedRegister(Request $request)
     {
@@ -56,28 +62,24 @@ class RegisterController extends Controller
                 ->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
-            $roleRepository = $this->getDoctrine()->getRepository(Role::class);
-
             //   If there is no users in DB first one should be ADMIN all others are USERS
             if ($this->userService->isFirstRegistration()) {
-                $userRole = $roleRepository->findOneBy(['name' => 'ROLE_ADMIN']);
+                $userRole = $this->roleService->getRole(['name' => 'ROLE_ADMIN']);
             } else {
-                $userRole = $roleRepository->findOneBy(['name' => 'ROLE_USER']);
+                $userRole = $this->roleService->getRole(['name' => 'ROLE_USER']);
             }
 
-            $initialCash = $this->getDoctrine()->getRepository(InitialCash::class)
-                ->getInitialCashValue();
+
+            $initialCash = $this->initialCashService->getInitialCashValue();
 
             $user->setBalance($initialCash);
             $user->addRole($userRole);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+            $this->userService->registerUser($user);
 
-            $this->addFlash("success", "{$user->getUsername()} have registered successfully!");
-
+            return $this->redirectToRoute('security_login');
         }
-        return $this->redirectToRoute('security_login');
+
+        return $this->redirectToRoute('user_register');
     }
 }

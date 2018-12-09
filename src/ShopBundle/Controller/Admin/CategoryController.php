@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ShopBundle\Entity\Category;
 use ShopBundle\Form\CategoryAddType;
+use ShopBundle\Service\CategoryServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,6 +19,15 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CategoryController extends Controller
 {
+    /**
+     * @var CategoryServiceInterface
+     */
+    private $categoryService;
+
+    public function __construct(CategoryServiceInterface $categoryService)
+    {
+        $this->categoryService=$categoryService;
+    }
 
     /**
      * Class CategoryController
@@ -34,11 +44,7 @@ class CategoryController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($category);
-            $em->flush();
-
-            $this->addFlash('success', "{$category->getName()} added successfully!");
+            $this->categoryService->saveCategory($category);
         }
 
         return $this->render('admin/category/add_category.html.twig', ['form' => $form->createView()]);

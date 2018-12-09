@@ -19,4 +19,14 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         parent::__construct($em, new Mapping\ClassMetadata(User::class));
     }
 
+    /**
+     * @param User $user
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function register(User $user){
+        $this->_em->persist($user);
+        $this->_em->flush();
+    }
+
 }

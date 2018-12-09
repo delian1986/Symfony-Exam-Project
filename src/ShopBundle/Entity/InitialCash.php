@@ -47,7 +47,7 @@ class InitialCash
     /**
      * Get initialCash.
      *
-     * @return string
+     * @return float
      */
     public function getInitialCash()
     {

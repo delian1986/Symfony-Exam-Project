@@ -2,6 +2,9 @@
 
 namespace ShopBundle\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
+use ShopBundle\Entity\Category;
+
 /**
  * CategoryRepository
  *
@@ -10,4 +13,22 @@ namespace ShopBundle\Repository;
  */
 class CategoryRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * @param EntityManagerInterface $em
+     */
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        parent::__construct($em, new \Doctrine\ORM\Mapping\ClassMetadata(Category::class));
+    }
+
+    /**
+     * @param Category $category
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function saveCategory(Category $category){
+        $this->_em->persist($category);
+        $this->_em->flush();
+    }
 }

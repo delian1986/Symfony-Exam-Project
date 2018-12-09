@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ShopBundle\Entity\Product;
 use ShopBundle\Form\ProductType;
+use ShopBundle\Service\ProductService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,10 +21,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends Controller
 {
     /**
+     * @var ProductService
+     */
+    private $productService;
+
+    public function __construct(ProductService $productService)
+    {
+        $this->productService=$productService;
+    }
+
+    /**
      * @Route("/add", name="product_add")
      * @Security("is_granted('ROLE_ADMIN')")
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function productAdd(Request $request)
     {
@@ -35,11 +48,9 @@ class ProductController extends Controller
             $owner = $this->getUser();
             $product->setOwner($owner);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($product);
-            $em->flush();
+            $this->productService->insertProduct($product);
 
-            return $this->redirectToRoute("homepage");
+            return $this->redirectToRoute("admin_index");
         }
         return $this->render('admin/products/create.html.twig', ['form' => $form->createView()]);
     }

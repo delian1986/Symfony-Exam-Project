@@ -5,7 +5,6 @@ namespace ShopBundle\Service;
 
 
 use Doctrine\ORM\EntityManagerInterface;
-use ShopBundle\Entity\Cart;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use ShopBundle\Entity\Product;
 use ShopBundle\Entity\User;

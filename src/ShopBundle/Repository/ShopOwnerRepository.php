@@ -2,6 +2,9 @@
 
 namespace ShopBundle\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
+use ShopBundle\Entity\ShopOwner;
+
 /**
  * ShopOwnerRepository
  *
@@ -10,4 +13,40 @@ namespace ShopBundle\Repository;
  */
 class ShopOwnerRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * @param EntityManagerInterface $em
+     */
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        parent::__construct($em, new \Doctrine\ORM\Mapping\ClassMetadata(ShopOwner::class));
+    }
+
+    /**
+     * @param ShopOwner $shopOwner
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function setOwner(ShopOwner $shopOwner): void
+    {
+        $this->_em->persist($shopOwner);
+        $this->_em->flush();
+    }
+
+    public function getShopOwner():?ShopOwner{
+        $qb = $this->createQueryBuilder('shop_owner');
+
+        return $qb->getQuery()->getResult()[0];
+    }
+
+    /**
+     * @param ShopOwner $shopOwner
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function removeOwner(ShopOwner $shopOwner):void {
+        $this->_em->remove($shopOwner);
+        $this->_em->flush();
+    }
+
 }

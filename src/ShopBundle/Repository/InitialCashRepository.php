@@ -2,6 +2,11 @@
 
 namespace ShopBundle\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
+use ShopBundle\Entity\InitialCash;
+use Doctrine\ORM\Mapping;
+
+
 /**
  * AdminHelperRepository
  *
@@ -10,6 +15,12 @@ namespace ShopBundle\Repository;
  */
 class InitialCashRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        parent::__construct($em, new Mapping\ClassMetadata(InitialCash::class));
+    }
+
     /**
      * @return mixed
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -21,10 +32,34 @@ class InitialCashRepository extends \Doctrine\ORM\EntityRepository
         return $qb->getQuery()->setMaxResults(1)->getSingleScalarResult();
     }
 
-    public function getOldInitialCash(){
+    public function getOldInitialCash():?InitialCash
+    {
         $qb = $this->createQueryBuilder('a');
 
         return $qb->getQuery()->getResult()[0];
     }
 
+    public function getInitialCashRecordsCount()
+    {
+        return $this->findAll();
+    }
+
+    /**
+     * @param InitialCash $initialCash
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function delete(InitialCash $initialCash):void{
+        $this->_em->remove($initialCash);
+        $this->_em->flush();
+    }
+
+    /**
+     * @param InitialCash $initialCash
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function save(InitialCash $initialCash):void {
+        $this->_em->persist($initialCash);
+        $this->_em->flush();
+    }
 }

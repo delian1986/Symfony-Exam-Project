@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ShopBundle\Entity\ShopOwner;
 use ShopBundle\Entity\User;
 use ShopBundle\Form\ShopOwnerType;
+use ShopBundle\Service\ShopOwnerServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,6 +17,16 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ShopOwnerController extends Controller
 {
+
+    /**
+     * @var ShopOwnerServiceInterface
+     */
+    private $shopOwnerService;
+
+    public function __construct(ShopOwnerServiceInterface $shopOwnerService)
+    {
+        $this->shopOwnerService=$shopOwnerService;
+    }
 
     /**
      * @Route("/set-owner", name="set_owner")
@@ -29,10 +40,7 @@ class ShopOwnerController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($owner);
-            $em->flush();
-
+            $this->shopOwnerService->setShopOwner($owner);
         }
 
         return $this->render('admin/set_owner.html.twig', ['form' => $form->createView()]);

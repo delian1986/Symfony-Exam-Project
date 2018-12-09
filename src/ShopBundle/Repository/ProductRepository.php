@@ -2,6 +2,9 @@
 
 namespace ShopBundle\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
+use ShopBundle\Entity\Product;
+
 /**
  * ProductRepository
  *
@@ -10,6 +13,15 @@ namespace ShopBundle\Repository;
  */
 class ProductRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * @param EntityManagerInterface $em
+     */
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        parent::__construct($em, new \Doctrine\ORM\Mapping\ClassMetadata(Product::class));
+    }
+
     public function findAllInStock(){
         $q = $this->createQueryBuilder('p')
             ->where('p.quantity > :inStock')
@@ -17,5 +29,15 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery();
 
         return $q->getResult();
+    }
+
+    /**
+     * @param Product $product
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function save(Product $product):void {
+        $this->_em->persist($product);
+        $this->_em->flush();
     }
 }

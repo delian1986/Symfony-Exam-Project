@@ -38,7 +38,9 @@
                             <li>
                                 <a href="{{ path('cart_show') }}"><span class="fa fa-shopping-cart"> Cart({{ app.user.cart|length }} products)</span></a>
                             </li>
-
+                            <li>
+                                <a href="#">Balance : {{ app.user.balance }}</a>
+                            </li>
                             <li>
                                 <a href="{{ path('my_items') }}"><span class="fa fa-shopping-cart"> My Items </span></a>
                             </li>
@@ -71,6 +73,14 @@
     {% block body %}
         <div class="row">
             <div id="main" class="col-sm-9">
+                {% for label, flashes in app.session.flashbag.all %}
+                    {% for flash in flashes %}
+                        <div class="alert alert-{{ label }}">
+                            {{ flash }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
                 {% block main %}{% endblock %}
             </div>
         </div>

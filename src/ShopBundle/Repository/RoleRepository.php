@@ -2,6 +2,7 @@
 
 namespace ShopBundle\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
 use ShopBundle\Entity\Role;
 
 /**
@@ -13,12 +14,17 @@ use ShopBundle\Entity\Role;
 class RoleRepository extends \Doctrine\ORM\EntityRepository
 {
     /**
-     * Adding roles in database on first run. Roles and their hierarchy are predefined in security.yml
-     * This function should be used only once on first user registration.
+     * @param EntityManagerInterface $em
      */
-    public function setupFirstRunRoles()
-    {
 
+    public function __construct(EntityManagerInterface $em)
+    {
+        parent::__construct($em, new \Doctrine\ORM\Mapping\ClassMetadata(Role::class));
+    }
+
+    public function getRoleByName(array $role)
+    {
+        return $this->findOneBy($role);
     }
 
 }
