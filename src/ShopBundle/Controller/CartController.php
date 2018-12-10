@@ -67,8 +67,12 @@ class CartController extends Controller
      */
     public function cartCheckOut(Request $request)
     {
-
-        var_dump($request->getQueryString());exit();
+        $productsWithQuantity=$request->request->all();
+        foreach ($productsWithQuantity as $product => $value){
+            var_dump($product);
+            var_dump($value);
+        }
+        exit();
         /** @var User $user */
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();

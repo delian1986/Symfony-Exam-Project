@@ -4,15 +4,15 @@
 
     {# @var product \ShopBundle\Entity\Product #}
     {% if app.user.cart|length >0 %}
-        <form method="get" name="checkout" style="display: inline-block" action="{{ path('cart_checkout') }}">
+        <form method="post" name="checkout" style="display: inline-block" action="{{ path('cart_checkout') }}">
             {% for product in cart %}
                 <div>
-                    <img src="{{ product.image }}" alt="{{ product.name }}">
+                    <img src="{{ product.image }}" alt="{{ product.name }}" width="100" height="100">
                     Name:{{ product.name }} <br/>
                     Price: {{ product.price }} <br/>
                     Quantity: {{ product.quantity }}<br/>
                     <label>
-                        <select name="{{ product.name }}">
+                        <select name="{{ product.id }}">
                             {% for quantity in range(1,product.quantity) %}
                                 <option value="{{ quantity }}">{{ quantity }}</option>
                             {% endfor %}

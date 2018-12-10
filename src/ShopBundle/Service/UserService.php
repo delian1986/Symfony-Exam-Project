@@ -41,7 +41,7 @@ class UserService implements UserServiceInterface
      */
     public function registerUser(User $user): void
     {
-        $this->userRepository->register($user);
+        $this->userRepository->save($user);
         $this->flashBag->add("success", "{$user->getUsername()} have registered successfully!");
 
     }
