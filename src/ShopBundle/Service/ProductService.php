@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class ProductService implements ProductServiceInterface
 {
-    const IMGUR_CLIENT_ID = "db958ac84e482d8";
+    const IMGUR_CLIENT_ID = "6d208ccd5a9275b";
     /**
      * @var ProductRepository
      */
@@ -66,7 +66,7 @@ class ProductService implements ProductServiceInterface
     public function addWatermark($image)
     {
         // Load the stamp and the photo to apply the watermark to
-        $stamp = imagecreatefrompng('C:\SoftUNI\Symfony-Final-Project\app\Resources\watermark\Untitled.png');
+        $stamp = imagecreatefrompng(__DIR__.'\app\Resources\watermark\Untitled.png');
         $im = imagecreatefromjpeg($image);
 
         // Set the margins for the stamp and get the height/width of the stamp image
