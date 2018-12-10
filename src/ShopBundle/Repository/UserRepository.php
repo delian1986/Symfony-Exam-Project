@@ -24,9 +24,8 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function register(User $user){
+    public function save(User $user){
         $this->_em->persist($user);
         $this->_em->flush();
     }
-
 }

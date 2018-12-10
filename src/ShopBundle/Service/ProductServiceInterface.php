@@ -8,5 +8,9 @@ use ShopBundle\Entity\Product;
 
 interface ProductServiceInterface
 {
-    public function insertProduct(Product $product):void;
+    public function saveProduct(Product $product):void;
+
+    public function handleImage(string $image):string;
+
+    public function addWatermark(string $image) ;
 }

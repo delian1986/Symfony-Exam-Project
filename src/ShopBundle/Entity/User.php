@@ -239,12 +239,10 @@ class User implements UserInterface, \Serializable
 
 
     public function getCartTotal(){
-        $total=0.00;
-
-        foreach ($this->getCart() as $item){
-            $total += $item->getProduct()->getPrice();
-        }
-        return $total;
+        return array_reduce($this->getCart(), function($i, $obj)
+        {
+            return $i += $obj->commission;
+        });
     }
 
     

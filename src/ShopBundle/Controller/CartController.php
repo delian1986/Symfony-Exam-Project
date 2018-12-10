@@ -7,6 +7,8 @@ use ShopBundle\Entity\Product;
 use ShopBundle\Entity\User;
 use ShopBundle\Service\CartServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -40,10 +42,9 @@ class CartController extends Controller
     {
         /** @var User $user */
         $user=$this->getUser();
-        var_dump($user->getCart()); exit;
         $this->cartService->addToCart($product,$user);
 
-        return $this->redirectToRoute('homepage');
+        return $this->redirectToRoute('cart_show');
     }
 
     /**
@@ -62,9 +63,12 @@ class CartController extends Controller
     /**
      * @Route("/checkout", name="cart_checkout")
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     * @param Request $request
      */
-    public function cartCheckOut()
+    public function cartCheckOut(Request $request)
     {
+
+        var_dump($request->getQueryString());exit();
         /** @var User $user */
         $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();

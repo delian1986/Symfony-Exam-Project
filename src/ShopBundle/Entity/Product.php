@@ -56,6 +56,12 @@ class Product
     private $description;
 
     /**
+     * @var string
+     * @ORM\Column(name="image",type="string", length=255)
+     */
+    private $image;
+
+    /**
      * @var User
      *
      * Many products have one owner. This is the owning side.
@@ -238,22 +244,24 @@ class Product
         $this->createdAt = $createdAt;
     }
 
-
     /**
-     * @return ArrayCollection
+     * @return string
      */
-    public function getOrders(): ArrayCollection
+    public function getImage(): ?string
     {
-        return $this->orders;
+        return $this->image;
     }
 
     /**
-     * @param ArrayCollection $orders
+     * @param string $image
+     * @return Product
      */
-    public function setOrders(ArrayCollection $orders): void
+    public function setImage(string $image): Product
     {
-        $this->orders = $orders;
+        $this->image = $image;
+        return $this;
     }
+
 
 
 }

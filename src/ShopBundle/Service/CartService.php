@@ -4,35 +4,41 @@
 namespace ShopBundle\Service;
 
 
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use ShopBundle\Entity\Product;
 use ShopBundle\Entity\User;
+use ShopBundle\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class CartService implements CartServiceInterface
 {
 
-    private $manager;
-    private $entityManager;
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, ManagerRegistry $manager)
+    /**
+     * @var FlashBagInterface
+     */
+    private $flashBag;
+
+    public function __construct(UserRepository $userRepository, FlashBagInterface $flashBag)
     {
-        $this->entityManager = $entityManager;
-        $this->manager = $manager;
+        $this->userRepository=$userRepository;
+        $this->flashBag=$flashBag;
     }
 
+    /**
+     * @param Product $product
+     * @param User $user
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function addToCart(Product $product, User $user): void
     {
-        $productToAdd=new Product();
-        $productToAdd->setName($product->getName());
-        $productToAdd->setQuantity(1);
-        $productToAdd->setDescription($product->getDescription());
-        $productToAdd->setPrice($product->getPrice());
+        $user->getCart()->add($product);
+        $this->userRepository->save($user);
 
-        $user->getCart()->add($productToAdd);
-
-        $em=$this->manager->getManager();
-        $em->persist($user);
-        $em->flush();
+        $this->flashBag->add('success', "{$product->getName()} added to your cart!");
     }
 }
