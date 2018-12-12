@@ -7,7 +7,6 @@ use ShopBundle\Entity\Product;
 use ShopBundle\Entity\User;
 use ShopBundle\Service\CartServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -41,8 +40,8 @@ class CartController extends Controller
     public function cartAdd(Product $product)
     {
         /** @var User $user */
-        $user=$this->getUser();
-        $this->cartService->addToCart($product,$user);
+        $user = $this->getUser();
+        $this->cartService->addToCart($product, $user);
 
         return $this->redirectToRoute('cart_show');
     }
@@ -61,29 +60,20 @@ class CartController extends Controller
     }
 
     /**
-     * @Route("/checkout", name="cart_checkout")
+     * @Route("/checkout", name="cart_checkout", methods={"POST"})
+    )
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function cartCheckOut(Request $request)
     {
-        $productsWithQuantity=$request->request->all();
-        foreach ($productsWithQuantity as $product => $value){
-            var_dump($product);
-            var_dump($value);
-        }
-        exit();
-        /** @var User $user */
+        $chosenProductsWithQuantity = $request->request->all();
         $user = $this->getUser();
-        $em = $this->getDoctrine()->getManager();
-        $products = $user->getCart();
+        $order = $this->cartService->checkoutPreview($user, $chosenProductsWithQuantity);
 
-
-
-
-
-
-
-        $this->redirectToRoute('cart_show');
+        return $this->render('product/checkout.html.twig', ['order' => $order]);
     }
+
+
 }

@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+<h1>You are going to buy</h1>
+
+<form method="post" name="confirm" action="{{ path('cart_confirm_order') }}">
+    {# @var product \ShopBundle\Entity\Product#}
+    {% for product in order.products %}
+        <div>
+            <input type="hidden" name="{{ product.id }}" value="{{ product.quantity }}">
+            {{ product.name }} <br>
+            {{ product.quantity }} <br>
+            {{ product.price }} <br>
+            Total: {{ product.productTotalPrice }} <br>
+        </div>
+    {% endfor %}
+
+    <button type="submit"
+            class="btn btn-success btn-block" >
+            Confirm order!
+        </button>
+    </form>
+{% endblock %}
+

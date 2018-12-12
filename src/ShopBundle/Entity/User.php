@@ -4,6 +4,7 @@ namespace ShopBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use function Symfony\Component\Debug\Tests\testHeader;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -235,17 +236,6 @@ class User implements UserInterface, \Serializable
     {
         $this->orders = $orders;
     }
-
-
-
-    public function getCartTotal(){
-        return array_reduce($this->getCart(), function($i, $obj)
-        {
-            return $i += $obj->commission;
-        });
-    }
-
-    
 
 
     /**

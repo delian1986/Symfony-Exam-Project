@@ -87,4 +87,21 @@ class ProductService implements ProductServiceInterface
         return $im;
 
     }
+
+    /**
+     * @param array $chosenProducts | Product[]
+     * @return array | Product[]
+     */
+    public function productHandler(array $chosenProducts):array{
+        $products=array();
+
+        foreach ($chosenProducts as $id => $quantity){
+            /** @var Product $product */
+            $product=$this->productRepository->find($id);
+            $product->setQuantity($quantity);
+            $products[]=$product;
+        }
+
+        return $products;
+    }
 }

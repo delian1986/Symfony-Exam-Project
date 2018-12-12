@@ -86,7 +86,6 @@ class Product
      */
     private $userCart;
 
-
     public function __construct()
     {
         $this->createdAt= new \DateTime('now');
@@ -262,6 +261,12 @@ class Product
         return $this;
     }
 
-
+    /**
+     * @return float
+     */
+    public function getProductTotalPrice(): float
+    {
+        return $this->getPrice() * $this->getQuantity();
+    }
 
 }

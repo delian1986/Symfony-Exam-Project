@@ -2,6 +2,9 @@
 
 namespace ShopBundle\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
+use ShopBundle\Entity\Order;
+
 /**
  * OrderRepository
  *
@@ -10,4 +13,14 @@ namespace ShopBundle\Repository;
  */
 class OrderRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * @param EntityManagerInterface $em
+     */
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        parent::__construct($em, new \Doctrine\ORM\Mapping\ClassMetadata(Order::class));
+    }
+
+
 }

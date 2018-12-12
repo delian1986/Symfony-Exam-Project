@@ -4,6 +4,7 @@
 namespace ShopBundle\Service;
 
 
+use ShopBundle\Entity\Order;
 use ShopBundle\Entity\Product;
 use ShopBundle\Entity\User;
 use ShopBundle\Repository\UserRepository;
@@ -18,14 +19,22 @@ class CartService implements CartServiceInterface
     private $userRepository;
 
     /**
+     * @var ProductServiceInterface
+     */
+    private $productService;
+
+    /**
      * @var FlashBagInterface
      */
     private $flashBag;
 
-    public function __construct(UserRepository $userRepository, FlashBagInterface $flashBag)
+    public function __construct(UserRepository $userRepository,
+                                ProductService $productService,
+                                FlashBagInterface $flashBag)
     {
-        $this->userRepository=$userRepository;
-        $this->flashBag=$flashBag;
+        $this->userRepository = $userRepository;
+        $this->productService = $productService;
+        $this->flashBag = $flashBag;
     }
 
     /**
@@ -41,4 +50,16 @@ class CartService implements CartServiceInterface
 
         $this->flashBag->add('success', "{$product->getName()} added to your cart!");
     }
+
+    public function checkoutPreview(User $user, array $chosenProducts): Order
+    {
+        $products = $this->productService->productHandler($chosenProducts);
+        $order = new Order();
+        $order->setUser($user);
+        $order->setProducts($products);
+
+        return $order;
+    }
+
+
 }
