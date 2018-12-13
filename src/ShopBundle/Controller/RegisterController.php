@@ -74,8 +74,10 @@ class RegisterController extends Controller
 
             $user->setBalance($initialCash);
             $user->addRole($userRole);
+            $user->setMoneySpent(0.00);
+            $user->setMoneyReceived(0.00);
 
-            $this->userService->registerUser($user);
+            $this->userService->saveUser($user);
 
             return $this->redirectToRoute('security_login');
         }

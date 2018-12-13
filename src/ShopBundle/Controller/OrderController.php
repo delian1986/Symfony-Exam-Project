@@ -4,7 +4,6 @@ namespace ShopBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ShopBundle\Service\OrderServiceInterface;
-use ShopBundle\Service\ProductServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,15 +27,16 @@ class OrderController extends Controller
 
     /**
      * @Route("/confirm", name="cart_confirm_order", methods={"POST"})
-    )
+     * )
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function cartConfirmOrder(Request $request){
         $chosenProductsWithQuantity = $request->request->all();
         $user= $this->getUser();
-
         $this->orderService->confirmOrder($user, $chosenProductsWithQuantity);
 
+       return $this->redirectToRoute('homepage');
     }
 }

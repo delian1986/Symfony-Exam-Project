@@ -51,14 +51,11 @@ class CartService implements CartServiceInterface
         $this->flashBag->add('success', "{$product->getName()} added to your cart!");
     }
 
-    public function checkoutPreview(User $user, array $chosenProducts): Order
+    public function checkoutPreview(User $user, array $chosenProducts): array
     {
         $products = $this->productService->productHandler($chosenProducts);
-        $order = new Order();
-        $order->setUser($user);
-        $order->setProducts($products);
 
-        return $order;
+        return $products;
     }
 
 

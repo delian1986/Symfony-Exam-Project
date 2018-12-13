@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+
+    {% if products is not empty %}
+        <h2>Your products:</h2>
+
+        {# @var product \ShopBundle\Entity\Product#}
+        {% for product in products %}
+            <div>
+                <p>{{ product.name }}</p>
+                <p>Bough quantity: {{ product.quantity }}</p>
+                <p>Total price of this product: {{ product.productTotalPrice|number_format(2) }}</p>
+            </div>
+        {% endfor %}
+
+    {% else %}
+        <h2>You don't have any products yet</h2>
+    {% endif %}
+
+{% endblock %}
+
+{% block body_id %}
+
+{% endblock %}
+

@@ -52,6 +52,18 @@ class User implements UserInterface, \Serializable
     private $balance;
 
     /**
+     * @var float
+     * @ORM\Column(name="money_spent", type="decimal", precision=10, scale=2)
+     */
+    private $moneySpent;
+
+    /**
+     * @var float
+     * @ORM\Column(name="money_received", type="decimal", precision=10, scale=2)
+     */
+    private $moneyReceived;
+
+    /**
      * @var Role|ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\Role", inversedBy="users")
@@ -64,7 +76,7 @@ class User implements UserInterface, \Serializable
      * One user has many products. This is the inverse side.
      * @ORM\OneToMany(targetEntity="ShopBundle\Entity\Product", mappedBy="owner", cascade={"remove"})
      */
-    private $products;
+    private $myProducts;
 
     /**
      * @var ArrayCollection|Product[]
@@ -83,7 +95,7 @@ class User implements UserInterface, \Serializable
     public function __construct()
     {
         $this->roles = new ArrayCollection();
-        $this->products=new ArrayCollection();
+        $this->myProducts=new ArrayCollection();
         $this->cart=new ArrayCollection();
         $this->orders=new ArrayCollection();
     }
@@ -174,18 +186,18 @@ class User implements UserInterface, \Serializable
     /**
      * @return ArrayCollection|Product
      */
-    public function getProducts()
+    public function getMyProducts()
     {
-        return $this->products;
+        return $this->myProducts;
     }
 
     /**
-     * @param ArrayCollection|Product $products
+     * @param ArrayCollection|Product $myProducts
      * @return User
      */
-    public function setProducts(Product $products): User
+    public function setMyProducts(Product $myProducts): User
     {
-        $this->products[]= $products;
+        $this->myProducts[]= $myProducts;
         return $this;
     }
 
@@ -235,6 +247,38 @@ class User implements UserInterface, \Serializable
     public function setOrders($orders): void
     {
         $this->orders = $orders;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMoneySpent(): float
+    {
+        return $this->moneySpent;
+    }
+
+    /**
+     * @param float $moneySpent
+     */
+    public function setMoneySpent(float $moneySpent): void
+    {
+        $this->moneySpent = $moneySpent;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMoneyReceived(): float
+    {
+        return $this->moneyReceived;
+    }
+
+    /**
+     * @param float $moneyReceived
+     */
+    public function setMoneyReceived(float $moneyReceived): void
+    {
+        $this->moneyReceived = $moneyReceived;
     }
 
 

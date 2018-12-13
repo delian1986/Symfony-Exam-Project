@@ -25,7 +25,9 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
     public function findAllInStock(){
         $q = $this->createQueryBuilder('p')
             ->where('p.quantity > :inStock')
+            ->andWhere('p.isListed = :isListed')
             ->setParameter('inStock', 0)
+            ->setParameter('isListed', 1)
             ->getQuery();
 
         return $q->getResult();

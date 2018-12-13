@@ -28,7 +28,7 @@ class Order
     private $products;
 
     /**
-     * @var User
+     * @var User $user
      *
      * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\User",inversedBy="orders")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")

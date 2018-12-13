@@ -22,5 +22,13 @@ class OrderRepository extends \Doctrine\ORM\EntityRepository
         parent::__construct($em, new \Doctrine\ORM\Mapping\ClassMetadata(Order::class));
     }
 
-
+    /**
+     * @param Order $order
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function save(Order $order){
+        $this->_em->persist($order);
+        $this->_em->flush();
+    }
 }

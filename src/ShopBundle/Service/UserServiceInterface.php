@@ -10,5 +10,5 @@ interface UserServiceInterface
 {
     public function isFirstRegistration():bool;
 
-    public function registerUser(User $user):void ;
+    public function saveUser(User $user):void ;
 }

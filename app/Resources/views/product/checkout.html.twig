@@ -5,7 +5,7 @@
 
 <form method="post" name="confirm" action="{{ path('cart_confirm_order') }}">
     {# @var product \ShopBundle\Entity\Product#}
-    {% for product in order.products %}
+    {% for product in products %}
         <div>
             <input type="hidden" name="{{ product.id }}" value="{{ product.quantity }}">
             {{ product.name }} <br>
@@ -14,6 +14,9 @@
             Total: {{ product.productTotalPrice }} <br>
         </div>
     {% endfor %}
+    <div>
+        <h3>Total Price: {{ total|number_format(2) }}</h3>
+    </div>
 
     <button type="submit"
             class="btn btn-success btn-block" >

@@ -39,10 +39,14 @@
                                 <a href="{{ path('cart_show') }}"><span class="fa fa-shopping-cart"> Cart({{ app.user.cart|length }} products)</span></a>
                             </li>
                             <li>
-                                <a href="#">Balance : {{ app.user.balance }}</a>
+                                <a href="#">Balance : {{ app.user.balance|number_format(2) }}</a>
                             </li>
                             <li>
-                                <a href="{{ path('my_items') }}"><span class="fa fa-shopping-cart"> My Items </span></a>
+                                <a href="{{ path('my_orders') }}"><span class="fa fa-shopping-cart"> My Orders </span></a>
+                            </li>
+
+                            <li>
+                                <a href="{{ path('my_products') }}"><span class="fa fa-shopping-cart"> My Products </span></a>
                             </li>
 
                             <li>

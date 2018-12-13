@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ShopBundle\Entity\Product;
 use ShopBundle\Entity\User;
 use ShopBundle\Service\CartServiceInterface;
+use ShopBundle\Service\OrderServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,9 +25,15 @@ class CartController extends Controller
      */
     private $cartService;
 
-    public function __construct(CartServiceInterface $cartService)
+    /**
+     * @var OrderServiceInterface
+     */
+    private $orderService;
+
+    public function __construct(CartServiceInterface $cartService,OrderServiceInterface $orderService)
     {
         $this->cartService = $cartService;
+        $this->orderService=$orderService;
     }
 
     /**
@@ -70,9 +77,10 @@ class CartController extends Controller
     {
         $chosenProductsWithQuantity = $request->request->all();
         $user = $this->getUser();
-        $order = $this->cartService->checkoutPreview($user, $chosenProductsWithQuantity);
+        $products = $this->cartService->checkoutPreview($user, $chosenProductsWithQuantity);
+        $totalPrice=$this->orderService->getOrderTotalPrice($products);
 
-        return $this->render('product/checkout.html.twig', ['order' => $order]);
+        return $this->render('product/checkout.html.twig', ['products' => $products, 'total'=>$totalPrice]);
     }
 
 

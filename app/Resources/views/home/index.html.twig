@@ -8,21 +8,21 @@
                     {# @var product \ShopBundle\Entity\Product#}
                     {% for product in products %}
                         <div class="col-md-6">
-                            <a><img src="{{ product.image }}" width="400" height="200" ></a>
+                            <a><img src="{{ product.image }}" width="400" height="200"  alt="{{ product.name }}"></a>
                             <header>
                                 <h2>{{ product.name }}</h2>
                             </header>
 
                             <p>
-                                {{ product.price }}
+                                Price: {{ product.price }}
                             </p>
 
                             <p>
-                                {{ product.quantity }}
+                                Available :{{ product.quantity }}
                             </p>
 
                             <small class="author">
-                                {{ product.owner.fullName }}
+                               Sold by:  {{ product.owner.fullName }}
                             </small>
                             <a href="{{ path('product_details',{'id':product.id}) }}" class="btn btn-primary btn-sm">Details</a>
                         </div>

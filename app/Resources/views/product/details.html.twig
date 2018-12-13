@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-    {{ product.name }}
-    {{ product.description }}
-    {{ product.price }}
+    {{ product.name }} <br>
+    Description: {{ product.description }} <br>
+    Available: {{ product.quantity }} <br>
+    Price: {{ product.price|number_format(2) }}
 
     <form method="post" style="display: inline-block">
         <a href="{{ path("cart_add", {'id':product.id}) }}" class="btn btn-primary"

@@ -2,9 +2,9 @@
 
 namespace ShopBundle\Controller;
 
-use ShopBundle\Entity\LineItem;
-use ShopBundle\Entity\Product;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ShopBundle\Entity\User;
+use ShopBundle\Service\ProductServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -12,34 +12,47 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class UserController
  * @package ShopBundle\Controller
  * @Route("user")
+ * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+
  */
 class UserController extends Controller
 {
     /**
-     * @Route("/orders",name="my_items")
+     * @var ProductServiceInterface
      */
-    public function myItemsAction()
+    private $productService;
+
+    public function __construct(ProductServiceInterface $productService)
+    {
+        $this->productService=$productService;
+    }
+
+    /**
+     * @Route("/orders",name="my_orders")
+     */
+    public function myOrdersAction()
     {
         /** @var User $user */
         $user=$this->getUser();
         $orders=$user->getOrders();
+
+        foreach ($orders as $order){
+            $products=$this->productService->productHandler($order->getProducts());
+            $order->setProducts($products);
+        }
+
         return $this->render('user/orders.html.twig',['orders'=>$orders]);
     }
 
     /**
-     * @Route("/resell/{id}",name="item_resell")
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("/products",name="my_products")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function itemResellAction(){
+    public function myProductsAction(){
         /** @var User $user */
-        $user=$this->getUser();
-        $products=$user->getCart();
+        $user= $this->getUser();
+        $myProducts=$user->getMyProducts();
 
-        /** @var Product $product */
-        foreach ($products as $product){
-            $newProductToSell=new Product();
-        }
-
-        return $this->redirectToRoute('homepage');
+        return $this->render('user/products.html.twig',['products'=>$myProducts]);
     }
 }

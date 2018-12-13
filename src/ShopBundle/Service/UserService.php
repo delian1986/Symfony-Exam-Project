@@ -39,7 +39,7 @@ class UserService implements UserServiceInterface
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function registerUser(User $user): void
+    public function saveUser(User $user): void
     {
         $this->userRepository->save($user);
         $this->flashBag->add("success", "{$user->getUsername()} have registered successfully!");

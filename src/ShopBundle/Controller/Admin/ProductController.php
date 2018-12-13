@@ -49,6 +49,7 @@ class ProductController extends Controller
             $image=$form->getData()->getImage();
             $imageUrl=$this->productService->handleImage($image);
             $product->setImage($imageUrl);
+            $product->setIsListed(true);
 
             $this->productService->saveProduct($product);
 

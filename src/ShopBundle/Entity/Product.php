@@ -65,7 +65,7 @@ class Product
      * @var User
      *
      * Many products have one owner. This is the owning side.
-     * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\User", inversedBy="products")
+     * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\User", inversedBy="myProducts")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
      */
     private $owner;
@@ -76,6 +76,12 @@ class Product
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
      */
     private $category;
+
+    /**
+     * @var boolean
+     * @ORM\Column("is_listed", type="boolean")
+     */
+    private $isListed;
 
 
     /**
@@ -259,6 +265,22 @@ class Product
     {
         $this->image = $image;
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isListed(): bool
+    {
+        return $this->isListed;
+    }
+
+    /**
+     * @param bool $isListed
+     */
+    public function setIsListed(bool $isListed): void
+    {
+        $this->isListed = $isListed;
     }
 
     /**
