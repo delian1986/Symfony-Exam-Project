@@ -10,7 +10,7 @@ use ShopBundle\Entity\User;
 interface CartServiceInterface
 {
 
-    public function addToCart(Product $product, User $user):void;
+    public function addToCart(Product $product, User $user, $quantity):void;
 
     public function checkoutPreview(User $user, array $products):array ;
 

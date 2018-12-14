@@ -40,17 +40,20 @@ class CartController extends Controller
      * @Route("/add/{id}", name="cart_add")
      *
      * @param Product $product
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      */
 
-    public function cartAdd(Product $product)
+    public function cartAdd(Product $product, Request $request)
     {
         /** @var User $user */
         $user = $this->getUser();
-        $this->cartService->addToCart($product, $user);
+        $quantity=$request->request->get('product_quantity');
 
-        return $this->redirectToRoute('cart_show');
+        $this->cartService->addToCart($product, $user,$quantity);
+
+        return $this->redirectToRoute('homepage');
     }
 
     /**
@@ -59,11 +62,8 @@ class CartController extends Controller
      */
     public function cartShow()
     {
-        /** @var User $user */
-        $user = $this->getUser();
-        $cartProducts = $user->getCart();
 
-        return $this->render('user/cart.html.twig', ['cart' => $cartProducts]);
+
     }
 
     /**

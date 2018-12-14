@@ -4,7 +4,6 @@ namespace ShopBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use function Symfony\Component\Debug\Tests\testHeader;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -79,14 +78,6 @@ class User implements UserInterface, \Serializable
     private $myProducts;
 
     /**
-     * @var ArrayCollection|Product[]
-     *
-     * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\Product", inversedBy="userCart")
-     * @ORM\JoinTable(name="users_carts")
-     */
-    private $cart;
-
-    /**
      * @var ArrayCollection|Order
      * @ORM\OneToMany(targetEntity="ShopBundle\Entity\Order", mappedBy="user")
      */
@@ -96,7 +87,6 @@ class User implements UserInterface, \Serializable
     {
         $this->roles = new ArrayCollection();
         $this->myProducts=new ArrayCollection();
-        $this->cart=new ArrayCollection();
         $this->orders=new ArrayCollection();
     }
 
@@ -199,22 +189,6 @@ class User implements UserInterface, \Serializable
     {
         $this->myProducts[]= $myProducts;
         return $this;
-    }
-
-    /**
-     * @return ArrayCollection|Product
-     */
-    public function getCart()
-    {
-        return $this->cart;
-    }
-
-    /**
-     * @param ArrayCollection|Product $cart
-     */
-    public function setCart($cart)
-    {
-        $this->cart = $cart;
     }
 
     /**

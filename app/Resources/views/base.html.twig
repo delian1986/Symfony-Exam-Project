@@ -36,7 +36,7 @@
                                 {% endif %}
                             </li>
                             <li>
-                                <a href="{{ path('cart_show') }}"><span class="fa fa-shopping-cart"> Cart({{ app.user.cart|length }} products)</span></a>
+                                {#<a href="{{ path('cart_show') }}"><span class="fa fa-shopping-cart"> Cart({{ app.user.cart|length }} products)</span></a>#}
                             </li>
                             <li>
                                 <a href="#">Balance : {{ app.user.balance|number_format(2) }}</a>

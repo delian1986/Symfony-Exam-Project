@@ -76,7 +76,7 @@ class RegisterController extends Controller
                 ->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
-            //  If there is no users in DB first one should be ADMIN all others are USERS
+            //  If there are no users in DB first one should be ADMIN all others are USERS
             if ($this->userService->isFirstRegistration()) {
                 $isThisFirstRegister=true;
                 $userRole = $this->roleService->getRole(['name' => 'ROLE_ADMIN']);

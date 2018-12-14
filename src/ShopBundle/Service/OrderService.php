@@ -54,11 +54,11 @@ class OrderService implements OrderServiceInterface
 
     public function getOrderTotalPrice(array $chosenProductWithQuantities): float
     {
-        $sum = array_reduce($chosenProductWithQuantities, function ($i, $product) {
-            return $i += $product->getProductTotalPrice();
-        });
-
-        return $sum;
+//        $sum = array_reduce($chosenProductWithQuantities, function ($i, $product) {
+//            return $i += $product->getProductTotalPrice();
+//        });
+//
+//        return $sum;
     }
 
 

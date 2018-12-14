@@ -83,18 +83,16 @@ class Product
      */
     private $isListed;
 
-
     /**
-     * @var User
-     *
-     * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\User", mappedBy="cart")
-     * @ORM\JoinTable(name="users_carts")
+     * @var OrdersProducts|ArrayCollection
+     * @ORM\OneToMany(targetEntity="ShopBundle\Entity\OrdersProducts", mappedBy="product")
      */
-    private $userCart;
+    private $inOrders;
 
     public function __construct()
     {
         $this->createdAt= new \DateTime('now');
+        $this->inOrders=new ArrayCollection();
     }
 
     /**
@@ -282,6 +280,24 @@ class Product
     {
         $this->isListed = $isListed;
     }
+
+    /**
+     * @return ArrayCollection|OrdersProducts
+     */
+    public function getInOrders()
+    {
+        return $this->inOrders;
+    }
+
+    /**
+     * @param ArrayCollection|OrdersProducts $inOrders
+     */
+    public function addInOrders($inOrders): void
+    {
+        $this->inOrders[] = $inOrders;
+    }
+
+
 
     /**
      * @return float

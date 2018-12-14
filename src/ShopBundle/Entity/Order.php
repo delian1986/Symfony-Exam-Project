@@ -2,6 +2,7 @@
 
 namespace ShopBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,25 +23,12 @@ class Order
     private $id;
 
     /**
-     * @var string[] $products
-     * @ORM\Column(type="json_array")
-     */
-    private $products;
-
-    /**
      * @var User $user
      *
      * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\User",inversedBy="orders")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $user;
-
-    /**
-     * @var float $total
-     *
-     * @ORM\Column(type="float", nullable=false)
-     */
-    private $total;
 
     /**
      * @var \DateTime $createdAt
@@ -49,11 +37,25 @@ class Order
      */
     private $dateCreated;
 
+    /**
+     * @var ArrayCollection|OrdersProducts
+     * @ORM\OneToMany(targetEntity="ShopBundle\Entity\OrdersProducts",mappedBy="order",cascade={"persist"})
+     */
+    private $products;
+
+    /**
+     * @var OrderStatus
+     * @ORM\OneToOne(targetEntity="ShopBundle\Entity\OrderStatus",inversedBy="order")
+     * @ORM\JoinColumn(name="status_id",referencedColumnName="id", nullable=false)
+     */
+    private $status;
+
 
 
     public function __construct()
     {
         $this->dateCreated = new \DateTime('now');
+        $this->products=new ArrayCollection();
     }
 
 
@@ -107,29 +109,36 @@ class Order
         $this->user = $user;
     }
 
+    /**
+     * @return ArrayCollection|OrdersProducts
+     */
     public function getProducts()
     {
         return $this->products;
     }
 
-    public function setProducts(array $products)
+    /**
+     * @param ArrayCollection|OrdersProducts $products
+     */
+    public function setProducts($products): void
     {
-        $this->products = $products;
+        $this->products[] = $products;
     }
 
     /**
-     * @return float
+     * @return OrderStatus
      */
-    public function getTotal(): float
+    public function getStatus(): OrderStatus
     {
-        return $this->total;
+        return $this->status;
     }
 
     /**
-     * @param float $total
+     * @param OrderStatus $status
      */
-    public function setTotal(float $total): void
+    public function setStatus(OrderStatus $status): void
     {
-        $this->total = $total;
+        $this->status = $status;
     }
+
 }
