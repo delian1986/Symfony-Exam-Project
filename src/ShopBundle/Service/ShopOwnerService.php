@@ -31,7 +31,7 @@ class ShopOwnerService implements ShopOwnerServiceInterface
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function setShopOwner(ShopOwner $shopOwner): void
+    public function changeShopOwner(ShopOwner $shopOwner): void
     {
         /** @var ShopOwner $currentOwner */
         $currentOwner = $this->shopOwnerRepository->getShopOwner();
@@ -52,5 +52,14 @@ class ShopOwnerService implements ShopOwnerServiceInterface
             $this->flashBag->add('success', "Shop Owner set to {$shopOwner->getShopOwner()->getEmail()} !");
             $this->shopOwnerRepository->setOwner($shopOwner);
         }
+    }
+
+    /**
+     * @param ShopOwner $shopOwner
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function saveShopOwner(ShopOwner $shopOwner):void {
+        $this->shopOwnerRepository->setOwner($shopOwner);
     }
 }

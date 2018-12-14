@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class InitialCashController
  * @package ShopBundle\Controller
  * @Route("initial-cash")
+ * @Security("is_granted('ROLE_ADMIN')")
  *
  * Initial cash for new registered users. The default value of 0.00 is set by DataFixtures/AppFixtures.php
  */

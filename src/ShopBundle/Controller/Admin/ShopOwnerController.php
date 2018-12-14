@@ -40,7 +40,7 @@ class ShopOwnerController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->shopOwnerService->setShopOwner($owner);
+            $this->shopOwnerService->changeShopOwner($owner);
         }
 
         return $this->render('admin/set_owner.html.twig', ['form' => $form->createView()]);

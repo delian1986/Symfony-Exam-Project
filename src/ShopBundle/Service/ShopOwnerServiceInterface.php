@@ -9,5 +9,8 @@ use ShopBundle\Entity\ShopOwner;
 
 interface ShopOwnerServiceInterface
 {
-    public function setShopOwner(ShopOwner $shopOwner):void;
+    public function changeShopOwner(ShopOwner $shopOwner):void;
+
+    public function saveShopOwner(ShopOwner $shopOwner):void ;
 }
+

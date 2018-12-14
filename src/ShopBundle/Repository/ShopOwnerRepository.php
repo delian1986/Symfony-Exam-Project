@@ -33,7 +33,8 @@ class ShopOwnerRepository extends \Doctrine\ORM\EntityRepository
         $this->_em->flush();
     }
 
-    public function getShopOwner():?ShopOwner{
+    public function getShopOwner(): ?ShopOwner
+    {
         $qb = $this->createQueryBuilder('shop_owner');
 
         return $qb->getQuery()->getResult()[0];
@@ -44,7 +45,8 @@ class ShopOwnerRepository extends \Doctrine\ORM\EntityRepository
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function removeOwner(ShopOwner $shopOwner):void {
+    public function removeOwner(ShopOwner $shopOwner): void
+    {
         $this->_em->remove($shopOwner);
         $this->_em->flush();
     }

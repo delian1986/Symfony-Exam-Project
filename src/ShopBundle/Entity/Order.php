@@ -132,8 +132,4 @@ class Order
     {
         $this->total = $total;
     }
-
-
-
-
 }
