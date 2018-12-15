@@ -12,66 +12,7 @@
 
 <body id="{% block body_id %}{% endblock %}">
 
-{% block header %}
-    <header>
-        <div class="navbar navbar-default navbar-static-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <a href="{{ path('homepage') }}" class="navbar-brand">SHOP</a>
-                    {% if app.user %}
-
-                    {% endif %}
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        {% if app.user %}
-                            <li>
-                                {% if is_granted('ROLE_ADMIN') %}
-                                    <a href="{{ path('admin_index') }}">ADMIN</a>
-                                {% endif %}
-                            </li>
-                            <li>
-                                {#<a href="{{ path('cart_show') }}"><span class="fa fa-shopping-cart"> Cart({{ app.user.cart|length }} products)</span></a>#}
-                            </li>
-                            <li>
-                                <a href="#">Balance : {{ app.user.balance|number_format(2) }}</a>
-                            </li>
-                            <li>
-                                <a href="{{ path('my_orders') }}"><span class="fa fa-shopping-cart"> My Orders </span></a>
-                            </li>
-
-                            <li>
-                                <a href="{{ path('my_products') }}"><span class="fa fa-shopping-cart"> My Products </span></a>
-                            </li>
-
-                            <li>
-                                <a href="{{ path('security_logout') }}">
-                                    Logout
-                                </a>
-                            </li>
-                        {% else %}
-                            <li>
-                                <a href="{{ path('user_register') }}">
-                                    REGISTER
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ path('security_login') }}">
-                                    LOGIN
-                                </a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </header>
-{% endblock %}
+{% include '_navbar.html.twig' with {"cartNumber":cartNumber} %}
 
 <div class="container body-container">
     {% block body %}

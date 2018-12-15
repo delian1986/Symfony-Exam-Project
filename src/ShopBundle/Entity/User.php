@@ -255,7 +255,6 @@ class User implements UserInterface, \Serializable
         $this->moneyReceived = $moneyReceived;
     }
 
-
     /**
      * @return bool
      */

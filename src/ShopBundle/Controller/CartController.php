@@ -56,6 +56,8 @@ class CartController extends Controller
         return $this->redirectToRoute('homepage');
     }
 
+
+
     /**
      * @Route("/show", name="cart_show")
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
@@ -71,16 +73,10 @@ class CartController extends Controller
     )
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function cartCheckOut(Request $request)
     {
-        $chosenProductsWithQuantity = $request->request->all();
-        $user = $this->getUser();
-        $products = $this->cartService->checkoutPreview($user, $chosenProductsWithQuantity);
-        $totalPrice=$this->orderService->getOrderTotalPrice($products);
 
-        return $this->render('product/checkout.html.twig', ['products' => $products, 'total'=>$totalPrice]);
     }
 
 

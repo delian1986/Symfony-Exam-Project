@@ -54,6 +54,7 @@ class OrdersProducts
     public function __construct()
     {
         $this->dateAdded=new \DateTime('now');
+
     }
 
 

@@ -4,6 +4,7 @@ namespace ShopBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ShopBundle\Entity\User;
+use ShopBundle\Service\CartServiceInterface;
 use ShopBundle\Service\ProductServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,14 +18,18 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UserController extends Controller
 {
+    /** @var CartServiceInterface */
+    private $cartService;
     /**
      * @var ProductServiceInterface
      */
     private $productService;
 
-    public function __construct(ProductServiceInterface $productService)
+    public function __construct(ProductServiceInterface $productService,
+                                CartServiceInterface $cartService)
     {
         $this->productService=$productService;
+        $this->cartService=$cartService;
     }
 
     /**
@@ -54,5 +59,12 @@ class UserController extends Controller
         $myProducts=$user->getMyProducts();
 
         return $this->render('user/products.html.twig',['products'=>$myProducts]);
+    }
+
+    public function numberOfItemsInCartAction(){
+        $user=$this->getUser();
+        $numberOfItems=$this->cartService->numberOfItemsInCart($user);
+
+        return $this->render('_navbar.html.twig',['cartNumber'=>$numberOfItems]);
     }
 }
