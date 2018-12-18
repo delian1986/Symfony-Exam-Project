@@ -45,17 +45,16 @@ class Order
 
     /**
      * @var OrderStatus
-     * @ORM\OneToOne(targetEntity="ShopBundle\Entity\OrderStatus",inversedBy="order")
+     * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\OrderStatus",inversedBy="order")
      * @ORM\JoinColumn(name="status_id",referencedColumnName="id", nullable=false)
      */
     private $status;
 
 
-
     public function __construct()
     {
         $this->dateCreated = new \DateTime('now');
-        $this->products=new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
 
@@ -140,5 +139,17 @@ class Order
     {
         $this->status = $status;
     }
+
+    public function getTotal(): float
+    {
+        $productsInOrder = $this->getProducts();
+        $sum = 0.00;
+        /** @var OrdersProducts $product */
+        foreach ($productsInOrder as $order) {
+            $sum += $order->getProduct()->getPrice() * $order->getQuantity();
+        }
+        return $sum;
+    }
+
 
 }

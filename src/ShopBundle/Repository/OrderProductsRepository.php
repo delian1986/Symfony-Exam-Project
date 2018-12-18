@@ -31,4 +31,14 @@ class OrderProductsRepository extends \Doctrine\ORM\EntityRepository
         $this->_em->persist($ordersProducts);
         $this->_em->flush();
     }
+
+    /**
+     * @param OrdersProducts $product
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function remove(OrdersProducts $product){
+        $this->_em->remove($product);
+        $this->_em->flush();
+    }
 }

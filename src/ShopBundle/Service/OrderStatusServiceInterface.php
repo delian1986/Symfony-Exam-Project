@@ -8,5 +8,5 @@ use ShopBundle\Entity\OrderStatus;
 
 interface OrderStatusServiceInterface
 {
-    public function findStatus(array $status):OrderStatus;
+    public function findOneByStatusName(string $status):OrderStatus;
 }

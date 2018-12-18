@@ -3,15 +3,16 @@
 
 namespace ShopBundle\Service;
 
-
+use ShopBundle\Entity\Order;
+use ShopBundle\Entity\OrderStatus;
 use ShopBundle\Entity\User;
 
 interface OrderServiceInterface
 {
-    public function getOrderTotalPrice(array $chosenProductWithQuantities):float ;
+    public function findOneOrderByStatus(OrderStatus $status, User $user):?Order;
 
-    public function confirmOrder(User $user, array $products):bool;
+    public function saveOrder(Order $order);
 
-    public function createOrder(User $user,array $products, float $totalPrice );
+    public function findOpenOrder(User $user):?Order;
 
 }

@@ -12,24 +12,15 @@
 
 <body id="{% block body_id %}{% endblock %}">
 
-{% include '_navbar.html.twig' with {"cartNumber":cartNumber} %}
+{% include '_navbar.html.twig' %}
 
 <div class="container body-container">
     {% block body %}
-        <div class="row">
-            <div id="main" class="col-sm-9">
-                {% for label, flashes in app.session.flashbag.all %}
-                    {% for flash in flashes %}
-                        <div class="alert alert-{{ label }}">
-                            {{ flash }}
-                        </div>
-                    {% endfor %}
-                {% endfor %}
+        {% include '_notifications.html.twig' %}
+        {% block main %}{% endblock %}
 
-                {% block main %}{% endblock %}
-            </div>
-        </div>
     {% endblock %}
+
 </div>
 
 {% block footer %}

@@ -17,8 +17,8 @@ class OrderStatusService implements OrderStatusServiceInterface
         $this->orderStatusRepository=$orderStatusRepository;
     }
 
-    public function findStatus(array $statusName): OrderStatus
+    public function findOneByStatusName(string $statusName): OrderStatus
     {
-        return $this->orderStatusRepository->findByName($statusName);
+        return $this->orderStatusRepository->findOneByName($statusName);
     }
 }

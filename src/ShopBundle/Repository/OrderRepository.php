@@ -4,6 +4,8 @@ namespace ShopBundle\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
 use ShopBundle\Entity\Order;
+use ShopBundle\Entity\OrderStatus;
+use ShopBundle\Entity\User;
 
 /**
  * OrderRepository
@@ -30,5 +32,9 @@ class OrderRepository extends \Doctrine\ORM\EntityRepository
     public function save(Order $order){
         $this->_em->persist($order);
         $this->_em->flush();
+    }
+
+    public function findOneByStatus(OrderStatus $status,User $user){
+        return $this->findOneBy(['status'=>$status,'user'=>$user]);
     }
 }

@@ -1,29 +1,38 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
+    {% if order is null %}
+        <h2>Your cart is empty</h2>
+    {% else %}
 
-    {# @var product \ShopBundle\Entity\Product #}
-    {% if app.user.cart|length >0 %}
-        <form method="post" name="checkout" style="display: inline-block" action="{{ path('cart_checkout') }}">
-            {% for product in cart %}
-                <div>
-                    <img src="{{ product.image }}" alt="{{ product.name }}" width="100" height="100">
-                    Name:{{ product.name }} <br/>
-                    Price: {{ product.price }} <br/>
-                    Quantity: {{ product.quantity }}<br/>
-                    <label>
-                        <select name="{{ product.id }}">
-                            {% for quantity in range(1,product.quantity) %}
-                                <option value="{{ quantity }}">{{ quantity }}</option>
+        {# @var product \ShopBundle\Entity\OrdersProducts#}
+        {% for product in order.products %}
+            <div>
+                <h2>{{ product.product.name }}</h2>
+                <h4>{{ product.product.price }}</h4>
+                <form method="post" action="{{ path("cart_edit", {'id':product.id}) }}" style="display: inline-block">
+                    <label for="product_quantity"> Edit quantity:
+                        <select name="product_quantity">
+                            {% for quantity in range(1,product.product.quantity) %}
+                                <option value="{{ quantity }}"{% if product.quantity ==quantity %}
+                                    selected="selected"
+                                        {% endif %}>{{ quantity }}</option>
                             {% endfor %}
                         </select>
                     </label>
-                </div>
-            {% endfor %}
-            <hr>
+                    <input type="submit" class="btn btn-primary" value="Edit"/>
+                </form>
+                <form method="post" action="{{ path('cart_remove', {'id':product.id}) }}" style="display: inline-block">
+                    <input type="submit" class="btn-sm btn-danger" value="Remove"/>
+                </form>
 
-            <input type="submit">
-        </form>
+            </div>
+        {% endfor %}
+        <h3>TOTAL: {{ total }}</h3>
+
+        <a href="{{ path('cart_checkout') }}" class="btn btn-primary btn-lg active" >Check Out</a>
     {% endif %}
+
+
 {% endblock %}
 

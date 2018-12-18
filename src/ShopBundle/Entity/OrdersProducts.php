@@ -25,14 +25,14 @@ class OrdersProducts
      * @var Order
      *
      * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\Order", inversedBy="products",cascade={"persist"})
-     * @ORM\JoinColumn(name="order_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="order_id", referencedColumnName="id",nullable=false)
      */
     private $order;
 
     /**
      * @var Product
      * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\Product", inversedBy="inOrders")
-     * @ORM\JoinColumn(name="product_id",referencedColumnName="id")
+     * @ORM\JoinColumn(name="product_id",referencedColumnName="id",nullable=false)
      */
     private $product;
 
@@ -156,6 +156,14 @@ class OrdersProducts
     {
         $this->product = $products;
         return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getProductTotalPrice(): float
+    {
+        return $this->getProduct()->getPrice() * $this->getQuantity();
     }
 
 }

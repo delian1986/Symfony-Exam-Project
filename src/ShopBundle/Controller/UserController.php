@@ -3,6 +3,7 @@
 namespace ShopBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use ShopBundle\Entity\User;
 use ShopBundle\Service\CartServiceInterface;
 use ShopBundle\Service\ProductServiceInterface;
@@ -61,10 +62,13 @@ class UserController extends Controller
         return $this->render('user/products.html.twig',['products'=>$myProducts]);
     }
 
+    /**
+     * @Template("_navbar.html.twig")
+     */
     public function numberOfItemsInCartAction(){
         $user=$this->getUser();
         $numberOfItems=$this->cartService->numberOfItemsInCart($user);
 
-        return $this->render('_navbar.html.twig',['cartNumber'=>$numberOfItems]);
+        return (['cartNumber'=>$numberOfItems]);
     }
 }

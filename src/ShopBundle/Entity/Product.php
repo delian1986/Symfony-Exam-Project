@@ -299,12 +299,6 @@ class Product
 
 
 
-    /**
-     * @return float
-     */
-    public function getProductTotalPrice(): float
-    {
-        return $this->getPrice() * $this->getQuantity();
-    }
+
 
 }

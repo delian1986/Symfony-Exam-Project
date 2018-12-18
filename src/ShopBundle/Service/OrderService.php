@@ -3,11 +3,11 @@
 
 namespace ShopBundle\Service;
 
-
 use ShopBundle\Entity\Order;
-use ShopBundle\Entity\Product;
+use ShopBundle\Entity\OrderStatus;
 use ShopBundle\Entity\User;
 use ShopBundle\Repository\OrderRepository;
+use ShopBundle\Repository\OrderStatusRepository;
 use ShopBundle\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
@@ -29,6 +29,11 @@ class OrderService implements OrderServiceInterface
     private $productRepository;
 
     /**
+     * @var OrderStatusRepository
+     */
+    private $orderStatusRepository;
+
+    /**
      * @var UserServiceInterface
      */
     private $userService;
@@ -42,6 +47,7 @@ class OrderService implements OrderServiceInterface
                                 ProductServiceInterface $productService,
                                 OrderRepository $orderRepository,
                                 ProductRepository $productRepository,
+                                OrderStatusRepository $orderStatusRepository,
                                 UserServiceInterface $userService)
     {
         $this->flashBag = $flashBag;
@@ -49,86 +55,27 @@ class OrderService implements OrderServiceInterface
         $this->orderRepository = $orderRepository;
         $this->userService = $userService;
         $this->productRepository = $productRepository;
+        $this->orderStatusRepository=$orderStatusRepository;
     }
 
 
-    public function getOrderTotalPrice(array $chosenProductWithQuantities): float
+    public function findOneOrderByStatus(OrderStatus $status, User $user): ?Order
     {
-//        $sum = array_reduce($chosenProductWithQuantities, function ($i, $product) {
-//            return $i += $product->getProductTotalPrice();
-//        });
-//
-//        return $sum;
+        return $this->orderRepository->findOneByStatus($status,$user);
     }
-
 
     /**
-     * @param User $user
-     * @param array $productsWithQuantities
-     * @return bool
+     * @param Order $order
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function confirmOrder(User $user, array $productsWithQuantities): bool
+    public function saveOrder(Order $order)
     {
-        $chosenProducts = $this->productService->productHandler($productsWithQuantities);
-        $productsInCart = $user->getCart();
-        $totalPrice = $this->getOrderTotalPrice($chosenProducts);
-        $userBalance = $user->getBalance();
-
-        if (count($productsInCart) === 0) {
-            $this->flashBag->add('danger', 'Your Cart is empty!');
-            return false;
-        }
-
-        if ($userBalance < $totalPrice) {
-            $this->flashBag->add('danger', 'Your don\'t have enough money to complete your order! ');
-            return false;
-        }
-
-        foreach ($chosenProducts as $product) {
-            if (!$productsInCart->contains($product)) {
-                $this->flashBag->add('danger', "{$product->getName()} does not exist in your cart!");
-                return false;
-            }
-        }
-
-        /** @var Product $product */
-        foreach ($productsInCart as $product) {
-            /** @var Product $productFromDB */
-            $productFromDB = $this->productRepository->find($product->getId());
-            $productFromDB->setQuantity($productFromDB->getQuantity() - $product->getQuantity());
-            $user->setBalance($user->getBalance() - $product->getProductTotalPrice());
-            $user->getCart()->removeElement($product);
-
-            /**
-             * @var User $seller
-             */
-            $seller = $product->getOwner();
-            $seller->setBalance($seller->getBalance() + $product->getProductTotalPrice());
-            $seller->setMoneyReceived($seller->getMoneyReceived() + $product->getProductTotalPrice());
-            $user->setMoneySpent($user->getMoneySpent() + $totalPrice);
-            $this->userService->saveUser($seller);
-            $this->userService->saveUser($user);
-            $this->productRepository->save($productFromDB);
-        }
-
-        $orderedProducts = $this->createOrder($user, $productsWithQuantities, $totalPrice);
-
-        $this->orderRepository->save($orderedProducts);
-
-        $this->flashBag->add('success', "{$user->getFullName()}, your order has beer received");
-
-        return true;
+        $this->orderRepository->save($order);
     }
 
-    public function createOrder(User $user, array $products, float $totalPrice)
+    public function findOpenOrder(User $user): ?Order
     {
-        $order = new Order();
-        $order->setUser($user);
-        $order->setProducts($products);
-        $order->setTotal($totalPrice);
-
-        return $order;
+        // TODO: Implement findOpenOrder() method.
     }
 }

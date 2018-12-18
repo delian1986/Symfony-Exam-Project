@@ -3,7 +3,6 @@
 namespace ShopBundle\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
-use ShopBundle\Entity\OrdersProducts;
 use ShopBundle\Entity\OrderStatus;
 
 /**
@@ -23,8 +22,8 @@ class OrderStatusRepository extends \Doctrine\ORM\EntityRepository
         parent::__construct($em, new \Doctrine\ORM\Mapping\ClassMetadata(OrderStatus::class));
     }
 
-    public function findByName(array $status){
+    public function findOneByName(string $status){
 
-        return $this->findOneBy($status);
+        return $this->findOneBy(['name'=>$status]);
     }
 }

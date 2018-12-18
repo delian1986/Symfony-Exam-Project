@@ -2,6 +2,7 @@
 
 namespace ShopBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,14 +25,19 @@ class OrderStatus
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
-     * @ORM\OneToOne(targetEntity="ShopBundle\Entity\Order", mappedBy="status")
+     * @ORM\OneToMany(targetEntity="ShopBundle\Entity\Order",mappedBy="status")
      */
     private $order;
+
+    public function __construct()
+    {
+        $this->order=new ArrayCollection();
+    }
 
 
     /**
@@ -69,7 +75,7 @@ class OrderStatus
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection|Order
      */
     public function getOrder()
     {
@@ -83,8 +89,5 @@ class OrderStatus
     {
         $this->order = $order;
     }
-
-
-
 
 }

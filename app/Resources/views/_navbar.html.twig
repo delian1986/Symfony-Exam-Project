@@ -21,7 +21,7 @@
                             {% endif %}
                         </li>
                         <li>
-                            <a href="{{ path('cart_show') }}"><span class="fa fa-shopping-cart"> Cart({{ render(controller('ShopBundle:User:numberOfItemsInCart')) }} products)</span></a>
+                            <a href="{{ path('cart_show') }}"><span class="fa fa-shopping-cart"> Cart products</span></a>
                         </li>
                         <li>
                             <a href="#">Balance : {{ app.user.balance|number_format(2) }}</a>
