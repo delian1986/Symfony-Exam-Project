@@ -43,6 +43,12 @@ class OrdersProducts
      */
     private $quantity;
 
+    /**
+     * @var float
+     * @ORM\Column(name="price", type="float")
+     */
+    private $price;
+
 
     /**
      * @var \DateTime
@@ -165,5 +171,25 @@ class OrdersProducts
     {
         return $this->getProduct()->getPrice() * $this->getQuantity();
     }
+
+    /**
+     * @return float
+     */
+    public function getPrice(): float
+    {
+        return $this->price;
+    }
+
+    /**
+     * @param float $price
+     * @return OrdersProducts
+     */
+    public function setPrice(float $price): OrdersProducts
+    {
+        $this->price = $price;
+        return $this;
+    }
+
+
 
 }

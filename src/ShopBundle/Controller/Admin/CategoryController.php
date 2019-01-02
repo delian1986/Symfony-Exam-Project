@@ -49,4 +49,15 @@ class CategoryController extends Controller
 
         return $this->render('admin/category/add_category.html.twig', ['form' => $form->createView()]);
     }
+
+    /**
+     * @Route("/all", name="categories_products")
+     */
+    public function showCategoriesWithProducts(){
+        /** @var Category $allCategories */
+        $allCategories=$this->categoryService->all();
+
+        return $this->render('admin/category/all.html.twig',['categories'=>$allCategories]);
+
+    }
 }

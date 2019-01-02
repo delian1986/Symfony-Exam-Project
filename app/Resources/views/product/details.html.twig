@@ -14,6 +14,10 @@
                 {% endfor %}
             </select>
         </label>
-        <input type="submit" class="btn btn-primary" value="Add To Cart"/>
+        {% if app.user.isAdmin or app.user.isEditor %}
+            <a href="#">Edit</a>
+        {% else %}
+            <input type="submit" class="btn btn-primary" value="Add To Cart"/>
+        {% endif %}
     </form>
 {% endblock %}

@@ -4,6 +4,7 @@ namespace ShopBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Vich\UploaderBundle\Entity\File;
 
 /**
  * Product
@@ -57,7 +58,8 @@ class Product
 
     /**
      * @var string
-     * @ORM\Column(name="image",type="string", length=255)
+     *
+     * @ORM\Column(name="image", type="string", nullable=false)
      */
     private $image;
 
@@ -296,9 +298,5 @@ class Product
     {
         $this->inOrders[] = $inOrders;
     }
-
-
-
-
 
 }

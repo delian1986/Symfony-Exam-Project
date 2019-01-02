@@ -5,13 +5,13 @@
     {% if orders is not empty %}
         {# @var order \ShopBundle\Entity\Order #}
         {% for order in orders %}
-            <h4>Order Id: {{ order.id }} created on {{ order.dateCreated|date("d/m/Y") }}</h4>
+            <h4>Order Id: {{ order.id }} created on {{ order.dateCreated|date("d/m/Y") }} with status {{ order.status.name}}</h4>
             {% for product in order.products %}
-                <p>{{ product.name }}</p>
+                <p>{{ product.product.name }}</p>
                 <p>Bough quantity: {{ product.quantity }}</p>
                 <p>Total price of this product: {{ product.productTotalPrice|number_format(2) }}</p>
             {% endfor %}
-            <p>Total price: {{ order.total|number_format(2) }}</p>
+            <p><strong>Total price: {{ order.total|number_format(2) }} </strong></p>
             <hr/>
         {% endfor %}
     {% else %}

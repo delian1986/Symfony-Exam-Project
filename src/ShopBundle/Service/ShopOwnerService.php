@@ -5,6 +5,7 @@ namespace ShopBundle\Service;
 
 
 use ShopBundle\Entity\ShopOwner;
+use ShopBundle\Entity\User;
 use ShopBundle\Repository\ShopOwnerRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
@@ -62,4 +63,12 @@ class ShopOwnerService implements ShopOwnerServiceInterface
     public function saveShopOwner(ShopOwner $shopOwner):void {
         $this->shopOwnerRepository->setOwner($shopOwner);
     }
+
+    public function getOwner(): User
+    {
+        $shopOwner= $this->shopOwnerRepository->getShopOwner();
+        return $shopOwner->getShopOwner();
+    }
+
+
 }

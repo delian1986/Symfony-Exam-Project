@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
+
 {% block main %}
-    <div class="container body-content span=8 offset=2">
-        <div class="well">
-            <div class="row">
-                <p><a href="{{ path('product_add') }}">Add Product</a></p>
-                <p><a href="{{ path('add_initial_cash') }}">Add Initial Cash</a></p>
-                <p><a href="{{ path('category_add') }}">Add Category</a></p>
-                <p><a href="{{ path('set_owner') }}">Set Shop Owner</a></p>
-            </div>
-        </div>
-    </div>
+    {% block sidebar %}
+        {% include "_admin_sidebar.html.twig" %}
+    {% endblock %}
+{% endblock %}
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    <link href="{{ asset('css/admin_sidebar.css') }}" rel="stylesheet">
 {% endblock %}

@@ -15,4 +15,8 @@ interface OrderServiceInterface
 
     public function findOpenOrder(User $user):?Order;
 
+    public function allOrders();
+
+    public function completeOrder(Order $order):bool ;
+
 }

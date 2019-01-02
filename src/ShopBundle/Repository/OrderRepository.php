@@ -37,4 +37,8 @@ class OrderRepository extends \Doctrine\ORM\EntityRepository
     public function findOneByStatus(OrderStatus $status,User $user){
         return $this->findOneBy(['status'=>$status,'user'=>$user]);
     }
+
+    public function findAllOrders(){
+        return $this->findBy(array(),array('date_created'=>'DESC'));
+    }
 }

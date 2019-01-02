@@ -132,10 +132,8 @@ class Order
         return $this->status;
     }
 
-    /**
-     * @param OrderStatus $status
-     */
-    public function setStatus(OrderStatus $status): void
+
+    public function setStatus($status): void
     {
         $this->status = $status;
     }

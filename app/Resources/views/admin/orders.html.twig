@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    {% include "_admin_sidebar.html.twig" %}
+
+    <h1>All users orders</h1>
+    <hr>
+    <div class="container">
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+
+                    <thead>
+                    <tr>
+                        <th>#id</th>
+                        <th>Products Name</th>
+                        <th>Email</th>
+                        <th>Date</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {# @var order \ShopBundle\Entity\Order#}
+                    {% for order in orders %}
+                        <td>#{{ order.id }} </td>
+                        <td>
+                            <ul>
+                                {% for product in order.products %}
+                                    <a href="{{ path('product_details', {'id': product.id}) }}">
+                                        <li>{{ product.product.name }}</li>
+                                        Quantity: {{ product.quantity }}
+                                    </a>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>{{ order.user.email }} </td>
+                        <td>{{ order.dateCreated|date }} </td>
+                        <td>{{ order.total }} </td>
+                        <td>
+                            {% if order.status.name=='Complete' %}
+                                <span class="label label-success">Completed</span>
+                            {% elseif order.status.name=='Open' %}
+                                <span class="label label-default">Open</span>
+                            {% else %}
+                                <form method="post" action="{{ path('admin_order_complete', {'id': order.id}) }}">
+                                    <p class="label label-info">Pending</p> /
+                                    <button class="btn btn-success btn-xs" type="submit">Complete order</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    <link href="{{ asset('css/admin_sidebar.css') }}" rel="stylesheet">
+{% endblock %}

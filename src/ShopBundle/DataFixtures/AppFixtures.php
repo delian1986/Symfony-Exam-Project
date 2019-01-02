@@ -47,6 +47,7 @@ class AppFixtures extends Fixture
         $roles = [
             'Open',
             'Pending',
+            'Declined',
             'Complete'
         ];
 

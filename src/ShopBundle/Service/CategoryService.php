@@ -36,4 +36,11 @@ class CategoryService implements CategoryServiceInterface
        $this->categoryRepository->saveCategory($category);
         $this->flashBag->add('success', "{$category->getName()} added successfully!");
     }
+
+    public function all()
+    {
+        return $this->categoryRepository->findAll();
+    }
+
+
 }

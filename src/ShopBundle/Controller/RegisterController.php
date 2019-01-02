@@ -18,18 +18,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RegisterController extends Controller
 {
-    private const STARTING_MONEY_VALUE=0.00;
+    private const STARTING_MONEY_VALUE = 0.00;
 
-    /** @var UserServiceInterface  */
+    /** @var UserServiceInterface */
     private $userService;
 
-    /** @var InitialCashServiceInterface  */
+    /** @var InitialCashServiceInterface */
     private $initialCashService;
 
-    /** @var RoleServiceInterface  */
+    /** @var RoleServiceInterface */
     private $roleService;
 
-    /** @var ShopOwnerServiceInterface  */
+    /** @var ShopOwnerServiceInterface */
     private $shopOwnerService;
 
     public function __construct(UserServiceInterface $userService,
@@ -38,9 +38,9 @@ class RegisterController extends Controller
                                 ShopOwnerServiceInterface $shopOwnerService)
     {
         $this->userService = $userService;
-        $this->initialCashService= $initialCashService;
-        $this->roleService=$roleService;
-        $this->shopOwnerService=$shopOwnerService;
+        $this->initialCashService = $initialCashService;
+        $this->roleService = $roleService;
+        $this->shopOwnerService = $shopOwnerService;
     }
 
     /**
@@ -70,15 +70,21 @@ class RegisterController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+
+            if ($this->userService->findByUsername($user->getUsername())) {
+                $this->addFlash('danger', "User already registered with {$user->getUsername()}");
+                return $this->redirectToRoute('user_register');
+            }
+
             //first user registration sets shop owner and admin to that user
-            $isThisFirstRegister=false;
+            $isThisFirstRegister = false;
             $password = $this->get('security.password_encoder')
                 ->encodePassword($user, $user->getPassword());
             $user->setPassword($password);
 
             //  If there are no users in DB first one should be ADMIN all others are USERS
             if ($this->userService->isFirstRegistration()) {
-                $isThisFirstRegister=true;
+                $isThisFirstRegister = true;
                 $userRole = $this->roleService->getRole(['name' => 'ROLE_ADMIN']);
             } else {
                 $userRole = $this->roleService->getRole(['name' => 'ROLE_USER']);
@@ -93,7 +99,7 @@ class RegisterController extends Controller
 
             $this->userService->saveUser($user);
 
-            if($isThisFirstRegister){
+            if ($isThisFirstRegister) {
                 $owner = new ShopOwner();
                 $owner->setShopOwner($user);
                 $this->shopOwnerService->saveShopOwner($owner);

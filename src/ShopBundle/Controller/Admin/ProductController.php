@@ -6,9 +6,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ShopBundle\Entity\Product;
 use ShopBundle\Form\ProductType;
-use ShopBundle\Service\ProductService;
 use ShopBundle\Service\ProductServiceInterface;
+use ShopBundle\Service\ShopOwnerServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -26,9 +28,13 @@ class ProductController extends Controller
      */
     private $productService;
 
-    public function __construct(ProductServiceInterface $productService)
+    /** @var ShopOwnerServiceInterface */
+    private $shopOwnerService;
+
+    public function __construct(ProductServiceInterface $productService, ShopOwnerServiceInterface $shopOwnerService)
     {
         $this->productService=$productService;
+        $this->shopOwnerService=$shopOwnerService;
     }
 
     /**
@@ -44,11 +50,20 @@ class ProductController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $owner = $this->getUser();
+            $owner = $this->shopOwnerService->getOwner();
             $product->setOwner($owner);
-            $image=$form->getData()->getImage();
-            $imageUrl=$this->productService->handleImage($image);
-            $product->setImage($imageUrl);
+
+            /** @var UploadedFile $image */
+            $image=$form->get('image')->getData();
+            $fileName = md5(uniqid()) . '.' . $image->guessExtension();
+
+            try {
+                $image->move($this->getParameter('products_directory'),
+                    $fileName);
+            } catch (FileException $ex) {
+
+            }
+            $product->setImage($fileName);
             $product->setIsListed(true);
 
             $this->productService->saveProduct($product);

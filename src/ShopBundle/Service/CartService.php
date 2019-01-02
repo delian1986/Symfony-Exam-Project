@@ -103,6 +103,7 @@ class CartService implements CartServiceInterface
         $productOrder
             ->setProduct($product)
             ->setQuantity(intval($quantity))
+            ->setPrice($product->getPrice())
             ->setOrders($order);
         $order->getProducts()->add($productOrder);
         $this->orderService->saveOrder($order);
@@ -180,49 +181,13 @@ class CartService implements CartServiceInterface
             return false;
         }
 
-        /** @var OrdersProducts $orderProduct */
-        foreach ($userOpenOrder->getProducts() as $orderProduct) {
-            $productFromDB = $orderProduct->getProduct();
-            $quantity = $orderProduct->getQuantity();
-
-            if($quantity>$productFromDB->getQuantity()){
-                $this->flashBag->add('error', "There is not enough quantity of {$productFromDB->getName()}");
-                return false;
-            }
-            $owner = $orderProduct->getProduct()->getOwner();
-            $price = $orderProduct->getProductTotalPrice();
-
-            $product = new Product();
-            $product->setQuantity($quantity);
-            $product->setIsListed(false);
-            $product->setImage($productFromDB->getImage());
-            $product->setOwner($user);
-            $product->setPrice($productFromDB->getPrice());
-            $product->setDescription($productFromDB->getDescription());
-            $product->setName($productFromDB->getName());
-            $product->setCategory($productFromDB->getCategory());
-
-//            var_dump($product);exit();
-
-            $this->productService->saveProduct($product);
-
-            $productFromDB->setQuantity($productFromDB->getQuantity() - $quantity);
-            $this->productService->saveProduct($productFromDB);
-
-            $user->setBalance($user->getBalance() - $orderProduct->getProductTotalPrice());
-            $user->setMoneySpent($user->getMoneySpent() + $orderProduct->getProductTotalPrice());
-
-            $owner->setBalance($owner->getBalance() + $orderProduct->getProductTotalPrice());
-            $owner->setMoneyReceived($owner->getMoneyReceived() + $orderProduct->getProductTotalPrice());
-            $this->userRepository->save($user);
-            $this->userRepository->save($owner);
-
-        }
         $pendingStatus=$this->orderStatusService->findOneByStatusName('Pending');
-        
+
         $userOpenOrder->setStatus($pendingStatus);
 
         $this->orderService->saveOrder($userOpenOrder);
+
+        $this->flashBag->add('success','Your order was received.');
         return true;
     }
 

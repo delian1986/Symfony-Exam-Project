@@ -42,10 +42,6 @@ class UserController extends Controller
         $user=$this->getUser();
         $orders=$user->getOrders();
 
-        foreach ($orders as $order){
-            $products=$this->productService->productHandler($order->getProducts());
-            $order->setProducts($products);
-        }
 
         return $this->render('user/orders.html.twig',['orders'=>$orders]);
     }

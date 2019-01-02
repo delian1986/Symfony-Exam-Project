@@ -264,6 +264,14 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * @return bool
+     */
+    public function isEditor()
+    {
+        return in_array('ROLE_EDITOR', $this->getRoles());
+    }
+
+    /**
      * Returns the roles granted to the user.
      *
      *     public function getRoles()

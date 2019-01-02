@@ -46,5 +46,16 @@ class UserService implements UserServiceInterface
 
     }
 
+    public function findByUsername(string $username): bool
+    {
+        $user=$this->userRepository->findBy(['email'=>$username]);
+
+        if (0 === count($user)){
+            return false;
+        }
+
+        return true;
+    }
+
 
 }

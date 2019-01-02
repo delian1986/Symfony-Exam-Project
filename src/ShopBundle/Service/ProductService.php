@@ -6,6 +6,7 @@ namespace ShopBundle\Service;
 
 use ShopBundle\Entity\Product;
 use ShopBundle\Repository\ProductRepository;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class ProductService implements ProductServiceInterface
@@ -39,29 +40,6 @@ class ProductService implements ProductServiceInterface
         $this->flashBag->add('success', "{$product->getName()} successfully saved!");
     }
 
-    public function handleImage(string $image): string
-    {
-//        $imageResource=$this->addWatermark($image);
-//        var_dump($imageResource); exit();
-
-        $handle = fopen($image, "r");
-        $data = fread($handle,filesize($image));
-
-        $pvars = array('image' => base64_encode($data));
-        $timeout = 30;
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, 'https://api.imgur.com/3/image.json');
-        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Client-ID ' . self::IMGUR_CLIENT_ID));
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $pvars);
-        $out = curl_exec($curl);
-        curl_close($curl);
-        $pms = json_decode($out, true);
-
-        return $pms['data']['link'];
-    }
 
     public function addWatermark($image)
     {
@@ -88,20 +66,5 @@ class ProductService implements ProductServiceInterface
 
     }
 
-    /**
-     * @param array $chosenProducts | Product[]
-     * @return array | Product[]
-     */
-    public function productHandler(array $chosenProducts):array{
-        $products=array();
 
-        foreach ($chosenProducts as $id => $quantity){
-            /** @var Product $product */
-            $product=$this->productRepository->find($id);
-            $product->setQuantity($quantity);
-            $products[]=$product;
-        }
-
-        return $products;
-    }
 }
