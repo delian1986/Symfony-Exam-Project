@@ -13,12 +13,12 @@ interface OrderServiceInterface
 
     public function saveOrder(Order $order);
 
-    public function findOpenOrder(User $user):?Order;
-
     public function findAllOrders();
 
     public function allOrdersByStatusName(string $status);
 
     public function completeOrder(Order $order):bool ;
+
+    public function declineOrder(Order $order, string $reason):bool ;
 
 }

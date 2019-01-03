@@ -1,0 +1,16 @@
+<h1>{{ name }}, your order No. {{ order.id }} is {{ order.status.name }}!</h1>
+
+{% if reason|default ('') %}
+    <h2>{{ reason }}</h2>
+{% endif %}
+
+{# @var order \ShopBundle\Entity\Order #}
+<h4>Order Id: {{ order.id }} created on {{ order.dateCreated|date("d/m/Y") }} with
+    status {{ order.status.name }}</h4>
+{% for product in order.products %}
+    <p>{{ product.product.name }}</p>
+    <p>Bough quantity: {{ product.quantity }}</p>
+    <p>Total price of this product: {{ product.productTotalPrice|number_format(2) }}</p>
+{% endfor %}
+<p><strong>Total price: {{ order.total|number_format(2) }} </strong></p>
+<hr/>

@@ -8,6 +8,7 @@ use ShopBundle\Entity\User;
 use ShopBundle\Form\UserType;
 
 use ShopBundle\Service\InitialCashServiceInterface;
+use ShopBundle\Service\MailerInterface;
 use ShopBundle\Service\RoleServiceInterface;
 use ShopBundle\Service\ShopOwnerService;
 use ShopBundle\Service\ShopOwnerServiceInterface;
@@ -32,15 +33,22 @@ class RegisterController extends Controller
     /** @var ShopOwnerServiceInterface */
     private $shopOwnerService;
 
+    /**
+     * @var MailerInterface
+     */
+    private $mailer;
+
     public function __construct(UserServiceInterface $userService,
                                 InitialCashServiceInterface $initialCashService,
                                 RoleServiceInterface $roleService,
-                                ShopOwnerServiceInterface $shopOwnerService)
+                                ShopOwnerServiceInterface $shopOwnerService,
+                                MailerInterface $mailer)
     {
         $this->userService = $userService;
         $this->initialCashService = $initialCashService;
         $this->roleService = $roleService;
         $this->shopOwnerService = $shopOwnerService;
+        $this->mailer=$mailer;
     }
 
     /**
@@ -105,9 +113,11 @@ class RegisterController extends Controller
                 $this->shopOwnerService->saveShopOwner($owner);
             }
 
+            $this->mailer->sendRegistration($user);
+
             return $this->redirectToRoute('security_login');
         }
-        var_dump($form->getErrors()->count()); exit();
+
         return $this->redirectToRoute('user_register');
     }
 }

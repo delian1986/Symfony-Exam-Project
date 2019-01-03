@@ -51,13 +51,19 @@ class OrderService implements OrderServiceInterface
      */
     private $orderRepository;
 
+    /**
+     * @var MailerInterface
+     */
+    private $mailer;
+
     public function __construct(FlashBagInterface $flashBag,
                                 ProductServiceInterface $productService,
                                 OrderRepository $orderRepository,
                                 ProductRepository $productRepository,
                                 OrderStatusRepository $orderStatusRepository,
                                 UserServiceInterface $userService,
-                                UserRepository $userRepository)
+                                UserRepository $userRepository,
+                                MailerInterface $mailer)
     {
         $this->flashBag = $flashBag;
         $this->productService = $productService;
@@ -66,6 +72,7 @@ class OrderService implements OrderServiceInterface
         $this->productRepository = $productRepository;
         $this->orderStatusRepository = $orderStatusRepository;
         $this->userRepository = $userRepository;
+        $this->mailer=$mailer;
     }
 
 
@@ -84,11 +91,6 @@ class OrderService implements OrderServiceInterface
         $this->orderRepository->save($order);
     }
 
-    public function findOpenOrder(User $user): ?Order
-    {
-        // TODO: Implement findOpenOrder() method.
-    }
-
     public function findAllOrders()
     {
         return $this->orderRepository->findAllOrders();
@@ -96,7 +98,7 @@ class OrderService implements OrderServiceInterface
 
     public function allOrdersByStatusName(string $status)
     {
-        $statusObj=$this->orderStatusRepository->findOneByName(ucfirst($status));
+        $statusObj = $this->orderStatusRepository->findOneByName(ucfirst($status));
         return $this->orderRepository->findAllByStatus($statusObj);
     }
 
@@ -108,6 +110,15 @@ class OrderService implements OrderServiceInterface
      */
     public function completeOrder(Order $order): bool
     {
+        $userBalance = $order->getUser()->getBalance();
+
+        if ($userBalance < $order->getTotal()) {
+            $reason='Your balance is too low to complete this order';
+            $this->declineOrder($order,$reason);
+
+            return false;
+        }
+
         /** @var OrdersProducts $orderProduct */
         foreach ($order->getProducts() as $orderProduct) {
             $productFromDB = $orderProduct->getProduct();
@@ -149,12 +160,22 @@ class OrderService implements OrderServiceInterface
         $completeStatus = $this->orderStatusRepository->findOneByName('Complete');
         $order->setStatus($completeStatus);
         $this->orderRepository->save($order);
-        $this->flashBag->add('success',"{$order->getId()} successfully completed!");
+        $this->flashBag->add('success', "{$order->getId()} successfully completed!");
+        $this->mailer->sendCartCheckOut($order);
 
         return true;
     }
 
+    public function declineOrder(Order $order,string $reason): bool
+    {
+        $declinedStatus = $this->orderStatusRepository->findOneByName('Declined');
+        $order->setStatus($declinedStatus);
 
+        $this->orderRepository->save($order);
+        $this->mailer->sendDeclinedOrderNotify($order,$reason);
+
+        return true;
+    }
 
 
 }

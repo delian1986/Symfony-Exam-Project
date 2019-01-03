@@ -37,6 +37,11 @@ class CartService implements CartServiceInterface
     private $productService;
 
     /**
+     * @var MailerInterface
+     */
+    private $mailer;
+
+    /**
      * @var FlashBagInterface
      */
     private $flashBag;
@@ -46,7 +51,8 @@ class CartService implements CartServiceInterface
                                 OrderServiceInterface $orderService,
                                 OrderStatusServiceInterface $orderStatusService,
                                 OrderProductsRepository $orderProductsRepository,
-                                FlashBagInterface $flashBag)
+                                FlashBagInterface $flashBag,
+                                MailerInterface $mailer)
     {
         $this->userRepository = $userRepository;
         $this->productService = $productService;
@@ -54,6 +60,7 @@ class CartService implements CartServiceInterface
         $this->orderService = $orderService;
         $this->orderProductsRepository = $orderProductsRepository;
         $this->flashBag = $flashBag;
+        $this->mailer=$mailer;
     }
 
     /**
@@ -176,18 +183,25 @@ class CartService implements CartServiceInterface
         $openStatus = $this->orderStatusService->findOneByStatusName('Open');
         $userOpenOrder = $this->orderService->findOneOrderByStatus($openStatus, $user);
 
-        if ($userOpenOrder->getTotal()>$user->getBalance()){
-            $this->flashBag->add('error','Your balance is too low to complete the order!');
+        if (null===$userOpenOrder){
+            $this->flashBag->add('danger','Your cart is empty!');
             return false;
         }
 
-        $pendingStatus=$this->orderStatusService->findOneByStatusName('Pending');
+        if ($userOpenOrder->getTotal() > $user->getBalance()) {
+            $this->flashBag->add('danger', 'Your balance is too low to complete the order!');
+            return false;
+        }
+
+        $pendingStatus = $this->orderStatusService->findOneByStatusName('Pending');
 
         $userOpenOrder->setStatus($pendingStatus);
 
         $this->orderService->saveOrder($userOpenOrder);
 
-        $this->flashBag->add('success','Your order was received.');
+        $this->mailer->sendCartCheckOut($userOpenOrder);
+
+        $this->flashBag->add('success', 'Your order was received.');
         return true;
     }
 

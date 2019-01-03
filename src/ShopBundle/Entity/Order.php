@@ -93,7 +93,7 @@ class Order
     }
 
     /**
-     * @return mixed
+     * @return User
      */
     public function getUser()
     {
@@ -101,11 +101,13 @@ class Order
     }
 
     /**
-     * @param mixed $user
+     * @param User $user
+     * @return Order
      */
-    public function setUser($user): void
+    public function setUser(User $user): Order
     {
         $this->user = $user;
+        return $this;
     }
 
     /**

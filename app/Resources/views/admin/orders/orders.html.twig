@@ -27,35 +27,39 @@
                     <tbody>
                     {# @var order \ShopBundle\Entity\Order#}
                     {% for order in orders %}
-                        <td>#{{ order.id }} </td>
-                        <td>
-                            <ul>
-                                {% for product in order.products %}
-                                    <a href="{{ path('product_details', {'slug': product.product.slug}) }}">
-                                        <ul>
-                                            <li>{{ product.product.name }}</li>
-                                        </ul>
-                                    </a>
-                                    <p>Quantity: {{ product.quantity }}</p>
-                                    <p>Price: {{ product.price }}</p>
-                                {% endfor %}
-                            </ul>
-                        </td>
-                        <td>{{ order.user.email }} </td>
-                        <td>{{ order.dateCreated|date }} </td>
-                        <td>{{ order.total }} </td>
-                        <td>
-                            {% if order.status.name=='Complete' %}
-                                <span class="label label-success">Completed</span>
-                            {% elseif order.status.name=='Open' %}
-                                <span class="label label-default">Open</span>
-                            {% else %}
-                                <form method="post" action="{{ path('admin_order_complete', {'id': order.id}) }}">
-                                    <p class="label label-info">Pending</p> /
-                                    <button class="btn btn-success btn-xs" type="submit">Complete order</button>
-                                </form>
-                            {% endif %}
-                        </td>
+                        <tr>
+                            <td>#{{ order.id }} </td>
+                            <td>
+                                <ul>
+                                    {% for product in order.products %}
+                                        <a href="{{ path('product_details', {'slug': product.product.slug}) }}">
+                                            <ul>
+                                                <li>{{ product.product.name }}</li>
+                                            </ul>
+                                        </a>
+                                        <p>Quantity: {{ product.quantity }}</p>
+                                        <p>Price: {{ product.price }}</p>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>{{ order.user.email }} </td>
+                            <td>{{ order.dateCreated|date }} </td>
+                            <td>{{ order.total }} </td>
+                            <td>
+                                {% if order.status.name=='Complete' %}
+                                    <span class="label label-success">Completed</span>
+                                {% elseif order.status.name=='Open' %}
+                                    <span class="label label-default">Open</span>
+                                {% elseif order.status.name=='Declined' %}
+                                    <span class="label label-danger">Declined</span>
+                                {% else %}
+                                    <form method="post" action="{{ path('admin_order_complete', {'id': order.id}) }}">
+                                        <p class="label label-info">Pending</p> /
+                                        <button class="btn btn-success btn-xs" type="submit">Complete order</button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                        </tr>
                     {% endfor %}
                     </tbody>
                 </table>

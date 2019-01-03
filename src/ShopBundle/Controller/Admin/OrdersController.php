@@ -36,7 +36,7 @@ class OrdersController extends Controller
     {
         $this->orderService->completeOrder($order);
 
-        return $this->redirectToRoute('admin_show_all_orders');
+        return $this->redirectToRoute("admin_show_all_orders",['param'=>'all']);
     }
 
     /**
