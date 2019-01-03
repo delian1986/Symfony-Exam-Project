@@ -29,16 +29,24 @@ class OrderRepository extends \Doctrine\ORM\EntityRepository
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function save(Order $order){
+    public function save(Order $order)
+    {
         $this->_em->persist($order);
         $this->_em->flush();
     }
 
-    public function findOneByStatus(OrderStatus $status,User $user){
-        return $this->findOneBy(['status'=>$status,'user'=>$user]);
+    public function findOneByStatus(OrderStatus $status, User $user)
+    {
+        return $this->findOneBy(['status' => $status, 'user' => $user]);
     }
 
-    public function findAllOrders(){
-        return $this->findBy(array(),array('date_created'=>'DESC'));
+    public function findAllOrders()
+    {
+        return $this->findBy(array(), array('dateCreated' => 'DESC'));
+    }
+
+    public function findAllByStatus($status)
+    {
+        return $this->findBy(['status'=>$status],['dateCreated'=>'DESC']);
     }
 }

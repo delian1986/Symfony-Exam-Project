@@ -107,7 +107,7 @@ class RegisterController extends Controller
 
             return $this->redirectToRoute('security_login');
         }
-
+        var_dump($form->getErrors()->count()); exit();
         return $this->redirectToRoute('user_register');
     }
 }

@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends Controller
 {
     /**
-     * @Route("/details/{id}", name="product_details")
+     * @Route("/details/{slug}", name="product_details")
      * @param Product $product
      * @return \Symfony\Component\HttpFoundation\Response
      */

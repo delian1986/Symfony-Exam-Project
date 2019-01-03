@@ -5,6 +5,8 @@ namespace ShopBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * User
@@ -27,6 +29,8 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Email(message = "The email '{{ value }}' is not a valid email.")
      */
     private $email;
 
@@ -41,6 +45,7 @@ class User implements UserInterface, \Serializable
      * @var string
      *
      * @ORM\Column(name="full_name", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $fullName;
 
@@ -53,6 +58,7 @@ class User implements UserInterface, \Serializable
     /**
      * @var float
      * @ORM\Column(name="money_spent", type="decimal", precision=10, scale=2)
+     * @Assert\Range(min="0", max="100000")
      */
     private $moneySpent;
 
@@ -80,14 +86,15 @@ class User implements UserInterface, \Serializable
     /**
      * @var ArrayCollection|Order
      * @ORM\OneToMany(targetEntity="ShopBundle\Entity\Order", mappedBy="user")
+     * @ORM\OrderBy({"dateCreated":"desc"})
      */
     private $orders;
 
     public function __construct()
     {
         $this->roles = new ArrayCollection();
-        $this->myProducts=new ArrayCollection();
-        $this->orders=new ArrayCollection();
+        $this->myProducts = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     /**
@@ -187,7 +194,7 @@ class User implements UserInterface, \Serializable
      */
     public function setMyProducts(Product $myProducts): User
     {
-        $this->myProducts[]= $myProducts;
+        $this->myProducts[] = $myProducts;
         return $this;
     }
 

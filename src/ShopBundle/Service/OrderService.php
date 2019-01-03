@@ -11,6 +11,7 @@ use ShopBundle\Entity\User;
 use ShopBundle\Repository\OrderRepository;
 use ShopBundle\Repository\OrderStatusRepository;
 use ShopBundle\Repository\ProductRepository;
+use ShopBundle\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class OrderService implements OrderServiceInterface
@@ -41,6 +42,11 @@ class OrderService implements OrderServiceInterface
     private $userService;
 
     /**
+     * @var UserRepository
+     */
+    private $userRepository;
+
+    /**
      * @var OrderRepository
      */
     private $orderRepository;
@@ -50,7 +56,8 @@ class OrderService implements OrderServiceInterface
                                 OrderRepository $orderRepository,
                                 ProductRepository $productRepository,
                                 OrderStatusRepository $orderStatusRepository,
-                                UserServiceInterface $userService)
+                                UserServiceInterface $userService,
+                                UserRepository $userRepository)
     {
         $this->flashBag = $flashBag;
         $this->productService = $productService;
@@ -58,6 +65,7 @@ class OrderService implements OrderServiceInterface
         $this->userService = $userService;
         $this->productRepository = $productRepository;
         $this->orderStatusRepository = $orderStatusRepository;
+        $this->userRepository = $userRepository;
     }
 
 
@@ -81,9 +89,15 @@ class OrderService implements OrderServiceInterface
         // TODO: Implement findOpenOrder() method.
     }
 
-    public function allOrders()
+    public function findAllOrders()
     {
-        return $this->orderRepository->findAll();
+        return $this->orderRepository->findAllOrders();
+    }
+
+    public function allOrdersByStatusName(string $status)
+    {
+        $statusObj=$this->orderStatusRepository->findOneByName(ucfirst($status));
+        return $this->orderRepository->findAllByStatus($statusObj);
     }
 
     /**
@@ -118,26 +132,29 @@ class OrderService implements OrderServiceInterface
             $product->setName($productFromDB->getName());
             $product->setCategory($productFromDB->getCategory());
 
-            $this->productService->saveProduct($product);
+            $this->productRepository->save($product);
 
             $productFromDB->setQuantity($productFromDB->getQuantity() - $quantity);
-            $this->productService->saveProduct($productFromDB);
+            $this->productRepository->save($productFromDB);
 
             $user->setBalance($user->getBalance() - $orderProduct->getProductTotalPrice());
             $user->setMoneySpent($user->getMoneySpent() + $orderProduct->getProductTotalPrice());
 
             $owner->setBalance($owner->getBalance() + $orderProduct->getProductTotalPrice());
             $owner->setMoneyReceived($owner->getMoneyReceived() + $orderProduct->getProductTotalPrice());
-            $this->userService->saveUser($user);
-            $this->userService->saveUser($owner);
+            $this->userRepository->save($user);
+            $this->userRepository->save($owner);
 
         }
         $completeStatus = $this->orderStatusRepository->findOneByName('Complete');
         $order->setStatus($completeStatus);
         $this->orderRepository->save($order);
+        $this->flashBag->add('success',"{$order->getId()} successfully completed!");
 
         return true;
     }
+
+
 
 
 }

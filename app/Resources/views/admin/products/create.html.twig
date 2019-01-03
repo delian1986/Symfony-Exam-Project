@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
+    {% include "_admin_sidebar.html.twig" %}
+
     <div class="container body-content span=8 offset=2">
         <div class="well">
             <legend>New Product</legend>
@@ -11,6 +13,7 @@
             {{ form_row(form.quantity) }}
             {{ form_row(form.description) }}
             {{ form_row(form.category) }}
+            {{ form_row(form.image) }}
             {{ form_row(form.Save) }}
 
             {{ form_row(form._token) }}
@@ -20,4 +23,11 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    <link href="{{ asset('css/admin_sidebar.css') }}" rel="stylesheet">
 {% endblock %}

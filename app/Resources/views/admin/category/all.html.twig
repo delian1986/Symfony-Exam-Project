@@ -11,7 +11,7 @@
             {% for product in category.products %}
                 {% if product.owner.username==app.user.username %}
                     <div class="product">
-                    <a href="{{ path('product_details',{'id':product.id}) }}"><h4> {{ product.name }}</h4></a>
+                    <a href="{{ path('product_details',{'slug':product.slug}) }}"><h4> {{ product.name }}</h4></a>
                     {% if product.isListed==1 %}
                         <span class="label label-success">In Stock</span>
                     {% else %}

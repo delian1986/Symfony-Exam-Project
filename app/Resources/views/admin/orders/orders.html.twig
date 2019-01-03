@@ -2,8 +2,12 @@
 
 {% block main %}
     {% include "_admin_sidebar.html.twig" %}
+    <a href="{{ path('admin_show_all_orders',{'param':'complete'}) }}">Show All Completed Orders</a> |
+    <a href="{{ path('admin_show_all_orders',{'param':'pending'}) }}">Show All Pending Orders</a> |
+    <a href="{{ path('admin_show_all_orders',{'param':'declined'}) }}">Show All Declined Orders</a> |
+    <a href="{{ path('admin_show_all_orders',{'param':'all'}) }}">Show All Orders</a>
 
-    <h1>All users orders</h1>
+    <h1>{{ label }} users orders</h1>
     <hr>
     <div class="container">
         <div class="row">
@@ -27,10 +31,13 @@
                         <td>
                             <ul>
                                 {% for product in order.products %}
-                                    <a href="{{ path('product_details', {'id': product.id}) }}">
-                                        <li>{{ product.product.name }}</li>
-                                        Quantity: {{ product.quantity }}
+                                    <a href="{{ path('product_details', {'slug': product.product.slug}) }}">
+                                        <ul>
+                                            <li>{{ product.product.name }}</li>
+                                        </ul>
                                     </a>
+                                    <p>Quantity: {{ product.quantity }}</p>
+                                    <p>Price: {{ product.price }}</p>
                                 {% endfor %}
                             </ul>
                         </td>
@@ -49,7 +56,6 @@
                                 </form>
                             {% endif %}
                         </td>
-                        </tr>
                     {% endfor %}
                     </tbody>
                 </table>

@@ -23,27 +23,41 @@ class OrdersController extends Controller
 
     public function __construct(OrderServiceInterface $orderService)
     {
-        $this->orderService=$orderService;
+        $this->orderService = $orderService;
     }
 
-    /**
-     * @Route("/all",name="admin_show_all_orders")
-     */
-    public function showAllOrdersAction()
-    {
-        $orders=$this->orderService->allOrders();
-
-        return $this->render('admin/orders.html.twig',['orders'=>$orders]);
-    }
 
     /**
      * @Route("/complete-order/{id}",name="admin_order_complete")
      * @param Order $order
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function completeOrder(Order $order){
+    public function completeOrder(Order $order)
+    {
         $this->orderService->completeOrder($order);
 
         return $this->redirectToRoute('admin_show_all_orders');
+    }
+
+    /**
+     * @Route("/{param}",name="admin_show_all_orders")
+     * @param string $param
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function showAllOrdersAction(string $param)
+    {
+        $orders = null;
+        $label = ucfirst($param);
+
+        switch ($param) {
+            case 'all':
+                $orders = $this->orderService->findAllOrders();
+                break;
+            default:
+                $orders = $this->orderService->allOrdersByStatusName($param);
+                break;
+        }
+
+        return $this->render('admin/orders/orders.html.twig', ['label' => $label, 'orders' => $orders]);
     }
 }

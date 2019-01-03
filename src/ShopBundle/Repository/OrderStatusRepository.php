@@ -24,6 +24,11 @@ class OrderStatusRepository extends \Doctrine\ORM\EntityRepository
 
     public function findOneByName(string $status){
 
-        return $this->findOneBy(['name'=>$status]);
+        $q = $this->createQueryBuilder('s')
+            ->where('s.name = :status')
+            ->setParameter('status', $status)
+            ->getQuery();
+
+        return $q->getResult();
     }
 }

@@ -4,7 +4,8 @@ namespace ShopBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Vich\UploaderBundle\Entity\File;
+use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Product
@@ -27,13 +28,24 @@ class Product
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $name;
+
+    /**
+     * @var string $slug
+     *
+     * @ORM\Column(nullable=false, type="string", unique=true)
+     * @Gedmo\Slug(fields={"name"})
+     */
+    private $slug;
 
     /**
      * @var string
      *
      * @ORM\Column(name="price", type="decimal", precision=10, scale=2)
+     * @Assert\NotBlank()
+     * @Assert\Range(min="0.01", max="900000")
      */
     private $price;
 
@@ -41,6 +53,8 @@ class Product
      * @var int
      *
      * @ORM\Column(name="quantity", type="integer")
+     * @Assert\NotBlank()
+     * @Assert\Range(min="0", max="5000")
      */
     private $quantity;
 
@@ -53,6 +67,7 @@ class Product
     /**
      * @var string
      * @ORM\Column(name="description", type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $description;
 
@@ -76,6 +91,7 @@ class Product
      * @var Category
      * @ORM\ManyToOne(targetEntity="ShopBundle\Entity\Category", inversedBy="products")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
+     * @Assert\NotBlank()
      */
     private $category;
 
@@ -93,8 +109,8 @@ class Product
 
     public function __construct()
     {
-        $this->createdAt= new \DateTime('now');
-        $this->inOrders=new ArrayCollection();
+        $this->createdAt = new \DateTime('now');
+        $this->inOrders = new ArrayCollection();
     }
 
     /**
@@ -130,6 +146,26 @@ class Product
     {
         return $this->name;
     }
+
+    /**
+     * @return string
+     */
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string $slug
+     * @return Product
+     */
+    public function setSlug(string $slug): Product
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
+
 
     /**
      * Set price.

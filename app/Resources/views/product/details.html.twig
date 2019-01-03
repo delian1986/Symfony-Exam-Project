@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
+    <img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}"> <br>
     {{ product.name }} <br>
     Description: {{ product.description }} <br>
     Available: {{ product.quantity }} <br>
@@ -14,7 +15,10 @@
                 {% endfor %}
             </select>
         </label>
+        <br>
+
         {% if app.user.isAdmin or app.user.isEditor %}
+
             <a href="#">Edit</a>
         {% else %}
             <input type="submit" class="btn btn-primary" value="Add To Cart"/>

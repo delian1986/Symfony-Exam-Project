@@ -4,12 +4,18 @@ namespace ShopBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+
 
 /**
  * Category
  *
  * @ORM\Table(name="categories")
  * @ORM\Entity(repositoryClass="ShopBundle\Repository\CategoryRepository")
+ * @UniqueEntity(fields={"name"}, message="A category with this name already exists in database!")
  */
 class Category
 {
@@ -25,9 +31,18 @@ class Category
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @ORM\Column(name="name", type="string", length=255, unique=false)
+     * @Assert\NotBlank()
      */
     private $name;
+
+    /**
+     * @var string $slug
+     *
+     * @ORM\Column(type="string", unique=true, length=255)
+     * @Gedmo\Slug(fields={"name"})
+     */
+    private $slug;
 
     /**
      * @var ArrayCollection| Product
@@ -37,7 +52,7 @@ class Category
 
     public function __construct()
     {
-        $this->products=new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
 
@@ -73,6 +88,24 @@ class Category
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string $slug
+     * @return Category
+     */
+    public function setSlug(string $slug): Category
+    {
+        $this->slug = $slug;
+        return $this;
     }
 
     /**

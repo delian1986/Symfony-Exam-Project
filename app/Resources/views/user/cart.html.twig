@@ -8,8 +8,9 @@
         {# @var product \ShopBundle\Entity\OrdersProducts#}
         {% for product in order.products %}
             <div>
+                <a href="{{ path('product_details',{'slug':product.product.slug}) }}"> <img src="{{ asset('uploads/images/' ~ product.product.image) }}" alt="{{ product.product.name }}" width="400" height="200"></a>
                 <h2>{{ product.product.name }}</h2>
-                <h4>{{ product.product.price }}</h4>
+                <h4>Price: {{ product.product.price }}</h4>
                 <form method="post" action="{{ path("cart_edit", {'id':product.id}) }}" style="display: inline-block">
                     <label for="product_quantity"> Edit quantity:
                         <select name="product_quantity">
@@ -30,7 +31,9 @@
         {% endfor %}
         <h3>TOTAL: {{ total }}</h3>
 
-        <a href="{{ path('cart_checkout') }}" class="btn btn-primary btn-lg active" >Check Out</a>
+        <a href="{{ path('cart_checkout') }}" class="btn btn-primary btn-lg active">Check Out</a>
+        <a href="{{ path('homepage') }}" class="btn btn-primary btn-sm active">Back to shop</a>
+
     {% endif %}
 
 
