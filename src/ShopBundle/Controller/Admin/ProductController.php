@@ -64,6 +64,7 @@ class ProductController extends Controller
 
             }
             $product->setImage($fileName);
+            $product->setSoldTimes(0);
             $product->setIsListed(true);
 
             $this->productService->saveProduct($product);

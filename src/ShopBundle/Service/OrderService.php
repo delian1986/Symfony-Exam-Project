@@ -6,11 +6,12 @@ namespace ShopBundle\Service;
 use ShopBundle\Entity\Order;
 use ShopBundle\Entity\OrdersProducts;
 use ShopBundle\Entity\OrderStatus;
-use ShopBundle\Entity\Product;
+use ShopBundle\Entity\SoldProduct;
 use ShopBundle\Entity\User;
 use ShopBundle\Repository\OrderRepository;
 use ShopBundle\Repository\OrderStatusRepository;
 use ShopBundle\Repository\ProductRepository;
+use ShopBundle\Repository\SoldProductRepository;
 use ShopBundle\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
@@ -56,6 +57,11 @@ class OrderService implements OrderServiceInterface
      */
     private $mailer;
 
+    /**
+     * @var SoldProductRepository
+     */
+    private $soldProductsRepository;
+
     public function __construct(FlashBagInterface $flashBag,
                                 ProductServiceInterface $productService,
                                 OrderRepository $orderRepository,
@@ -63,7 +69,8 @@ class OrderService implements OrderServiceInterface
                                 OrderStatusRepository $orderStatusRepository,
                                 UserServiceInterface $userService,
                                 UserRepository $userRepository,
-                                MailerInterface $mailer)
+                                MailerInterface $mailer,
+                                SoldProductRepository $soldProductRepository)
     {
         $this->flashBag = $flashBag;
         $this->productService = $productService;
@@ -72,7 +79,8 @@ class OrderService implements OrderServiceInterface
         $this->productRepository = $productRepository;
         $this->orderStatusRepository = $orderStatusRepository;
         $this->userRepository = $userRepository;
-        $this->mailer=$mailer;
+        $this->mailer = $mailer;
+        $this->soldProductsRepository=$soldProductRepository;
     }
 
 
@@ -113,8 +121,8 @@ class OrderService implements OrderServiceInterface
         $userBalance = $order->getUser()->getBalance();
 
         if ($userBalance < $order->getTotal()) {
-            $reason='Your balance is too low to complete this order';
-            $this->declineOrder($order,$reason);
+            $reason = 'Your balance is too low to complete this order';
+            $this->declineOrder($order, $reason);
 
             return false;
         }
@@ -133,19 +141,18 @@ class OrderService implements OrderServiceInterface
             /** @var User $user */
             $user = $order->getUser();
 
-            $product = new Product();
-            $product->setQuantity($quantity);
-            $product->setIsListed(false);
-            $product->setImage($productFromDB->getImage());
-            $product->setOwner($user);
-            $product->setPrice($productFromDB->getPrice());
-            $product->setDescription($productFromDB->getDescription());
-            $product->setName($productFromDB->getName());
-            $product->setCategory($productFromDB->getCategory());
+            $soldProduct = new SoldProduct();
+            $soldProduct
+                ->setProduct($productFromDB)
+                ->setPrice($price)
+                ->setQuantity($quantity)
+                ->setOwner($user);
 
-            $this->productRepository->save($product);
+            $this->soldProductsRepository->save($soldProduct);
+
 
             $productFromDB->setQuantity($productFromDB->getQuantity() - $quantity);
+            $productFromDB->setSoldTimes($productFromDB->getSoldTimes() + $quantity);
             $this->productRepository->save($productFromDB);
 
             $user->setBalance($user->getBalance() - $orderProduct->getProductTotalPrice());
@@ -160,19 +167,26 @@ class OrderService implements OrderServiceInterface
         $completeStatus = $this->orderStatusRepository->findOneByName('Complete');
         $order->setStatus($completeStatus);
         $this->orderRepository->save($order);
-        $this->flashBag->add('success', "{$order->getId()} successfully completed!");
+        $this->flashBag->add('success', "Order with ID: {$order->getId()} was successfully completed!");
         $this->mailer->sendCartCheckOut($order);
 
         return true;
     }
 
-    public function declineOrder(Order $order,string $reason): bool
+    /**
+     * @param Order $order
+     * @param string $reason
+     * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function declineOrder(Order $order, string $reason): bool
     {
         $declinedStatus = $this->orderStatusRepository->findOneByName('Declined');
         $order->setStatus($declinedStatus);
 
         $this->orderRepository->save($order);
-        $this->mailer->sendDeclinedOrderNotify($order,$reason);
+        $this->mailer->sendDeclinedOrderNotify($order, $reason);
 
         return true;
     }

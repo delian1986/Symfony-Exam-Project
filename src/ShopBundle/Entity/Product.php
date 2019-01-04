@@ -107,6 +107,12 @@ class Product
      */
     private $inOrders;
 
+    /**
+     * @var int
+     * @ORM\Column("sold_times",type="integer",options={"default" : 0})
+     */
+    private $soldTimes;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime('now');
@@ -332,5 +338,25 @@ class Product
     {
         $this->inOrders[] = $inOrders;
     }
+
+    /**
+     * @return int
+     */
+    public function getSoldTimes(): int
+    {
+        return $this->soldTimes;
+    }
+
+    /**
+     * @param int $soldTimes
+     * @return Product
+     */
+    public function setSoldTimes(int $soldTimes): Product
+    {
+        $this->soldTimes = $soldTimes;
+        return $this;
+    }
+
+
 
 }

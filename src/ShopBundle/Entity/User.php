@@ -4,6 +4,7 @@ namespace ShopBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use function Symfony\Component\Debug\Tests\testHeader;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -79,7 +80,7 @@ class User implements UserInterface, \Serializable
     /**
      * @var ArrayCollection|Product
      * One user has many products. This is the inverse side.
-     * @ORM\OneToMany(targetEntity="ShopBundle\Entity\Product", mappedBy="owner", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="ShopBundle\Entity\SoldProduct", mappedBy="owner", cascade={"remove"})
      */
     private $myProducts;
 
@@ -181,11 +182,21 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @return ArrayCollection|Product
+     * @return array
      */
     public function getMyProducts()
     {
-        return $this->myProducts;
+        $boughProducts=[];
+        foreach ($this->myProducts as $product) {
+            if (!isset($products[$product->getProduct()->getName()])){
+                $boughProducts[$product->getProduct()->getName()][]=$product;
+
+                continue;
+            }
+            $boughProducts[$product->getProduct()->getName()][]=$product;
+        }
+        var_dump($boughProducts); exit();
+        return $boughProducts;
     }
 
     /**

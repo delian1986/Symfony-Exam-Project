@@ -4,6 +4,7 @@ namespace ShopBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use ShopBundle\Entity\Product;
 use ShopBundle\Entity\User;
 use ShopBundle\Service\CartServiceInterface;
 use ShopBundle\Service\ProductServiceInterface;
