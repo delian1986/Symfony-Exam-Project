@@ -42,12 +42,15 @@ class CartController extends Controller
      *
      * @param Product $product
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
 
-    public function cartAdd(Product $product, Request $request)
+    public function cartAdd(Request $request, Product $product = null)
     {
+        if (null === $product) {
+            return $this->render('exception/error404.html.twig');
+        }
+
         /** @var User $user */
         $user = $this->getUser();
         $quantity = $request->request->get('product_quantity');
@@ -59,7 +62,6 @@ class CartController extends Controller
 
     /**
      * @Route("/show", name="cart_show")
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      */
     public function cartShow()
     {
@@ -68,8 +70,8 @@ class CartController extends Controller
         $openOrder = $this->cartService->itemsInCart($user);
         $total = null;
 
-        if ($openOrder){
-            $total=$openOrder->getTotal();
+        if ($openOrder) {
+            $total = $openOrder->getTotal();
         }
 
         return $this->render('user/cart.html.twig', ['order' => $openOrder, 'total' => $total]);
@@ -83,7 +85,7 @@ class CartController extends Controller
     public function cartCheckOut()
     {
         $user = $this->getUser();
-        if (false===$this->cartService->checkout($user)) {
+        if (false === $this->cartService->checkout($user)) {
             return $this->redirectToRoute('cart_show');
         }
 
@@ -94,10 +96,14 @@ class CartController extends Controller
      * @param OrdersProducts $product
      * @param Request $request
      * @Route("/edit-quantity/{id}", name="cart_edit")
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function cartEditQuantity(OrdersProducts $product, Request $request)
+    public function cartEditQuantity(Request $request,OrdersProducts $product=null)
     {
+        if (null === $product) {
+            return $this->render('exception/error404.html.twig');
+        }
+
         $quantity = $request->request->get('product_quantity');
         $user = $this->getUser();
         $this->cartService->editItemQuantity($user, $product, $quantity);
@@ -107,15 +113,17 @@ class CartController extends Controller
     /**
      * @param OrdersProducts $product
      * @Route("/remove/{id}",name="cart_remove")
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function removeProductFromCart(OrdersProducts $product)
+    public function removeProductFromCart(OrdersProducts $product=null)
     {
+        if (null === $product) {
+            return $this->render('exception/error404.html.twig');
+        }
+
         $user = $this->getUser();
         $this->cartService->removeFromCart($user, $product);
 
         return $this->redirectToRoute('cart_show');
     }
-
-
 }

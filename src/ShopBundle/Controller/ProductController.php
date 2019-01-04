@@ -18,8 +18,11 @@ class ProductController extends Controller
      * @param Product $product
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function productDetails(Product $product)
+    public function productDetails(Product $product=null)
     {
+        if (null===$product){
+            return $this->render('exception/error404.html.twig');
+        }
         return $this->render('product/details.html.twig',['product'=>$product]);
     }
 }

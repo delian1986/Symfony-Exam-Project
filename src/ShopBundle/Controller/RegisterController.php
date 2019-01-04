@@ -2,7 +2,6 @@
 
 namespace ShopBundle\Controller;
 
-use ShopBundle\Entity\Role;
 use ShopBundle\Entity\ShopOwner;
 use ShopBundle\Entity\User;
 use ShopBundle\Form\UserType;
@@ -10,12 +9,12 @@ use ShopBundle\Form\UserType;
 use ShopBundle\Service\InitialCashServiceInterface;
 use ShopBundle\Service\MailerInterface;
 use ShopBundle\Service\RoleServiceInterface;
-use ShopBundle\Service\ShopOwnerService;
 use ShopBundle\Service\ShopOwnerServiceInterface;
 use ShopBundle\Service\UserServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class RegisterController extends Controller
 {
@@ -69,9 +68,10 @@ class RegisterController extends Controller
     /**
      * @Route("/register", name="user_register_proceed", methods={"POST"})
      * @param Request $request
+     * @param AuthenticationUtils $authenticationUtils
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function proceedRegister(Request $request)
+    public function proceedRegister(Request $request,AuthenticationUtils $authenticationUtils)
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
@@ -116,6 +116,10 @@ class RegisterController extends Controller
             $this->mailer->sendRegistration($user);
 
             return $this->redirectToRoute('security_login');
+        }
+
+        foreach ($form->getErrors(true) as $error){
+            $this->addFlash('danger',$error->getMessage());
         }
 
         return $this->redirectToRoute('user_register');

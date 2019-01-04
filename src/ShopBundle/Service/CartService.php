@@ -183,7 +183,7 @@ class CartService implements CartServiceInterface
         $openStatus = $this->orderStatusService->findOneByStatusName('Open');
         $userOpenOrder = $this->orderService->findOneOrderByStatus($openStatus, $user);
 
-        if (null===$userOpenOrder){
+        if (null===$userOpenOrder || 0=== $userOpenOrder->getProducts()->count()){
             $this->flashBag->add('danger','Your cart is empty!');
             return false;
         }

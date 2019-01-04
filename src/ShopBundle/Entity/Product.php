@@ -165,8 +165,6 @@ class Product
         return $this;
     }
 
-
-
     /**
      * Set price.
      *
