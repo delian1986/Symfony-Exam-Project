@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+{% block main %}
+    {% include '_admin_sidebar.html.twig' %}
+    <div class="container body-content span=8 offset=2">
+        <h1>Add promotion</h1>
+        <div class="well">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_widget(form) }}
+
+            <button type="submit" class="btn btn-success">Add</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    <link href="{{ asset('css/admin_sidebar.css') }}" rel="stylesheet">
+{% endblock %}

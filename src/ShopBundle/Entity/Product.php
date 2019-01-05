@@ -120,11 +120,21 @@ class Product
      */
     private $reviews;
 
+    /**
+     * @var Promotion[]|ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\Promotion", inversedBy="products")
+     * @ORM\JoinTable(name="product_promotions")
+     * @ORM\OrderBy({"discount" = "DESC"})
+     */
+    private $promotions;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime('now');
         $this->inOrders = new ArrayCollection();
         $this->reviews = new ArrayCollection();
+        $this->promotions = new ArrayCollection();
 
     }
 
@@ -201,7 +211,65 @@ class Product
      */
     public function getPrice()
     {
+        if (!$this->hasActivePromotion()) {
+            return $this->price;
+        }
+
+        $discount = $this->price * $this->getBiggestActivePromotion()->getDiscount() / 100;
+        return $this->price - $discount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getOriginalPrice()
+    {
         return $this->price;
+    }
+
+    /**
+     * @return ArrayCollection|Promotion[]
+     */
+    public function getPromotions()
+    {
+        return $this->promotions;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasActivePromotion()
+    {
+        if ($this->getBiggestActivePromotion()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return null|Promotion
+     */
+    public function getBiggestActivePromotion()
+    {
+        return $this->promotions->filter(function (Promotion $promotion) {
+            return $promotion->isActive();
+        })->first();
+    }
+
+    /**
+     * @param ArrayCollection|Promotion[] $promotions
+     */
+    public function addPromotions($promotions)
+    {
+        $this->promotions = $promotions;
+    }
+
+    /**
+     * @param Promotion $promotion
+     */
+    public function removePromotion(Promotion $promotion)
+    {
+        $this->promotions->removeElement($promotion);
     }
 
     /**
@@ -402,7 +470,12 @@ class Product
         return 0;
     }
 
-
-
+    /**
+     * @return bool
+     */
+    public function isInStock(): bool
+    {
+        return $this->quantity > 0;
+    }
 
 }

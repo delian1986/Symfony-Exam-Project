@@ -7,10 +7,10 @@
         <div class="well">
             <div class="row">
                 <div class="col-sm-6">
-                    {{ form_start(form,{'attr':{'class' : 'form-horizontal'}}) }}
+                    {{ form_start(form) }}
                     <div class="form-group">
                         {{ form_label(form.initialCash, 'Add Cash: ') }}
-                        {{ form_widget(form.initialCash, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_widget(form.initialCash)}}
                     </div>
                     <div class="form-group">
                         {{ form_widget(form.Save, {'attr': {'class': 'btn btn-primary'}}) }}
