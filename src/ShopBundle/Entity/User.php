@@ -91,11 +91,20 @@ class User implements UserInterface, \Serializable
      */
     private $orders;
 
+    /**
+     * @var Review[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ShopBundle\Entity\Review", mappedBy="author")
+     */
+    private $reviews;
+
     public function __construct()
     {
         $this->roles = new ArrayCollection();
         $this->myProducts = new ArrayCollection();
         $this->orders = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
+
     }
 
     /**
@@ -195,8 +204,15 @@ class User implements UserInterface, \Serializable
             }
             $boughProducts[$product->getProduct()->getName()][]=$product;
         }
-        var_dump($boughProducts); exit();
         return $boughProducts;
+    }
+
+    public function getListOfBoughtProducts(){
+        $products=[];
+        foreach ($this->myProducts as $deal){
+            $products[$deal->getProduct()->getId()]=$deal->getProduct();
+        }
+        return $products;
     }
 
     /**
@@ -273,6 +289,39 @@ class User implements UserInterface, \Serializable
         $this->moneyReceived = $moneyReceived;
     }
 
+    public function itemsInCart(){
+        foreach ($this->getOrders() as $order){
+           if($order->getStatus()->getName() === 'Open'){
+                $itemsInCart=0;
+                foreach ($order->getProducts() as $product){
+                    $itemsInCart+=$product->getQuantity();
+                }
+                return $itemsInCart;
+           }
+        }
+        return 0;
+    }
+
+    /**
+     * @return ArrayCollection|Review[]
+     */
+    public function getReviews()
+    {
+        return $this->reviews;
+    }
+
+    /**
+     * @param ArrayCollection|Review[] $reviews
+     * @return User
+     */
+    public function setReviews($reviews): User
+    {
+        $this->reviews = $reviews;
+        return $this;
+    }
+
+
+
     /**
      * @return bool
      */
@@ -288,7 +337,6 @@ class User implements UserInterface, \Serializable
     {
         return in_array('ROLE_EDITOR', $this->getRoles());
     }
-
     /**
      * Returns the roles granted to the user.
      *

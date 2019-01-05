@@ -117,22 +117,6 @@ class CartService implements CartServiceInterface
         $this->flashBag->add('success', "{$product->getName()} added to your cart!");
     }
 
-
-    public function numberOfItemsInCart(User $user): int
-    {
-        $openStatus = $this->orderStatusService->findOneByStatusName('Open');
-
-        /** @var Order $userOpenOrder */
-        $userOpenOrder = $this->orderService->findOneOrderByStatus($openStatus, $user);
-
-        if ($userOpenOrder->getProducts()) {
-            return $userOpenOrder->getProducts()->count();
-        }
-
-        return 0;
-
-    }
-
     public function itemsInCart(User $user): ?Order
     {
         $openStatus = $this->orderStatusService->findOneByStatusName('Open');

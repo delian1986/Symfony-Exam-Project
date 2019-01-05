@@ -15,6 +15,10 @@ class SecurityController extends Controller
      */
     public function login(AuthenticationUtils $authenticationUtils)
     {
+        if ($this->getUser()){
+            return $this->redirectToRoute('homepage');
+        }
+
         return $this->render('security/login.html.twig', [
             'error' => $authenticationUtils->getLastAuthenticationError(),
             'lastUserName' => $authenticationUtils->getLastUsername()

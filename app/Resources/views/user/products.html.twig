@@ -6,13 +6,21 @@
         <h2>Your products:</h2>
         {% for name,item in products %}
             <div>
-                <p>{{ name }}</p>
-                {{ dump(item) }}
+                <h3>You bought {{ name }} {{ item|length }} time{{ (item|length>1) ? 's':'' }}</h3>
+                <a href="{{ path('product_details',{'slug':item[0].product.slug}) }}"><img src="{{ asset('uploads/images/' ~ item[0].product.image) }}" alt="{{ item[0].product.name }}" width="400" height="200"></a>
+                {% set totalSpentOnProduct = 0.00 %}
                 {# @var value \ShopBundle\Entity\SoldProduct#}
                 {% for value in item %}
+
                     <p>Bough quantity: {{ value.quantity }}</p>
-                    {#<p>Total price of this product: {{ product.productTotalPrice|number_format(2) }}</p>#}
+                    <p>Price: {{ value.price }}</p>
+                    <p>Total price: {{ value.price * value.quantity|number_format(2) }}</p>
+                    {% set totalSpentOnProduct =totalSpentOnProduct+ value.price %}
+                    <hr>
                 {% endfor %}
+                <strong>Total spent for {{ name }} : {{ totalSpentOnProduct }}</strong>
+                <hr>
+
             </div>
         {% endfor %}
 

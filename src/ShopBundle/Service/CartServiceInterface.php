@@ -16,8 +16,6 @@ interface CartServiceInterface
 
     public function addProductToCurrentOpenOrder(Product $product, $quantity, Order $order): void;
 
-    public function numberOfItemsInCart(User $user): int;
-
     public function itemsInCart(User $user): ?Order;
 
     public function editItemQuantity(User $user, OrdersProducts $product, int $quantity): bool;

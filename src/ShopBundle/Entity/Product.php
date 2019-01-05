@@ -113,10 +113,19 @@ class Product
      */
     private $soldTimes;
 
+    /**
+     * @var Review[]|ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="ShopBundle\Entity\Review", mappedBy="product")
+     */
+    private $reviews;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime('now');
         $this->inOrders = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
+
     }
 
     /**
@@ -356,6 +365,43 @@ class Product
         $this->soldTimes = $soldTimes;
         return $this;
     }
+
+    /**
+     * @return ArrayCollection|Review[]
+     */
+    public function getReviews()
+    {
+        return $this->reviews;
+    }
+
+    /**
+     * @param ArrayCollection|Review[] $reviews
+     * @return Product
+     */
+    public function setReviews($reviews): Product
+    {
+        $this->reviews = $reviews;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAverageRating(): int
+    {
+        if (count($this->getReviews()) > 0) {
+            $sum = array_reduce($this->getReviews()->toArray(), function ($sum, Review $review) {
+                $sum += $review->getRating();
+
+                return $sum;
+            });
+
+            return floor($sum / count($this->getReviews()));
+        }
+
+        return 0;
+    }
+
 
 
 

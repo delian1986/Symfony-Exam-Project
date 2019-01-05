@@ -8,27 +8,32 @@
                     {# @var product \ShopBundle\Entity\Product#}
                     {% for product in products %}
                         <div class="col-md-6">
-                            <a href="{{ path('product_details',{'slug':product.slug}) }}"> <img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}" width="400" height="200"></a>
-                            <header>
-                                <h2>{{ product.name }}</h2>
-                            </header>
+                            <div class="well">
+                                <a href="{{ path('product_details',{'slug':product.slug}) }}"> <img
+                                            src="{{ asset('uploads/images/' ~ product.image) }}"
+                                            alt="{{ product.name }}" width="400" height="200"></a>
+                                <header>
+                                    <h2>{{ product.name }}</h2>
+                                </header>
 
-                            <p>
-                                Description: {{ product.description }}
-                            </p>
+                                <p>
+                                    Description: {{ product.description }}
+                                </p>
 
-                            <p>
-                                Price: {{ product.price }}
-                            </p>
+                                <p>
+                                    Price: {{ product.price }}
+                                </p>
 
-                            <p>
-                                Available :{{ product.quantity }}
-                            </p>
+                                <p>
+                                    Available :{{ product.quantity }}
+                                </p>
 
-                            <small class="author">
-                               Seller:  {{ product.owner.fullName }}
-                            </small>
-                            <a href="{{ path('product_details',{'slug':product.slug}) }}" class="btn btn-primary btn-sm">Details</a>
+                                <small class="author">
+                                    Seller: {{ product.owner.fullName }}
+                                </small>
+                                <a href="{{ path('product_details',{'slug':product.slug}) }}"
+                                   class="btn btn-primary btn-sm">Details</a>
+                            </div>
                         </div>
                     {% endfor %}
                 </div>

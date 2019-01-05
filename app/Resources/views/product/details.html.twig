@@ -1,27 +1,72 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-    <img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}"> <br>
-    {{ product.name }} <br>
-    Description: {{ product.description }} <br>
-    Available: {{ product.quantity }} <br>
-    Price: {{ product.price|number_format(2) }} <br>
+    <div class="well">
+        <img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}"> <br>
+        {{ product.name }} <br>
+        Description: {{ product.description }} <br>
+        Available: {{ product.quantity }} <br>
+        Price: {{ product.price|number_format(2) }} <br>
+        Our Users Rating: {{ product.averageRating }} / 5 <br>
 
-    <form method="post" action="{{ path("cart_add", {'id':product.id}) }}" style="display: inline-block">
-        <label for="product_quantity"> Choice quantity:
-            <select name="product_quantity">
-                {% for quantity in range(1,product.quantity) %}
-                    <option value="{{ quantity }}">{{ quantity }}</option>
-                {% endfor %}
-            </select>
-        </label>
-        <br>
+        <form method="post" action="{{ path("cart_add", {'id':product.id}) }}" style="display: inline-block">
+            <label for="product_quantity"> Choice quantity:
+                <select name="product_quantity">
+                    {% for quantity in range(1,product.quantity) %}
+                        <option value="{{ quantity }}">{{ quantity }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <br>
+            {% if app.user and (app.user.isAdmin or app.user.isEditor) %}
+                <a href="#">Edit</a>
+            {% else %}
+                <input type="submit" class="btn btn-primary" value="Add To Cart"/>
+            {% endif %}
+        </form>
+    </div>
 
-        {% if app.user.isAdmin or app.user.isEditor %}
+    <h1>Reviews</h1>
+    {% if product.reviews|length > 0 %}
+        {% for review in product.reviews %}
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <strong>{{ review.author.fullName }} ({{ review.author.email }})</strong>
+                    Rated this product with: <strong>{{ review.rating }} / 5</strong>
+                    {% if (app.user and (review.author.id == app.user.id)) %}
+                        <form method="post" action="{{ path('product_delete_review', {"id": review.id}) }}"
+                              class="pull-right">
+                            <button type="submit" class="btn btn-xs btn-danger">Delete
+                            </button>
+                        </form>
+                        <form method="post" action="{{ path('product_edit_review', {"id": review.id}) }}"
+                              class="pull-right">
+                            <button type="submit" class="btn btn-xs btn-warning">Edit
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+                <div class="panel-body">
+                    {{ review.body }}
+                </div>
+                <div class="panel-footer">
+                    Posted on: {{ review.date|date }}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <span>There are no reviews for this product. the first review :)</span>
+    {% endif %}
+    <hr>
+    {% if app.user %}
+        {% if (product.id in app.user.getListOfBoughtProducts|keys) %}
+            <h2>Please add a review to this product!</h2>
+            {{ form_start(review_add, {'action': path('product_add_review', {'slug': product.slug}), 'method': 'POST'}) }}
+            {{ form_row(review_add.body) }}
+            {{ form_row(review_add.rating) }}
 
-            <a href="#">Edit</a>
-        {% else %}
-            <input type="submit" class="btn btn-primary" value="Add To Cart"/>
+            <button type="submit" class="btn btn-success" >Add Review</button>
+            {{ form_end(review_add) }}
         {% endif %}
-    </form>
+    {% endif %}
 {% endblock %}

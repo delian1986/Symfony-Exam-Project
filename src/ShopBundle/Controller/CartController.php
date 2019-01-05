@@ -67,6 +67,8 @@ class CartController extends Controller
     {
         /** @var User $user */
         $user = $this->getUser();
+        $user->getListOfBoughtProducts();
+
         $openOrder = $this->cartService->itemsInCart($user);
         $total = null;
 

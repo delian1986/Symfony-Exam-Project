@@ -59,13 +59,7 @@ class UserController extends Controller
         return $this->render('user/products.html.twig',['products'=>$myProducts]);
     }
 
-    /**
-     * @Template("_navbar.html.twig")
-     */
-    public function numberOfItemsInCartAction(){
-        $user=$this->getUser();
-        $numberOfItems=$this->cartService->numberOfItemsInCart($user);
 
-        return (['cartNumber'=>$numberOfItems]);
-    }
+
+
 }
