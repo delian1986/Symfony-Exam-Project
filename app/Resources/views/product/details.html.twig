@@ -6,7 +6,21 @@
         {{ product.name }} <br>
         Description: {{ product.description }} <br>
         Available: {{ product.quantity }} <br>
-        Price: {{ product.price|number_format(2) }} <br>
+        {% if product.activePromotion %}
+            <p>
+                Price: <s>{{ product.originalPrice|number_format(2) }}</s>
+            </p>
+            <p>
+                Price: {{ product.price|number_format(2) }}
+            </p>
+            <p>
+                Promotion active till: {{ product.biggestActivePromotion.endDate|date }}
+            </p>
+        {% else %}
+            <p>
+                Price: {{ product.price|number_format(2) }}
+            </p>
+        {% endif %}
         Our Users Rating: {{ product.averageRating }} / 5 <br>
 
         <form method="post" action="{{ path("cart_add", {'id':product.id}) }}" style="display: inline-block">
@@ -19,7 +33,7 @@
             </label>
             <br>
             {% if app.user and (app.user.isAdmin or app.user.isEditor) %}
-                <a href="#">Edit</a>
+                <a class="btn btn-primary btn-sm" href="{{ path('admin_product_edit',{'slug':product.slug}) }}">Edit</a>
             {% else %}
                 <input type="submit" class="btn btn-primary" value="Add To Cart"/>
             {% endif %}

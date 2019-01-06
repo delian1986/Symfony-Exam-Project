@@ -23,6 +23,7 @@
 
             </div>
         {% endfor %}
+        <h4><strong>Total spent on shop: {{ app.user.moneySpent|number_format(2) }}</strong></h4>
 
     {% else %}
         <h2>You don't have any products yet</h2>

@@ -19,10 +19,21 @@
                                 <p>
                                     Description: {{ product.description }}
                                 </p>
-
-                                <p>
-                                    Price: {{ product.price }}
-                                </p>
+                                {% if product.activePromotion %}
+                                    <p>
+                                        Price: <s>{{ product.originalPrice|number_format(2) }}</s>
+                                    </p>
+                                    <p>
+                                        Price: {{ product.price|number_format(2) }}
+                                    </p>
+                                    <p>
+                                        Promotion active till: {{ product.biggestActivePromotion.endDate|date }}
+                                    </p>
+                                {% else %}
+                                    <p>
+                                        Price: {{ product.price|number_format(2) }}
+                                    </p>
+                                {% endif %}
 
                                 <p>
                                     Available :{{ product.quantity }}

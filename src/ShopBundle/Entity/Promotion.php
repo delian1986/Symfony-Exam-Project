@@ -207,4 +207,9 @@ class Promotion
 
         return false;
     }
+
+    public function __toString()
+    {
+        return $this->getName() . " / {$this->getDiscount()} % discount on products";
+    }
 }

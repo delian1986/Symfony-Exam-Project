@@ -110,7 +110,6 @@ class CartService implements CartServiceInterface
         $productOrder
             ->setProduct($product)
             ->setQuantity(intval($quantity))
-            ->setPrice($product->getPrice())
             ->setOrders($order);
         $order->getProducts()->add($productOrder);
         $this->orderService->saveOrder($order);
@@ -162,6 +161,12 @@ class CartService implements CartServiceInterface
         return true;
     }
 
+    /**
+     * @param User $user
+     * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function checkout(User $user): bool
     {
         $openStatus = $this->orderStatusService->findOneByStatusName('Open');
@@ -177,9 +182,12 @@ class CartService implements CartServiceInterface
             return false;
         }
 
+        $this->setPriceToCheckoutProducts($userOpenOrder);
+
         $pendingStatus = $this->orderStatusService->findOneByStatusName('Pending');
 
         $userOpenOrder->setStatus($pendingStatus);
+        $userOpenOrder->setDateCreated(new \DateTime("now"));
 
         $this->orderService->saveOrder($userOpenOrder);
 
@@ -187,6 +195,18 @@ class CartService implements CartServiceInterface
 
         $this->flashBag->add('success', 'Your order was received.');
         return true;
+    }
+
+    /**
+     * @param Order $order
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    private function setPriceToCheckoutProducts(Order $order){
+        foreach ($order->getProducts() as $product){
+            $product->setPrice($product->getProduct()->getPrice());
+            $this->orderProductsRepository->save($product);
+        }
     }
 
 

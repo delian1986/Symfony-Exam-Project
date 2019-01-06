@@ -5,21 +5,20 @@
 
     <div class="container body-content span=8 offset=2">
         <div class="well">
-            <legend>New Product</legend>
             {{ form_start(form) }}
 
             {{ form_row(form.name) }}
-            {{ form_row(form.price) }}
-            {{ form_row(form.quantity) }}
             {{ form_row(form.description) }}
             {{ form_row(form.category) }}
             {{ form_row(form.image) }}
-            {{ form_row(form.Save) }}
+            {{ form_row(form.quantity) }}
+            {{ form_row(form.price) }}
+            {{ form_row(form.isListed) }}
+            {{ form_row(form.promotions) }}
 
-            {{ form_row(form._token) }}
+            <button class="btn btn-success">Add</button>
 
             {{ form_end(form) }}
-
         </div>
     </div>
 

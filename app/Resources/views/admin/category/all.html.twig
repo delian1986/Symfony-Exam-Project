@@ -9,8 +9,7 @@
 
             {# @var product \ShopBundle\Entity\Product#}
             {% for product in category.products %}
-                {% if product.owner.username==app.user.username %}
-                    <div class="product">
+                <div class="product">
                     <a href="{{ path('product_details',{'slug':product.slug}) }}"><h4> {{ product.name }}</h4></a>
                     {% if product.isListed==1 %}
                         <span class="label label-success">In Stock</span>
@@ -18,9 +17,10 @@
                         <span class="label label-danger">Out of Stock</span>
                     {% endif %}
                     <p>Available Quantity: {{ product.quantity }}</p>
-                    <p>Price: {{ product.price }}</p>
-                    </div>
-                {% endif %}
+                    <p>Price: {{ product.price|number_format(2) }}</p>
+                    <p>In promotion: {{ product.hasActivePromotion ? 'Yes' : 'No' }}</p>
+                    <hr/>
+                </div>
             {% endfor %}
         {% endfor %}
     </div>

@@ -38,13 +38,13 @@
                                             </ul>
                                         </a>
                                         <p>Quantity: {{ product.quantity }}</p>
-                                        <p>Price: {{ product.price }}</p>
+                                        <p>Price: {{ product.price|number_format(2) }}</p>
                                     {% endfor %}
                                 </ul>
                             </td>
                             <td>{{ order.user.email }} </td>
                             <td>{{ order.dateCreated|date }} </td>
-                            <td>{{ order.total }} </td>
+                            <td>{{ order.total|number_format(2) }} </td>
                             <td>
                                 {% if order.status.name=='Complete' %}
                                     <span class="label label-success">Completed</span>

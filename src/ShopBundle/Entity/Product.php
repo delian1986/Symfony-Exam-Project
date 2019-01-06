@@ -387,7 +387,7 @@ class Product
     /**
      * @return bool
      */
-    public function isListed(): bool
+    public function isListed(): ?bool
     {
         return $this->isListed;
     }

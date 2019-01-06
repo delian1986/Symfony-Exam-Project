@@ -45,7 +45,7 @@ class OrdersProducts
 
     /**
      * @var float
-     * @ORM\Column(name="price", type="float")
+     * @ORM\Column(name="price", type="float",scale=2,nullable=true)
      */
     private $price;
 
@@ -59,7 +59,7 @@ class OrdersProducts
 
     public function __construct()
     {
-        $this->dateAdded=new \DateTime('now');
+        $this->dateAdded = new \DateTime('now');
 
     }
 
@@ -189,7 +189,6 @@ class OrdersProducts
         $this->price = $price;
         return $this;
     }
-
 
 
 }

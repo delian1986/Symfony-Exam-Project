@@ -166,6 +166,7 @@ class OrderService implements OrderServiceInterface
         }
         $completeStatus = $this->orderStatusRepository->findOneByName('Complete');
         $order->setStatus($completeStatus);
+        $order->setDateCreated(new \DateTime("now"));
         $this->orderRepository->save($order);
         $this->flashBag->add('success', "Order with ID: {$order->getId()} was successfully completed!");
         $this->mailer->sendCartCheckOut($order);

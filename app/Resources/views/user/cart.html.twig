@@ -12,7 +12,15 @@
                             src="{{ asset('uploads/images/' ~ product.product.image) }}"
                             alt="{{ product.product.name }}" width="400" height="200"></a>
                 <h2>{{ product.product.name }}</h2>
-                <h4>Price: {{ product.product.price }}</h4>
+                {% if product.product.activePromotion %}
+                    <p>Price: <s>{{ product.product.originalPrice|number_format(2) }}</s></p>
+                    <p>Price: {{ product.product.price|number_format(2) }}</p>
+                    <p>Promotion active till: {{ product.product.biggestActivePromotion.endDate|date }}</p>
+                {% else %}
+                    <p>
+                        Price: {{ product.product.price|number_format(2) }}
+                    </p>
+                {% endif %}
                 <form method="post" action="{{ path("cart_edit", {'id':product.id}) }}" style="display: inline-block">
                     <label for="product_quantity"> Edit quantity:
                         <select name="product_quantity">
@@ -31,7 +39,7 @@
 
             </div>
         {% endfor %}
-        <h3>TOTAL: {{ total }}</h3>
+        <h3>TOTAL: {{ total|number_format(2) }}</h3>
 
         <a href="{{ path('cart_checkout') }}" class="btn btn-primary btn-lg active">Check Out</a>
 
