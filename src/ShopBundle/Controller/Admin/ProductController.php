@@ -2,11 +2,10 @@
 
 namespace ShopBundle\Controller\Admin;
 
-use Proxies\__CG__\ShopBundle\Entity\Order;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ShopBundle\Entity\Product;
 use ShopBundle\Form\ProductType;
+use ShopBundle\Repository\ProductRepository;
 use ShopBundle\Service\ProductServiceInterface;
 use ShopBundle\Service\ShopOwnerServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -53,16 +52,7 @@ class ProductController extends Controller
             $owner = $this->shopOwnerService->getOwner();
             $product->setOwner($owner);
 
-            /** @var UploadedFile $image */
-            $image = $form->get('image')->getData();
-            $fileName = md5(uniqid()) . '.' . $image->guessExtension();
-
-            try {
-                $image->move($this->getParameter('products_directory'),
-                    $fileName);
-            } catch (FileException $ex) {
-
-            }
+            $fileName = $this->uploadPicture($form->get('image')->getData());
             $product->setImage($fileName);
             $product->setSoldTimes(0);
             $product->setIsListed(true);
@@ -82,15 +72,44 @@ class ProductController extends Controller
      */
     public function editProduct(Product $product, Request $request)
     {
+        $this->deleteOldPicture($product->getId());
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $fileName = $this->uploadPicture($form->get('image')->getData());
+            $product->setImage($fileName);
             $this->productService->saveProduct($product);
-            return $this->redirectToRoute('product_details',{'slug':$product->getSlug()});
+            return $this->redirectToRoute('product_details', ['slug' => $product->getSlug()]);
 
         }
 
         return $this->render('admin/products/create.html.twig', ['form' => $form->createView()]);
     }
+
+    private function uploadPicture($image)
+    {
+        $fileName = md5(uniqid()) . '.' . $image->guessExtension();
+
+        try {
+            $image->move($this->getParameter('products_directory'),
+                $fileName);
+        } catch (FileException $ex) {
+
+        }
+
+        return $fileName;
+    }
+
+    private function deleteOldPicture(int $productId)
+    {
+        $dir = $this->getParameter('products_directory');
+        $product = $this->getDoctrine()->getRepository(Product::class)->findOneBy(['id' => $productId]);
+        $oldImage = $dir . $product->getImage();
+        if (file_exists($oldImage)) {
+            unlink($oldImage);
+        }
+    }
+
+
 }

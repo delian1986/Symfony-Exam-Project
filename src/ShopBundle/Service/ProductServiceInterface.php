@@ -10,7 +10,7 @@ interface ProductServiceInterface
 {
     public function saveProduct(Product $product):void;
 
-    public function addWatermark(string $image) ;
+
 
 
 }
