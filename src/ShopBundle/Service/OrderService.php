@@ -185,7 +185,7 @@ class OrderService implements OrderServiceInterface
     {
         $declinedStatus = $this->orderStatusRepository->findOneByName('Declined');
         $order->setStatus($declinedStatus);
-
+        $this->flashBag->add('danger',"Order {$order->getId()} was declined!");
         $this->orderRepository->save($order);
         $this->mailer->sendDeclinedOrderNotify($order, $reason);
 

@@ -5,6 +5,7 @@ namespace ShopBundle\Controller\Admin;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use ShopBundle\Entity\Order;
 use ShopBundle\Form\DeclineOrderType;
+use ShopBundle\Service\MailerInterface;
 use ShopBundle\Service\OrderServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +23,7 @@ class OrdersController extends Controller
      * @var OrderServiceInterface
      */
     private $orderService;
+
 
     public function __construct(OrderServiceInterface $orderService)
     {
@@ -63,8 +65,8 @@ class OrdersController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            var_dump($order); exit();
+            $reason=$form['Reason']->getData();
+            $this->orderService->declineOrder($order,$reason);
             return $this->redirectToRoute("admin_show_all_orders", ['param' => 'all']);
         }
 

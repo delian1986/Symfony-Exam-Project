@@ -18,12 +18,12 @@
         {% endfor %}
         <p><strong>Total price: {{ order.total|number_format(2) }} </strong></p>
 
-        <form method="post" action="{{ path('admin_order_decline', {'id': order.id}) }}">
-            {{ form_start(form) }}
-            {{ form(form) }}
-            {{ form_end(form) }}
-            <button class="btn btn-danger" type="submit">Decline this order</button>
-        </form>
+        {#{{ form_start(form) path('admin_order_decline', {'id': order.id}) }}#}
+        {{ form_start(form, {'action': path('admin_order_decline', {'id': order.id}),  'method': 'POST'}) }}
+        {{ form_row(form.Reason) }}
+        <button class="btn btn-danger">Decline Order</button>
+
+        {{ form_end(form) }}
         <a href="{{ path('admin_show_all_orders',{'param':'all'}) }}" class="btn btn-primary" type="button">Back</a>
     </div>
 {% endblock %}
