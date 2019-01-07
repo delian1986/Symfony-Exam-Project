@@ -1,13 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block main %}
-    {% block sidebar %}
-        {% include "_admin_sidebar.html.twig" %}
-    {% endblock %}
-{% endblock %}
-{% block stylesheets %}
-
-    {{ parent() }}
-
-    <link href="{{ asset('css/admin_sidebar.css') }}" rel="stylesheet">
+{% block body %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <h1>Admin Panel</h1>
+        <a href="#" type="button" class="btn btn-default btn-lg btn-block">
+            Manage Users</a>
+        {#<a href="{{ path('admin_bannedips_all') }}" type="button"#}
+           {#class="fa fa-exclamation-triangle fa-lg btn btn-info btn-lg btn-block"> Manage Security</a>#}
+        <a href="{{ path('admin_show_all_orders',{'param':'all'})}}" type="button"
+           class="btn btn-default btn-lg btn-block"> Manage Orders</a>
+        <hr>
+    {% endif %}
+    <h1>Editor Panel</h1>
+    <a href="{{ path('categories_products') }}" type="button"
+       class="btn btn-default btn-lg btn-block"> Manage Categories</a>
+    <a href="#" type="button"
+       class="btn btn-default btn-lg btn-block"> Manage Products</a>
+    <a href="{{ path('admin_promotion_add') }}" type="button"
+       class="btn btn-default btn-lg btn-block"> Manage Promotions</a>
 {% endblock %}

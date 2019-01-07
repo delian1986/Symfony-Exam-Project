@@ -1,7 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block main %}
+{% block body %}
     <div class="well">
+        <h1>Product Details</h1>
         <img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}"> <br>
         {{ product.name }} <br>
         Description: {{ product.description }} <br>
@@ -23,6 +24,9 @@
         {% endif %}
         Our Users Rating: {{ product.averageRating }} / 5 <br>
 
+        {% if app.user and (app.user.isAdmin or app.user.isEditor) %}
+        <a class="btn btn-primary btn-sm" href="{{ path('admin_product_edit',{'slug':product.slug}) }}">Edit</a>
+        {% else %}
         <form method="post" action="{{ path("cart_add", {'id':product.id}) }}" style="display: inline-block">
             <label for="product_quantity"> Choice quantity:
                 <select name="product_quantity">
@@ -32,10 +36,7 @@
                 </select>
             </label>
             <br>
-            {% if app.user and (app.user.isAdmin or app.user.isEditor) %}
-                <a class="btn btn-primary btn-sm" href="{{ path('admin_product_edit',{'slug':product.slug}) }}">Edit</a>
-            {% else %}
-                <input type="submit" class="btn btn-primary" value="Add To Cart"/>
+            <input type="submit" class="btn btn-primary" value="Add To Cart"/>
             {% endif %}
         </form>
     </div>
@@ -79,7 +80,7 @@
             {{ form_row(review_add.body) }}
             {{ form_row(review_add.rating) }}
 
-            <button type="submit" class="btn btn-success" >Add Review</button>
+            <button type="submit" class="btn btn-success">Add Review</button>
             {{ form_end(review_add) }}
         {% endif %}
     {% endif %}

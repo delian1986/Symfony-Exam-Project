@@ -3,7 +3,9 @@
 namespace ShopBundle\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use ShopBundle\Entity\Product;
+use Symfony\Bundle\FrameworkBundle\Tests\Fixtures\Validation\Category;
 
 /**
  * ProductRepository
@@ -42,4 +44,27 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         $this->_em->persist($product);
         $this->_em->flush();
     }
+
+    public function findAllbyCategoryQueryBuilder(Category $category): QueryBuilder
+    {
+        return $this->createQueryBuilder("product")
+            ->andWhere("product.quantity > 0")
+            ->andWhere("product.isListed = 1")
+            ->andWhere("product.category = :category")
+            ->orderBy("product.id", "desc")
+            ->setParameter("category", $category);
+    }
+
+    public function findAllTopSellers(){
+        $q = $this->createQueryBuilder('p')
+            ->where('p.quantity > :inStock')
+            ->andWhere('p.isListed = :isListed')
+            ->setParameter('inStock', 0)
+            ->setParameter('isListed', 1)
+            ->orderBy('p.soldTimes','DESC')
+            ->getQuery();
+
+        return $q->getResult();
+    }
+
 }

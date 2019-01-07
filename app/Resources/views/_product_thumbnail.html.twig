@@ -1,0 +1,31 @@
+<div class="col-sm-6 col-md-4">
+    <div class="thumbnail {{ product.hasActivePromotion ?  "promo" : '' }} fixed-div">
+        <h3 class="text-center">{{ product.name }}</h3>
+        <img class="img-thumbnail center-block fixed-image" src="{{ asset('uploads/images/' ~ product.image)}}"
+             alt="{{ product.name }}">
+        <div class="caption">
+            <div class="text-center">
+                Rating: {{ product.averageRating }} / 5
+            </div>
+            <hr>
+            <p><strong>Category</strong><a
+                        href="{{ path('show_products_by_category', {'slug': product.category.slug}) }}">
+                    {{ product.category.name }}
+                </a></p>
+            <p><strong>Quantity available: {{ product.quantity }}</strong></p>
+            <div class="h3">
+                {% if product.hasActivePromotion %}
+                    <span class="label label-success"><s>€{{ product.originalPrice|number_format(2) }}</s></span>
+                    <span class="label label-info">€{{ product.price|number_format(2) }}</span>
+                {% else %}
+                    <span class="label label-success">€{{ product.originalPrice|number_format(2) }}</span>
+                {% endif %}
+            </div>
+            <hr>
+            <p class="text">
+            <a href="{{ path("product_details", {"slug": product.slug}) }}" class="btn btn-primary"
+               role="button"> Details
+            </a>
+        </div>
+    </div>
+</div>

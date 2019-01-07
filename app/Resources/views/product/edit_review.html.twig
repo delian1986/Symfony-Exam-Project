@@ -1,31 +1,46 @@
 {% extends 'base.html.twig' %}
 
-{% block main %}
+{% block body %}
 
-    <img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}"> <br>
-    {{ product.name }} <br>
-    Description: {{ product.description }} <br>
-    Available: {{ product.quantity }} <br>
-    Price: {{ product.price|number_format(2) }} <br>
-    Rating: {{ product.averageRating }} <br>
-
-    <form method="post" action="{{ path("cart_add", {'id':product.id}) }}" style="display: inline-block">
-        <label for="product_quantity"> Choice quantity:
-            <select name="product_quantity">
-                {% for quantity in range(1,product.quantity) %}
-                    <option value="{{ quantity }}">{{ quantity }}</option>
-                {% endfor %}
-            </select>
-        </label>
-        <br>
-
-        {% if app.user.isAdmin or app.user.isEditor %}
-
-            <a href="#">Edit</a>
+    <div class="well">
+        <h1>Product Details</h1>
+        <img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}"> <br>
+        {{ product.name }} <br>
+        Description: {{ product.description }} <br>
+        Available: {{ product.quantity }} <br>
+        {% if product.activePromotion %}
+            <p>
+                Price: <s>{{ product.originalPrice|number_format(2) }}</s>
+            </p>
+            <p>
+                Price: {{ product.price|number_format(2) }}
+            </p>
+            <p>
+                Promotion active till: {{ product.biggestActivePromotion.endDate|date }}
+            </p>
         {% else %}
-            <input type="submit" class="btn btn-primary" value="Add To Cart"/>
+            <p>
+                Price: {{ product.price|number_format(2) }}
+            </p>
         {% endif %}
-    </form>
+        Our Users Rating: {{ product.averageRating }} / 5 <br>
+
+        {% if app.user and (app.user.isAdmin or app.user.isEditor) %}
+        <a class="btn btn-primary btn-sm" href="{{ path('admin_product_edit',{'slug':product.slug}) }}">Edit</a>
+        {% else %}
+        <form method="post" action="{{ path("cart_add", {'id':product.id}) }}" style="display: inline-block">
+            <label for="product_quantity"> Choice quantity:
+                <select name="product_quantity">
+                    {% for quantity in range(1,product.quantity) %}
+                        <option value="{{ quantity }}">{{ quantity }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <br>
+            <input type="submit" class="btn btn-primary" value="Add To Cart"/>
+            {% endif %}
+        </form>
+    </div>
 
     <h1>Edit your Review</h1>
     {{ form_start(review_add, {'action': path('product_edit_review', {'id': review.id}), 'method': 'POST'}) }}

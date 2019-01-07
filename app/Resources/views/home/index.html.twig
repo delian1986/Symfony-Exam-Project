@@ -1,56 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block main %}
-    <div class="container body-content">
-        <div class="row">
-            <div class="container body-content">
-                <div class="row">
-                    {# @var product \ShopBundle\Entity\Product#}
-                    {% for product in products %}
-                        <div class="col-md-6">
-                            <div class="well">
-                                <a href="{{ path('product_details',{'slug':product.slug}) }}"> <img
-                                            src="{{ asset('uploads/images/' ~ product.image) }}"
-                                            alt="{{ product.name }}" width="400" height="200"></a>
-                                <header>
-                                    <h2>{{ product.name }}</h2>
-                                </header>
-
-                                <p>
-                                    Description: {{ product.description }}
-                                </p>
-                                {% if product.activePromotion %}
-                                    <p>
-                                        Price: <s>{{ product.originalPrice|number_format(2) }}</s>
-                                    </p>
-                                    <p>
-                                        Price: {{ product.price|number_format(2) }}
-                                    </p>
-                                    <p>
-                                        Promotion active till: {{ product.biggestActivePromotion.endDate|date }}
-                                    </p>
-                                {% else %}
-                                    <p>
-                                        Price: {{ product.price|number_format(2) }}
-                                    </p>
-                                {% endif %}
-
-                                <p>
-                                    Available :{{ product.quantity }}
-                                </p>
-
-                                <small class="author">
-                                    Seller: {{ product.owner.fullName }}
-                                </small>
-                                <a href="{{ path('product_details',{'slug':product.slug}) }}"
-                                   class="btn btn-primary btn-sm">Details</a>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-        </div>
-    </div>
+{% block body %}
+    <h1 class="text-center">Our Top Sellers</h1>
+    <hr>
+    {% for product in products %}
+        {% include "_product_thumbnail.html.twig" %}
+    {% endfor %}
 
 {% endblock %}

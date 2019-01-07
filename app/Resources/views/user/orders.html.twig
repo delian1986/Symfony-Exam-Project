@@ -1,18 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block main %}
-
+{% block body %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2>Your Orders</h2>
+        </div>
+    </div>
     {% if orders is not empty %}
         {# @var order \ShopBundle\Entity\Order #}
         {% for order in orders %}
-            <h4>Order Id: {{ order.id }} created on {{ order.dateCreated|date("d/m/Y") }} with status {{ order.status.name}}</h4>
-            {% for product in order.products %}
-                <p>{{ product.product.name }}</p>
-                <p>Bough quantity: {{ product.quantity }}</p>
-                <p>Total price of this product: {{ product.productTotalPrice|number_format(2) }}</p>
-            {% endfor %}
-            <p><strong>Total price: {{ order.total|number_format(2) }} </strong></p>
-            <hr/>
+            <div class="well">
+                <h4>Order Id: {{ order.id }} created on {{ order.dateCreated|date("d/m/Y") }} with
+                    status {{ order.status.name }}</h4>
+                {% for product in order.products %}
+                    <a href="{{ path('product_details',{'slug':product.product.slug}) }}"><p>{{ product.product.name }}</p></a>
+                    <p>Bough quantity: {{ product.quantity }}</p>
+                    <p>Total price of this product: {{ product.productTotalPrice|number_format(2) }}</p>
+                    <hr/>
+                {% endfor %}
+                <p><strong>Total price: {{ order.total|number_format(2) }} </strong></p>
+            </div>
         {% endfor %}
     {% else %}
         <h4>You don't have complete orders!</h4>
