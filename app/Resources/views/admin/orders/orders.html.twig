@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block main %}
-    {% include "_admin_sidebar.html.twig" %}
+{% block body %}
     <a href="{{ path('admin_show_all_orders',{'param':'complete'}) }}">Show All Completed Orders</a> |
     <a href="{{ path('admin_show_all_orders',{'param':'pending'}) }}">Show All Pending Orders</a> |
     <a href="{{ path('admin_show_all_orders',{'param':'declined'}) }}">Show All Declined Orders</a> |
@@ -53,10 +52,11 @@
                                 {% elseif order.status.name=='Declined' %}
                                     <span class="label label-danger">Declined</span>
                                 {% else %}
-                                    <form method="post" action="{{ path('admin_order_complete', {'id': order.id}) }}">
+                                    <form method="post" action="{{ path('admin_order_take_action', {'id': order.id}) }}">
                                         <p class="label label-info">Pending</p> /
-                                        <button class="btn btn-success btn-xs" type="submit">Complete order</button>
+                                        <button class="btn btn-warning btn-xs" type="submit">Take Action</button>
                                     </form>
+
                                 {% endif %}
                             </td>
                         </tr>
@@ -67,11 +67,4 @@
         </div>
 
     </div>
-{% endblock %}
-
-{% block stylesheets %}
-
-    {{ parent() }}
-
-    <link href="{{ asset('css/admin_sidebar.css') }}" rel="stylesheet">
 {% endblock %}

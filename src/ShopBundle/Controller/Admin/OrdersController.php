@@ -4,8 +4,10 @@ namespace ShopBundle\Controller\Admin;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use ShopBundle\Entity\Order;
+use ShopBundle\Form\DeclineOrderType;
 use ShopBundle\Service\OrderServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -26,6 +28,16 @@ class OrdersController extends Controller
         $this->orderService = $orderService;
     }
 
+    /**
+     * @Route("/action/{id}",name="admin_order_take_action")
+     * @param Order $order
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function orderTakeAction(Order $order)
+    {
+        return $this->render('admin/orders/take_action.html.twig', ['order' => $order]);
+    }
+
 
     /**
      * @Route("/complete-order/{id}",name="admin_order_complete")
@@ -36,7 +48,28 @@ class OrdersController extends Controller
     {
         $this->orderService->completeOrder($order);
 
-        return $this->redirectToRoute("admin_show_all_orders",['param'=>'all']);
+        return $this->redirectToRoute("admin_show_all_orders", ['param' => 'all']);
+    }
+
+    /**
+     * @Route("/decline-order/{id}",name="admin_order_decline")
+     * @param Order $order
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function declineOrder(Order $order, Request $request)
+    {
+        $form = $this->createForm(DeclineOrderType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            var_dump($order); exit();
+            return $this->redirectToRoute("admin_show_all_orders", ['param' => 'all']);
+        }
+
+        return $this->render('admin/orders/decline_order.html.twig', ['order' => $order, 'form' => $form->createView()]);
+
     }
 
     /**

@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2 class="text-left">All products</h2>
+    <p class="text-right">
+        <a href="{{ path("product_add") }}" class="btn btn-success">Add new product</a>
+    </p>
+    <hr>
+    <table class="table table-responsive table-striped">
+        <thead>
+        <tr>
+            <th>{{ knp_pagination_sortable(products, '#id', 'product.id') }}</th>
+            <th>Image</th>
+            <th>{{ knp_pagination_sortable(products, 'Name', 'product.name') }}</th>
+            <th>Owner</th>
+            <th>Category</th>
+            <th>{{ knp_pagination_sortable(products, 'Quantity', 'product.quantity') }}</th>
+            <th>{{ knp_pagination_sortable(products, 'Price', 'product.price') }}</th>
+            <th>{{ knp_pagination_sortable(products, 'Sold Times', 'product.soldTimes') }}</th>
+            <th>{{ knp_pagination_sortable(products, 'Is Listed', 'product.isListed') }}</th>
+            <th>{{ knp_pagination_sortable(products, 'Date Added', 'product.dateAdded') }}</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if products|length > 0 %}
+            {% for product in products %}
+                <tr>
+                    <td>{{ product.id }}</td>
+                    <td><img src="{{ asset('uploads/images/' ~ product.image)}}" class="admin-image"
+                             alt="Product Image"></td>
+                    <td>
+                        <a href="{{ path("product_details", {"slug": product.slug}) }}">
+                            {{ product.name }}
+                        </a>
+                    </td>
+                    <td>{{ product.owner.email }}</td>
+                    <td>
+                        <a href="{{ path('show_products_by_category', {"slug": product.category.slug}) }}"> {{ product.category.name }}</a>
+                    </td>
+                    <td>{{ product.quantity }}</td>
+                    <td>
+                        {{ product.price|number_format(2) }}
+                    </td>
+                    <td>
+                        {{ product.soldTimes }}
+                    </td>
+                    <td>
+                        {{ product.isListed? 'Yes':'No' }}
+                    </td>
+                    <td>
+                        {{ product.createdAt|date }}
+                    </td>
+                    <td>
+                        <a href="{{ path("admin_product_edit", {"slug": product.slug}) }}"
+                           class="btn btn-warning">Edit</a>
+                    </td>
+                    <td>
+                        {% if product.soldTimes==0 %}
+                        <form action="{{ path("admin_products_delete", {"slug": product.slug}) }}" method="post">
+                            <button class="btn btn-danger delete-item" type="submit">Delete</button>
+                        </form>
+                            {% else %}
+                                <button class="btn btn-danger delete-item disabled" type="submit">Delete</button>
+
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+
+    <div class="navigation text-center">
+        {{ knp_pagination_render(products) }}
+    </div>
+{% endblock %}
+
+

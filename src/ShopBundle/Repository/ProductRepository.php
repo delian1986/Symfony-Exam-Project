@@ -62,9 +62,16 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('inStock', 0)
             ->setParameter('isListed', 1)
             ->orderBy('p.soldTimes','DESC')
+            ->setMaxResults(6)
             ->getQuery();
 
         return $q->getResult();
+    }
+
+    public function findAllByQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder("product")
+            ->orderBy("product.id", "desc");
     }
 
 }

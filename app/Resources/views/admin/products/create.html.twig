@@ -1,8 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block main %}
-    {% include "_admin_sidebar.html.twig" %}
-
+{% block body %}
     <div class="container body-content span=8 offset=2">
         <div class="well">
             {{ form_start(form) }}
@@ -22,11 +20,4 @@
         </div>
     </div>
 
-{% endblock %}
-
-{% block stylesheets %}
-
-    {{ parent() }}
-
-    <link href="{{ asset('css/admin_sidebar.css') }}" rel="stylesheet">
 {% endblock %}

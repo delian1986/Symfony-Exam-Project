@@ -2,16 +2,17 @@
 
 namespace ShopBundle\Controller\Admin;
 
+use Doctrine\DBAL\DBALException;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ShopBundle\Entity\Product;
 use ShopBundle\Form\ProductType;
-use ShopBundle\Repository\ProductRepository;
 use ShopBundle\Service\ProductServiceInterface;
 use ShopBundle\Service\ShopOwnerServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -59,9 +60,49 @@ class ProductController extends Controller
 
             $this->productService->saveProduct($product);
 
-            return $this->redirectToRoute("admin_index");
+            return $this->redirectToRoute("admin_products_all");
         }
         return $this->render('admin/products/create.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/all/", name="admin_products_all")
+     * @param Request $request
+     * @param PaginatorInterface $paginator
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function allProducts(Request $request, PaginatorInterface $paginator)
+    {
+        $products = $paginator->paginate(
+            $this->getDoctrine()->getRepository(Product::class)
+                ->findAllByQueryBuilder(),
+            $request->query->getInt('page', 1),
+            9
+        );
+
+        return $this->render('admin/products/all.html.twig',['products'=>$products]);
+
+    }
+
+    /**
+     * @Route("/products/delete/{slug}", name="admin_products_delete")
+     *
+     * @param Product $product
+     * @return Response
+     */
+    public function deleteProductsAction(Product $product): Response
+    {
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($product);
+            $em->flush();
+        }catch (DBALException $exception){
+            $this->addFlash('danger','You cannot delete product that is already purchased! You can only unlist it from the shop!');
+            return $this->redirectToRoute('admin_products_all');
+        }
+
+        $this->addFlash("success", "Product {$product->getName()} was deleted successfully!");
+        return $this->redirectToRoute('admin_products_all');
     }
 
     /**

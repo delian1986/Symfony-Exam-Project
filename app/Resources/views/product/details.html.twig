@@ -3,23 +3,25 @@
 {% block body %}
     <div class="well">
         <h1>Product Details</h1>
+        <div class="thumbnail">
         <img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}"> <br>
-        {{ product.name }} <br>
-        Description: {{ product.description }} <br>
-        Available: {{ product.quantity }} <br>
+        </div>
+        <h2>{{ product.name }}</h2> <br>
+        <p>Description: {{ product.description }}</p> <br>
+        <p>Available: {{ product.quantity }} </p><br>
         {% if product.activePromotion %}
             <p>
                 Price: <s>{{ product.originalPrice|number_format(2) }}</s>
             </p>
             <p>
-                Price: {{ product.price|number_format(2) }}
+                <strong>Price: {{ product.price|number_format(2) }}</strong>
             </p>
             <p>
                 Promotion active till: {{ product.biggestActivePromotion.endDate|date }}
             </p>
         {% else %}
             <p>
-                Price: {{ product.price|number_format(2) }}
+                <strong>Price: {{ product.price|number_format(2) }}</strong>
             </p>
         {% endif %}
         Our Users Rating: {{ product.averageRating }} / 5 <br>

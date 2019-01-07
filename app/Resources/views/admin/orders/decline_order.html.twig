@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2>You are going to decline Order no. {{ order.id }}</h2>
+        </div>
+    </div>
+    {# @var order \ShopBundle\Entity\Order #}
+    <div class="well">
+        <h4>Order Id: {{ order.id }} created on {{ order.dateCreated|date("d/m/Y") }} with
+            status {{ order.status.name }}</h4>
+        {% for product in order.products %}
+            <a href="{{ path('product_details',{'slug':product.product.slug}) }}"><p>{{ product.product.name }}</p></a>
+            <p>Bough quantity: {{ product.quantity }}</p>
+            <p>Total price of this product: {{ product.productTotalPrice|number_format(2) }}</p>
+            <hr/>
+        {% endfor %}
+        <p><strong>Total price: {{ order.total|number_format(2) }} </strong></p>
+
+        <form method="post" action="{{ path('admin_order_decline', {'id': order.id}) }}">
+            {{ form_start(form) }}
+            {{ form(form) }}
+            {{ form_end(form) }}
+            <button class="btn btn-danger" type="submit">Decline this order</button>
+        </form>
+        <a href="{{ path('admin_show_all_orders',{'param':'all'}) }}" class="btn btn-primary" type="button">Back</a>
+    </div>
+{% endblock %}
+
