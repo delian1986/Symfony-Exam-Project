@@ -27,7 +27,7 @@
                         {% set totalSpentOnProduct =totalSpentOnProduct+ value.price %}
                         <hr>
                     {% endfor %}
-                    <strong>Total spent for {{ name }} : {{ totalSpentOnProduct }}</strong>
+                    <strong>Total spent for {{ name }} : {{ totalSpentOnProduct|number_format(2) }}</strong>
                     <hr>
             </div>
         {% endfor %}
@@ -36,10 +36,6 @@
     {% else %}
         <h2>You don't have any products yet</h2>
     {% endif %}
-
-{% endblock %}
-
-{% block body_id %}
 
 {% endblock %}
 

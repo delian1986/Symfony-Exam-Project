@@ -1,12 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block main %}
-    {% include "_admin_sidebar.html.twig" %}
-
-    <div class="container body-content span=8 offset=2">
+{% block body %}
         <div class="well">
             <div class="row">
-                <div class="col-sm-6">
                     {{ form_start(form) }}
                     <div class="form-group">
                         {{ form_label(form.initialCash, 'Add Cash: ') }}
@@ -15,17 +11,9 @@
                     <div class="form-group">
                         {{ form_widget(form.Save, {'attr': {'class': 'btn btn-primary'}}) }}
                     </div>
-                </div>
                 {{ form_end(form) }}
             </div>
         </div>
-    </div>
 {% endblock %}
 
-{% block stylesheets %}
-
-    {{ parent() }}
-
-    <link href="{{ asset('css/admin_sidebar.css') }}" rel="stylesheet">
-{% endblock %}
 

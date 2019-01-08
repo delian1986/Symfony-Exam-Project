@@ -104,6 +104,7 @@ class RegisterController extends Controller
             $user->addRole($userRole);
             $user->setMoneySpent(self::STARTING_MONEY_VALUE);
             $user->setMoneyReceived(self::STARTING_MONEY_VALUE);
+            $user->setIsActive(1);
 
             $this->userService->saveUser($user);
 

@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class AdminController
  * @package ShopBundle\Controller
  * @Route("/admin")
- * @Security("is_granted('ROLE_ADMIN')")
+ * @Security("is_granted('ROLE_EDITOR')")
  */
 class AdminController extends Controller
 {

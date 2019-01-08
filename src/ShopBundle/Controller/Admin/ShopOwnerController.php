@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ShopBundle\Entity\ShopOwner;
 use ShopBundle\Entity\User;
 use ShopBundle\Form\ShopOwnerType;
+use ShopBundle\Repository\ProductRepository;
 use ShopBundle\Service\ShopOwnerServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,9 +24,10 @@ class ShopOwnerController extends Controller
      */
     private $shopOwnerService;
 
+
     public function __construct(ShopOwnerServiceInterface $shopOwnerService)
     {
-        $this->shopOwnerService=$shopOwnerService;
+        $this->shopOwnerService = $shopOwnerService;
     }
 
     /**
@@ -36,10 +38,11 @@ class ShopOwnerController extends Controller
     public function chooseShopOwnerAction(Request $request)
     {
         $owner = new ShopOwner();
-        $form = $this->createForm(ShopOwnerType::class,$owner);
+        $form = $this->createForm(ShopOwnerType::class, $owner);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $this->shopOwnerService->changeShopOwner($owner);
         }
 

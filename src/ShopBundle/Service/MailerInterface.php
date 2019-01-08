@@ -15,4 +15,6 @@ interface MailerInterface
 
     public function sendDeclinedOrderNotify(Order $order,string $reason);
 
+    public function sendShopOwnerNotice(User $oldOwner, User $newOwner);
+
 }

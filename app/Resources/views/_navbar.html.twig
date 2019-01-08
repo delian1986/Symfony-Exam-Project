@@ -13,7 +13,7 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 {% block nav_link %}
-                    <li><a href="#" class="fa fa-briefcase"> Products</a></li>
+                    <li><a href="#"><i class="fa fa-laptop" aria-hidden="true"></i> Products</a></li>
                     <li><a href="#" class="fa fa-percent"> Promotions</a></li>
                 {% endblock %}
             </ul>
@@ -22,16 +22,16 @@
                     {% block navbar_user %}
                         {% if is_granted('ROLE_ADMIN') %}
                             <li><a href="{{ path('admin_index') }}"><span
-                                            class="fa fa-user-secret"> Admin Panel</span></a></li>
+                                            class="fa fa-key" aria-hidden="true"> Admin Panel</span></a></li>
                         {% elseif is_granted('ROLE_EDITOR') %}
-                            <li><a href="{{ path('admin_index') }}"><span class="fa fa-floppy-o"> Editor Panel</span></a>
+                            <li><a href="{{ path('admin_index') }}"><span class="fa fa-pencil"> Editor Panel</span></a>
                             </li>
                         {% endif %}
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Welcome ({{ app.user.fullName }})
                                 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#"><span class="fa fa-user"> My Profile</span></a>
+                                <li><a href="{{ path('user_profile') }}"><span class="fa fa-user"> My Profile</span></a>
                                 </li>
                                 <li><a href="{{ path('my_orders') }}"><span class="fa fa-database"> My Orders</span></a>
                                 </li>

@@ -3,19 +3,20 @@
 {% block body %}
     {% if is_granted('ROLE_ADMIN') %}
         <h1>Admin Panel</h1>
-        <a href="#" type="button" class="btn btn-default btn-lg btn-block">
+        <a href="{{ path('admin_users_all') }}" type="button" class="btn btn-default btn-lg btn-block"><i class="fa fa-user-circle-o" aria-hidden="true"></i>
             Manage Users</a>
-        {#<a href="{{ path('admin_bannedips_all') }}" type="button"#}
-           {#class="fa fa-exclamation-triangle fa-lg btn btn-info btn-lg btn-block"> Manage Security</a>#}
+        <a href="{{ path('add_initial_cash') }}" type="button" class="btn btn-default btn-lg btn-block"><i class="fa fa-credit-card-alt" aria-hidden="true"></i> Set Initial Cash</a>
         <a href="{{ path('admin_show_all_orders',{'param':'all'})}}" type="button"
-           class="btn btn-default btn-lg btn-block"> Manage Orders</a>
+           class="btn btn-default btn-lg btn-block"><i class="fa fa-handshake-o" aria-hidden="true"></i> Manage Orders</a>
+        <a href="{{ path('set_owner') }}" type="button"
+           class="btn btn-default btn-lg btn-block"><i class="fa fa-trophy" aria-hidden="true"></i> Manage Shop Owner</a>
         <hr>
     {% endif %}
     <h1>Editor Panel</h1>
     <a href="{{ path('categories_products') }}" type="button"
-       class="btn btn-default btn-lg btn-block"> Manage Categories</a>
+       class="btn btn-default btn-lg btn-block"><i class="fa fa-bars" aria-hidden="true"></i> Manage Categories</a>
     <a href="{{ path('admin_products_all') }}" type="button"
-       class="btn btn-default btn-lg btn-block"> Manage Products</a>
+       class="btn btn-default btn-lg btn-block"><i class="fa fa-laptop" aria-hidden="true"></i> Manage Products</a>
     <a href="{{ path('admin_promotion_add') }}" type="button"
-       class="btn btn-default btn-lg btn-block"> Manage Promotions</a>
+       class="btn btn-default btn-lg btn-block fa fa-percent"> Manage Promotions</a>
 {% endblock %}

@@ -5,7 +5,6 @@ namespace ShopBundle\Controller\Admin;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use ShopBundle\Entity\Order;
 use ShopBundle\Form\DeclineOrderType;
-use ShopBundle\Service\MailerInterface;
 use ShopBundle\Service\OrderServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;

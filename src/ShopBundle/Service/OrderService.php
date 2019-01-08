@@ -3,6 +3,7 @@
 
 namespace ShopBundle\Service;
 
+use Knp\Component\Pager\PaginatorInterface;
 use ShopBundle\Entity\Order;
 use ShopBundle\Entity\OrdersProducts;
 use ShopBundle\Entity\OrderStatus;
@@ -13,6 +14,7 @@ use ShopBundle\Repository\OrderStatusRepository;
 use ShopBundle\Repository\ProductRepository;
 use ShopBundle\Repository\SoldProductRepository;
 use ShopBundle\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class OrderService implements OrderServiceInterface
@@ -62,6 +64,16 @@ class OrderService implements OrderServiceInterface
      */
     private $soldProductsRepository;
 
+    /**
+     * @var PaginatorInterface
+     */
+    private $paginator;
+
+    /**
+     * @var RequestStack
+     */
+    private $request;
+
     public function __construct(FlashBagInterface $flashBag,
                                 ProductServiceInterface $productService,
                                 OrderRepository $orderRepository,
@@ -70,7 +82,9 @@ class OrderService implements OrderServiceInterface
                                 UserServiceInterface $userService,
                                 UserRepository $userRepository,
                                 MailerInterface $mailer,
-                                SoldProductRepository $soldProductRepository)
+                                SoldProductRepository $soldProductRepository,
+                                PaginatorInterface $paginator,
+                                RequestStack $request)
     {
         $this->flashBag = $flashBag;
         $this->productService = $productService;
@@ -80,7 +94,9 @@ class OrderService implements OrderServiceInterface
         $this->orderStatusRepository = $orderStatusRepository;
         $this->userRepository = $userRepository;
         $this->mailer = $mailer;
-        $this->soldProductsRepository=$soldProductRepository;
+        $this->soldProductsRepository = $soldProductRepository;
+        $this->paginator=$paginator;
+        $this->request=$request;
     }
 
 
@@ -101,13 +117,21 @@ class OrderService implements OrderServiceInterface
 
     public function findAllOrders()
     {
-        return $this->orderRepository->findAllOrders();
+        $products = $this->paginator->paginate(
+            $this->orderRepository->findAllOrders(),
+            $this->request->getCurrentRequest()->query->getInt('page', 1),
+            9);
+        return $products;
     }
 
     public function allOrdersByStatusName(string $status)
     {
         $statusObj = $this->orderStatusRepository->findOneByName(ucfirst($status));
-        return $this->orderRepository->findAllByStatus($statusObj);
+        $products = $this->paginator->paginate(
+            $this->orderRepository->findAllByStatus($statusObj),
+            $this->request->getCurrentRequest()->query->getInt('page', 1),
+            9);
+        return $products;
     }
 
     /**
@@ -185,7 +209,7 @@ class OrderService implements OrderServiceInterface
     {
         $declinedStatus = $this->orderStatusRepository->findOneByName('Declined');
         $order->setStatus($declinedStatus);
-        $this->flashBag->add('danger',"Order {$order->getId()} was declined!");
+        $this->flashBag->add('danger', "Order {$order->getId()} was declined!");
         $this->orderRepository->save($order);
         $this->mailer->sendDeclinedOrderNotify($order, $reason);
 

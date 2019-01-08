@@ -32,7 +32,7 @@ class Role
     /**
      * @var User[]|ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\User", mappedBy="roles")
+     * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\User", mappedBy="sroles")
      */
     private $users;
 
@@ -81,5 +81,31 @@ class Role
 
     public function getRole(){
         return $this->getName();
+    }
+    /**
+     * @return ArrayCollection|User[]
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    /**
+     * @param $users
+     * @return Role
+     */
+    public function setUsers($users)
+    {
+        $this->users = $users;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return ucfirst(strtolower(explode("_", $this->name)[1]));
     }
 }

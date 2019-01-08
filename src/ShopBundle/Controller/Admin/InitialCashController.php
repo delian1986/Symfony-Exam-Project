@@ -45,7 +45,7 @@ class InitialCashController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $this->initialCashService->insertInitialCash($initialCash);
 
-            return $this->redirectToRoute('add_initial_cash');
+            return $this->redirectToRoute('admin_index');
         }
 
         return $this->render('admin/initial_cash/add_cash.html.twig', ['form' => $form->createView()]);

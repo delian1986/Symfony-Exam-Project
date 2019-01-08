@@ -5,6 +5,7 @@ namespace ShopBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use function Symfony\Component\Debug\Tests\testHeader;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -15,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="ShopBundle\Repository\UserRepository")
  */
-class User implements UserInterface, \Serializable
+class User implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var int
@@ -64,6 +65,12 @@ class User implements UserInterface, \Serializable
     private $moneySpent;
 
     /**
+     * @var bool
+     * @ORM\Column(name="is_active", type="boolean", options={"default":1})
+     */
+    private $isActive;
+
+    /**
      * @var float
      * @ORM\Column(name="money_received", type="decimal", precision=10, scale=2)
      */
@@ -75,7 +82,7 @@ class User implements UserInterface, \Serializable
      * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\Role", inversedBy="users")
      * @ORM\JoinTable(name="users_roles")
      */
-    private $roles;
+    private $sroles;
 
     /**
      * @var ArrayCollection|Product
@@ -196,12 +203,13 @@ class User implements UserInterface, \Serializable
     public function getMyProducts()
     {
         $boughProducts=[];
+
         foreach ($this->myProducts as $product) {
             if (!isset($products[$product->getProduct()->getName()])){
                 $boughProducts[$product->getProduct()->getName()][]=$product;
-
                 continue;
             }
+
             $boughProducts[$product->getProduct()->getName()][]=$product;
         }
         return $boughProducts;
@@ -354,7 +362,7 @@ class User implements UserInterface, \Serializable
     public function getRoles()
     {
         $stringRoles = [];
-        foreach ($this->roles as $role) {
+        foreach ($this->sroles as $role) {
             /** @var $role Role */
             $stringRoles[] = $role->getRole();
         }
@@ -362,15 +370,22 @@ class User implements UserInterface, \Serializable
         return $stringRoles;
     }
 
+
+
     /**
      * @param \ShopBundle\Entity\Role $role
      * @return User
      */
     public function addRole(Role $role)
     {
-        $this->roles[] = $role;
+        $this->sroles[] = $role;
 
         return $this;
+    }
+
+    function getSroles()
+    {
+        return $this->sroles;
     }
 
     /**
@@ -396,6 +411,26 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @param bool $isActive
+     * @return User
+     */
+    public function setIsActive(bool $isActive): User
+    {
+        $this->isActive=$isActive;
+        return $this;
+    }
+
+
+
+    /**
      * Removes sensitive data from the user.
      *
      * This is important if, at any given point, sensitive information like
@@ -403,7 +438,27 @@ class User implements UserInterface, \Serializable
      */
     public function eraseCredentials()
     {
-        // TODO: Implement eraseCredentials() method.
+        return true;
+    }
+
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled()
+    {
+        return $this->isActive;
     }
 
 
@@ -412,7 +467,8 @@ class User implements UserInterface, \Serializable
         return serialize([
             $this->getId(),
             $this->getUsername(),
-            $this->getPassword()
+            $this->getPassword(),
+            $this->isActive
         ]);
     }
 
@@ -422,7 +478,8 @@ class User implements UserInterface, \Serializable
         list(
             $this->id,
             $this->email,
-            $this->password
+            $this->password,
+            $this->isActive
             ) = unserialize($serialized);
     }
 }
