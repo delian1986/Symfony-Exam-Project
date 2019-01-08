@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_start(edit_form) }}
+
+    {{ form_row(edit_form.fullName) }}
+
+    {{ form_row(edit_form.password.first, {
+        label: "New Password"
+    }) }}
+    {{ form_row(edit_form.password.second, {
+        label: "Repeat New Password"
+    }) }}
+    <hr>
+    <button class="btn btn-success">Edit Profile</button>
+
+    {{ form_end(edit_form) }}
+{% endblock %}

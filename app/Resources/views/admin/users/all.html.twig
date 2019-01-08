@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Users</h1>
+    <table class="table table-responsive table-striped">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Email</th>
+            <th>Fullname</th>
+            <th>Balance</th>
+            <th>Roles</th>
+            <th>Money Spent</th>
+            <th>Money Received</th>
+            <th>Is Active</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.fullName }}</td>
+                <td>{{ user.balance|number_format(2) }}</td>
+                <td>{{ user.roles|join(", ") }}</td>
+                <td>{{ user.moneySpent|number_format(2) }}</td>
+                <td>{{ user.moneyReceived|number_format(2) }}</td>
+                <td>{{ user.isActive ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path("admin_users_edit", {"id": user.id}) }}" class="btn btn-warning">Edit</a>
+                </td>
+                <td>
+                    {% if  user.orders|length >0 or user.isAdmin %}
+                        <button class="btn btn-danger disabled" type="submit">Delete</button>
+                    {% else %}
+                        <form action="{{ path("admin_users_delete", {"id": user.id}) }}" method="post">
+                            <button class="btn btn-danger" type="submit">Delete</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="navigation text-center">
+        {{ knp_pagination_render(users) }}
+    </div>
+{% endblock %}

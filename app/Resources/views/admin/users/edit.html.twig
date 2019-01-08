@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="well">
+        {{ form_start(edit_form) }}
+
+        {{ form_row(edit_form.email) }}
+        {{ form_row(edit_form.fullName) }}
+        {{ form_row(edit_form.balance) }}
+        {{ form_row(edit_form.sroles) }}
+        {{ form_row(edit_form.isActive) }}
+
+        <button class="btn btn-success">Edit User</button>
+
+        {{ form_end(edit_form) }}
+        <a href="{{ path('admin_users_all') }}" type="button" class="btn btn-default">Back</a>
+    </div>
+{% endblock %}
