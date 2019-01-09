@@ -64,12 +64,12 @@ class ShopOwnerService implements ShopOwnerServiceInterface
 
         //if there is shop owner
         if (null !== $currentOwner) {
-            $ownerId = $currentOwner->getShopOwner()->getId();
+            $oldOwnerId = $currentOwner->getShopOwner()->getId();
             $newOwnerId = $shopOwner->getShopOwner()->getId();
 
-            if ($ownerId === $newOwnerId) {
+            if ($oldOwnerId === $newOwnerId) {
                 $this->flashBag->add('danger', "{$shopOwner->getShopOwner()->getEmail()} already owns the shop!");
-            } elseif ($ownerId !== $newOwnerId) {
+            } else {
 
                 $currentOwnerProducts = $this->productRepository->findBy(['owner' => $currentOwner->getShopOwner()]);
                 $this->shopOwnerRepository->removeOwner($currentOwner);
@@ -88,9 +88,6 @@ class ShopOwnerService implements ShopOwnerServiceInterface
                 $this->shopOwnerRepository->setOwner($shopOwner);
                 $this->mailer->sendShopOwnerNotice($currentOwner->getShopOwner(), $shopOwner->getShopOwner());
             }
-        } else {
-            $this->flashBag->add('success', "Shop Owner set to {$shopOwner->getShopOwner()->getEmail()} !");
-            $this->shopOwnerRepository->setOwner($shopOwner);
         }
     }
 

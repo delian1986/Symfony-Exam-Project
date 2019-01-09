@@ -68,8 +68,8 @@ class UserController extends Controller
     {
         $user = $this->getUser();
 
-        return $this->render("user/profile.html.twig", [
-            "user" => $user
+        return $this->render('user/profile.html.twig', [
+            'user' => $user
         ]);
     }
 
@@ -85,15 +85,19 @@ class UserController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $password = $this->get('security.password_encoder')
+                ->encodePassword($user, $user->getPassword());
+            $user->setPassword($password);
             $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
             $em->flush();
 
-            $this->addFlash("success", "Profile edited successfully!");
-            return $this->redirectToRoute("user_profile");
+            $this->addFlash('success', 'Profile edited successfully!');
+            return $this->redirectToRoute('user_profile');
         }
 
         return $this->render('user/edit.html.twig', [
-            "edit_form" => $form->createView()
+            'edit_form' => $form->createView()
         ]);
     }
 

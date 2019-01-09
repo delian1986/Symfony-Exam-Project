@@ -10,6 +10,7 @@ use ShopBundle\Repository\ProductRepository;
 use ShopBundle\Service\ShopOwnerServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -37,6 +38,12 @@ class ShopOwnerController extends Controller
      */
     public function chooseShopOwnerAction(Request $request)
     {
+        $currentOwner=$this->shopOwnerService->getOwner();
+        // only current owner have access to change shop owner page
+        if ($this->getUser() !== $currentOwner){
+            $content=$this->render('exception/error403.html.twig');
+            return new Response($content,403);
+        }
         $owner = new ShopOwner();
         $form = $this->createForm(ShopOwnerType::class, $owner);
         $form->handleRequest($request);
@@ -44,6 +51,8 @@ class ShopOwnerController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
             $this->shopOwnerService->changeShopOwner($owner);
+
+            return $this->redirectToRoute('admin_index');
         }
 
         return $this->render('admin/set_owner.html.twig', ['form' => $form->createView()]);

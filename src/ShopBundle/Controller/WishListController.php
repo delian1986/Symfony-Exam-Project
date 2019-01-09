@@ -35,7 +35,7 @@ class WishListController extends Controller
     public function indexAction(): \Symfony\Component\HttpFoundation\Response
     {
         return $this->render('user/wish_list_show.html.twig', [
-            "wishList" => $this->getUser()->getWishList()]);
+            'wishList' => $this->getUser()->getWishList()]);
     }
 
     /**

@@ -36,7 +36,7 @@ class CategoryController extends Controller
             $this->getDoctrine()->getRepository(Product::class)
                 ->findAllbyCategoryQueryBuilder($category),
             $request->query->getInt('page', 1),
-            9
+            6
         );
 
         return $this->render('category/all_by_cat.html.twig', [

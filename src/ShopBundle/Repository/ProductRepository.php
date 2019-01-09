@@ -25,7 +25,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
 
     public function findAllInStock(){
         $q = $this->createQueryBuilder('p')
-            ->Where('p.isListed = :isListed')
+            ->where('p.isListed = :isListed')
             ->setParameter('isListed', 1)
             ->getQuery();
 
@@ -44,19 +44,19 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
 
     public function findAllbyCategoryQueryBuilder(Category $category)
     {
-        return $this->createQueryBuilder("product")
-            ->Where("product.isListed = 1")
-            ->andWhere("product.category = :category")
-            ->orderBy("product.id", "desc")
-            ->setParameter("category", $category);
+        return $this->createQueryBuilder('product')
+            ->where('product.isListed = 1')
+            ->andWhere('product.category = :category')
+            ->orderBy('product.id', 'desc')
+            ->setParameter('category', $category);
     }
 
     public function findAllTopSellers(){
         $q = $this->createQueryBuilder('p')
-            ->Where('p.isListed = :isListed')
+            ->where('p.isListed = :isListed')
             ->setParameter('isListed', 1)
             ->orderBy('p.soldTimes','DESC')
-            ->setMaxResults(6)
+            ->setMaxResults(3)
             ->getQuery();
 
         return $q->getResult();
@@ -64,15 +64,17 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
 
     public function findAllByQueryBuilder()
     {
-        return $this->createQueryBuilder("product")
-            ->orderBy("product.id", "desc");
+        return $this->createQueryBuilder('product')
+            ->orderBy('product.id', 'desc');
     }
 
     public function findAllAvailableByQueryBuilder()
     {
-        return $this->createQueryBuilder("product")
-            ->Where("product.isListed = 1")
-            ->orderBy("product.id", "desc");
+        return $this->createQueryBuilder('product')
+            ->where('product.isListed = 1')
+            ->orderBy('product.id', 'desc');
     }
+
+
 
 }

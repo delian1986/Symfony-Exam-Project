@@ -71,7 +71,7 @@ class PromotionController extends Controller
     }
 
     /**
-     * @Route("/promotions/edit/{id}", name="admin_promotions_edit")
+     * @Route("/edit/{id}", name="admin_promotions_edit")
      *
      * @param Promotion $promotion
      * @param Request $request
@@ -96,7 +96,7 @@ class PromotionController extends Controller
     }
 
     /**
-     * @Route("/promotions/delete/{id}", name="admin_promotions_delete")
+     * @Route("/delete/{id}", name="admin_promotions_delete")
      *
      * @param Promotion $promotion
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
@@ -107,8 +107,8 @@ class PromotionController extends Controller
         $em->remove($promotion);
         $em->flush();
 
-        $this->addFlash("success", "Promotion deleted successfully");
-        return $this->redirectToRoute("admin_promotions_all");
+        $this->addFlash('success', 'Promotion deleted successfully');
+        return $this->redirectToRoute('admin_promotions_all');
     }
 
 

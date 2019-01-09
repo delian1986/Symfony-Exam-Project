@@ -17,6 +17,7 @@
             <th>{{ knp_pagination_sortable(products, 'Quantity', 'product.quantity') }}</th>
             <th>{{ knp_pagination_sortable(products, 'Price', 'product.price') }}</th>
             <th>{{ knp_pagination_sortable(products, 'Sold Times', 'product.soldTimes') }}</th>
+            <th>Promo</th>
             <th>{{ knp_pagination_sortable(products, 'Is Listed', 'product.isListed') }}</th>
             <th>{{ knp_pagination_sortable(products, 'Date Added', 'product.dateAdded') }}</th>
             <th>Edit</th>
@@ -45,6 +46,9 @@
                     </td>
                     <td>
                         {{ product.soldTimes }}
+                    </td>
+                    <td>
+                        {{ product.hasActivePromotion ? 'Yes':'No' }}
                     </td>
                     <td>
                         {{ product.isListed? 'Yes':'No' }}

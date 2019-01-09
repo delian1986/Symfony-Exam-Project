@@ -41,7 +41,7 @@ class ProductController extends Controller
             $this->getDoctrine()->getRepository(Product::class)
                 ->findAllAvailableByQueryBuilder(),
             $request->query->getInt('page', 1),
-            9
+            6
         );
 
         return $this->render('product/all.html.twig', [

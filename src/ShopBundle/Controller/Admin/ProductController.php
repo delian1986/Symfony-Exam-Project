@@ -56,11 +56,10 @@ class ProductController extends Controller
             $fileName = $this->uploadPicture($form->get('image')->getData());
             $product->setImage($fileName);
             $product->setSoldTimes(0);
-            $product->setIsListed(true);
 
             $this->productService->saveProduct($product);
 
-            return $this->redirectToRoute("admin_products_all");
+            return $this->redirectToRoute('admin_products_all');
         }
         return $this->render('admin/products/create.html.twig', ['form' => $form->createView()]);
     }
