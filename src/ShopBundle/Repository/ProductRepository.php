@@ -3,9 +3,8 @@
 namespace ShopBundle\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\QueryBuilder;
+use ShopBundle\Entity\Category;
 use ShopBundle\Entity\Product;
-use Symfony\Bundle\FrameworkBundle\Tests\Fixtures\Validation\Category;
 
 /**
  * ProductRepository
@@ -26,9 +25,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
 
     public function findAllInStock(){
         $q = $this->createQueryBuilder('p')
-            ->where('p.quantity > :inStock')
-            ->andWhere('p.isListed = :isListed')
-            ->setParameter('inStock', 0)
+            ->Where('p.isListed = :isListed')
             ->setParameter('isListed', 1)
             ->getQuery();
 
@@ -45,11 +42,10 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         $this->_em->flush();
     }
 
-    public function findAllbyCategoryQueryBuilder(Category $category): QueryBuilder
+    public function findAllbyCategoryQueryBuilder(Category $category)
     {
         return $this->createQueryBuilder("product")
-            ->andWhere("product.quantity > 0")
-            ->andWhere("product.isListed = 1")
+            ->Where("product.isListed = 1")
             ->andWhere("product.category = :category")
             ->orderBy("product.id", "desc")
             ->setParameter("category", $category);
@@ -57,9 +53,7 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
 
     public function findAllTopSellers(){
         $q = $this->createQueryBuilder('p')
-            ->where('p.quantity > :inStock')
-            ->andWhere('p.isListed = :isListed')
-            ->setParameter('inStock', 0)
+            ->Where('p.isListed = :isListed')
             ->setParameter('isListed', 1)
             ->orderBy('p.soldTimes','DESC')
             ->setMaxResults(6)
@@ -68,9 +62,16 @@ class ProductRepository extends \Doctrine\ORM\EntityRepository
         return $q->getResult();
     }
 
-    public function findAllByQueryBuilder(): QueryBuilder
+    public function findAllByQueryBuilder()
     {
         return $this->createQueryBuilder("product")
+            ->orderBy("product.id", "desc");
+    }
+
+    public function findAllAvailableByQueryBuilder()
+    {
+        return $this->createQueryBuilder("product")
+            ->Where("product.isListed = 1")
             ->orderBy("product.id", "desc");
     }
 

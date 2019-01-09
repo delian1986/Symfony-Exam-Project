@@ -1,36 +1,49 @@
-{% extends 'base.html.twig' %}
+{% extends "base.html.twig" %}
 
 {% block body %}
-    {% include "_admin_sidebar.html.twig" %}
-    <div class="well">
-        {# @var category \ShopBundle\Entity\Category#}
-        {% for category in categories %}
-            <h3>Category: {{ category.name }}</h3>
-
-            {# @var product \ShopBundle\Entity\Product#}
-            {% for product in category.products %}
-                <div class="product">
-                    <a href="{{ path('product_details',{'slug':product.slug}) }}"><h4> {{ product.name }}</h4></a>
-                    {% if product.isListed==1 %}
-                        <span class="label label-success">In Stock</span>
-                    {% else %}
-                        <span class="label label-danger">Out of Stock</span>
-                    {% endif %}
-                    <p>Available Quantity: {{ product.quantity }}</p>
-                    <p>Price: {{ product.price|number_format(2) }}</p>
-                    <p>In promotion: {{ product.hasActivePromotion ? 'Yes' : 'No' }}</p>
-                    <hr/>
-                </div>
-            {% endfor %}
-        {% endfor %}
+    <h1>Categories</h1>
+    <div class="text-right">
+        <a href="{{ path("admin_category_add") }}" class="btn btn-success">Add new category</a>
     </div>
-
+    <hr>
+    <table class="table table-responsive table-striped">
+        <thead>
+        <tr>
+            <th>#Id</th>
+            <th>Name</th>
+            <th>Products count</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+            <tr>
+                <td>{{ category.id }}</td>
+                <td>
+                    <a href="{{ path("show_products_by_category", {"slug": category.slug}) }}">
+                        {{ category.name }}
+                    </a>
+                </td>
+                <td>{{ category.products|length }}</td>
+                <td>
+                    <a href="{{ path("admin_categories_edit", {"slug": category.slug}) }}"
+                       class="btn btn-warning">Edit</a>
+                </td>
+                <td>
+                    {% if category.products|length == 0 %}
+                        <form action="{{ path("admin_categories_delete", {"id": category.id}) }}" method="post">
+                            <button class="btn btn-danger delete-item" type="submit">Delete</button>
+                        </form>
+                    {% else %}
+                        <button class="btn btn-default disabled" type="submit">Delete</button>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="navigation text-center">
+        {{ knp_pagination_render(categories) }}
+    </div>
 {% endblock %}
-
-{% block stylesheets %}
-
-    {{ parent() }}
-
-    <link href="{{ asset('css/admin_sidebar.css') }}" rel="stylesheet">
-{% endblock %}
-

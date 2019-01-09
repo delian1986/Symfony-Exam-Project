@@ -8,8 +8,13 @@
         </div>
         <h2>{{ product.name }}</h2> <br>
         <p>Description: {{ product.description }}</p> <br>
-        <p>Available: {{ product.quantity }} </p><br>
+        {% if (product.inStock) %}
+            <p>Available: {{ product.quantity }} </p><br>
+        {% else %}
+            <p><strong>Out of Stock!</strong> </p><br>
+        {% endif %}
         {% if product.activePromotion %}
+
             <p>
                 Price: <s>{{ product.originalPrice|number_format(2) }}</s>
             </p>
@@ -28,7 +33,7 @@
 
         {% if app.user and (app.user.isAdmin or app.user.isEditor) %}
             <a class="btn btn-primary btn-sm" href="{{ path('admin_product_edit',{'slug':product.slug}) }}">Edit</a>
-        {% else %}
+        {% elseif (product.inStock) %}
             <form method="post" action="{{ path("cart_add", {'id':product.id}) }}">
                 <label for="product_quantity"> Choice quantity:
                     <select name="product_quantity">
@@ -41,11 +46,16 @@
                 <input type="submit" class="btn btn-primary" value="Add To Cart"/>
             </form>
 
-
             <form method="post" action="{{ path("wish_list_add", {'id':product.id}) }}">
                 <input type="submit" class="btn btn-default" value="Add To Wish List"/>
             </form>
         {% endif %}
+        {% if (not product.inStock) %}
+            <form method="post" action="{{ path("wish_list_add", {'id':product.id}) }}">
+                <input type="submit" class="btn btn-default" value="Add To Wish List"/>
+            </form>
+        {% endif %}
+
     </div>
 
     <h1>Reviews</h1>

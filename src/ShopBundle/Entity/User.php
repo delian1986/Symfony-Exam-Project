@@ -87,7 +87,7 @@ class User implements AdvancedUserInterface, \Serializable
     /**
      * @var ArrayCollection|Product
      * One user has many products. This is the inverse side.
-     * @ORM\OneToMany(targetEntity="ShopBundle\Entity\SoldProduct", mappedBy="owner", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="ShopBundle\Entity\SoldProduct", mappedBy="owner")
      */
     private $myProducts;
 

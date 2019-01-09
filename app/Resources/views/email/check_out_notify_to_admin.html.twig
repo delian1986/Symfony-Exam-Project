@@ -1,4 +1,4 @@
-<h1>{{ user.fullName }} made an order No. {{ order.id }}. Please take an action!</h1>
+<h1>{{ user.fullName }} with email {{ user.email }} made an order No. {{ order.id }}. Please take an action!</h1>
 {# @var order \ShopBundle\Entity\Order #}
 <h4>Order Id: {{ order.id }} created on {{ order.dateCreated|date("d/m/Y") }} with
     status {{ order.status.name }}</h4>

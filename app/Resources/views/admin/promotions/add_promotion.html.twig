@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block main %}
-    {% include '_admin_sidebar.html.twig' %}
-    <div class="container body-content span=8 offset=2">
+{% block body %}
         <h1>Add promotion</h1>
         <div class="well">
             {{ form_start(form) }}
@@ -10,13 +8,7 @@
 
             <button type="submit" class="btn btn-success">Add</button>
             {{ form_end(form) }}
+            <br>
+            <a href="{{ path('admin_promotions_all') }}" type="button" class="btn btn-default">Back</a>
         </div>
-    </div>
-{% endblock %}
-
-{% block stylesheets %}
-
-    {{ parent() }}
-
-    <link href="{{ asset('css/admin_sidebar.css') }}" rel="stylesheet">
 {% endblock %}

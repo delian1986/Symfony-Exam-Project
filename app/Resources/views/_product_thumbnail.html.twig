@@ -13,7 +13,11 @@
                         href="{{ path('show_products_by_category', {'slug': product.category.slug}) }}">
                     {{ product.category.name }}
                 </a></p>
+            {% if product.inStock %}
             <p><strong>Quantity available: {{ product.quantity }}</strong></p>
+                {% else %}
+                    <p><strong>Out of stock!</strong></p>
+            {% endif %}
             <div class="h3">
                 {% if product.hasActivePromotion %}
                     <span class="label label-success"><s>€{{ product.originalPrice|number_format(2) }}</s></span>

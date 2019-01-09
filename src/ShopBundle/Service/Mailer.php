@@ -74,9 +74,9 @@ class Mailer implements MailerInterface
 
     public function sendCheckOutToAdmin(User $user, Order $order)
     {
-        $body = $this->templating->render('email/check_out_notify_to_admin.html.twig', ['name' => $order->getUser()->getFullName(), 'order' => $order]);
+        $body = $this->templating->render('email/check_out_notify_to_admin.html.twig', ['user' => $user, 'order' => $order]);
         $subject = "You have new order form {$user->getFullName()}!";
-        $message = $this->messageBuilder($subject, self::DEFAULT_EMAIL_ADDRESS, $body);
+        $message = $this->messageBuilder($subject, 'shopOwner', $body);
         $this->send($message);
     }
 
@@ -104,6 +104,10 @@ class Mailer implements MailerInterface
 
         if (null===$from){
             $from=self::DEFAULT_EMAIL_ADDRESS;
+        }
+
+        if ($to==='shopOwner'){
+            $to=$from;
         }
 
         $message = \Swift_Message::newInstance()

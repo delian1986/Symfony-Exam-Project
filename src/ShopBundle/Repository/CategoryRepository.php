@@ -22,6 +22,12 @@ class CategoryRepository extends \Doctrine\ORM\EntityRepository
         parent::__construct($em, new \Doctrine\ORM\Mapping\ClassMetadata(Category::class));
     }
 
+    public function findAllByQueryBuilder()
+    {
+        return $this->createQueryBuilder("category")
+            ->orderBy('category.id', 'asc');
+    }
+
     /**
      * @param Category $category
      * @throws \Doctrine\ORM\ORMException

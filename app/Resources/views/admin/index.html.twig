@@ -13,10 +13,10 @@
         <hr>
     {% endif %}
     <h1>Editor Panel</h1>
-    <a href="{{ path('categories_products') }}" type="button"
+    <a href="{{ path('admin_categories_all') }}" type="button"
        class="btn btn-default btn-lg btn-block"><i class="fa fa-bars" aria-hidden="true"></i> Manage Categories</a>
     <a href="{{ path('admin_products_all') }}" type="button"
        class="btn btn-default btn-lg btn-block"><i class="fa fa-laptop" aria-hidden="true"></i> Manage Products</a>
-    <a href="{{ path('admin_promotion_add') }}" type="button"
+    <a href="{{ path('admin_promotions_all') }}" type="button"
        class="btn btn-default btn-lg btn-block fa fa-percent"> Manage Promotions</a>
 {% endblock %}

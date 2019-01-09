@@ -2,6 +2,7 @@
 
 namespace ShopBundle\Controller;
 
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ShopBundle\Entity\Product;
 use ShopBundle\Entity\Review;
@@ -26,6 +27,26 @@ class ProductController extends Controller
     public function __construct(ReviewServiceInterface $reviewService)
     {
         $this->reviewService = $reviewService;
+    }
+
+    /**
+     * @Route("/all", name="products_all")
+     * @param PaginatorInterface $paginator
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function allProductsAction(Request $request, PaginatorInterface $paginator)
+    {
+        $products = $paginator->paginate(
+            $this->getDoctrine()->getRepository(Product::class)
+                ->findAllAvailableByQueryBuilder(),
+            $request->query->getInt('page', 1),
+            9
+        );
+
+        return $this->render('product/all.html.twig', [
+            "products" => $products
+        ]);
     }
 
     /**

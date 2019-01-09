@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if products|length > 0 %}
+        <div class="text-center">
+        </div>
+        <div class="row">
+        {% for index, product in products %}
+            {% if index % 3 == 0 and index > 0 %}
+                </div>
+                <div class="row">
+            {% endif %}
+            {% include "promotions/_promotion_product_thumb.html.twig" %}
+        {% endfor %}
+        </div>
+        <div class="navigation text-center">
+            {{ knp_pagination_render(products) }}
+        </div>
+    {% else %}
+        <h2>No products with this promotion yet :(</h2>
+    {% endif %}
+{% endblock %}

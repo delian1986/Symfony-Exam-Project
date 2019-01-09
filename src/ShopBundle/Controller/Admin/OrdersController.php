@@ -47,7 +47,7 @@ class OrdersController extends Controller
      */
     public function completeOrder(Order $order)
     {
-        if (!$this->orderService->completeOrder($order)) {
+        if (!$this->orderService->completeOrder($order) && $order->getStatus()->getName()==='Pending') {
             return $this->redirectToRoute('admin_order_decline', ['id' => $order->getId()]);
         }
 

@@ -22,4 +22,10 @@
     {% endfor %}
 </table>
 <p><strong>Total price: {{ order.total|number_format(2) }} </strong></p>
+
+{% if (order.status.name=='Pending') %}
+    <strong>Important :</strong>
+    <p>The cost will be withdraw form your balance when the order is complete!</p>
+    <p>You will be notified with email when your order is complete!</p>
+{% endif %}
 <hr/>

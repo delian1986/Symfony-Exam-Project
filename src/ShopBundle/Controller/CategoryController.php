@@ -30,7 +30,7 @@ class CategoryController extends Controller
      * @param Category $category
      * @return Response
      */
-    public function showCategoryAction(Request $request, Category $category, PaginatorInterface $paginator): Response
+    public function showCategory(Request $request, Category $category, PaginatorInterface $paginator)
     {
         $products = $paginator->paginate(
             $this->getDoctrine()->getRepository(Product::class)
@@ -39,7 +39,7 @@ class CategoryController extends Controller
             9
         );
 
-        return $this->render('ShoppingCartBundle:categories:category.html.twig', [
+        return $this->render('category/all_by_cat.html.twig', [
             'products' => $products,
             'category' => $category
         ]);

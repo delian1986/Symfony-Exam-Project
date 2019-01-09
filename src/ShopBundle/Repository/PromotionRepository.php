@@ -31,4 +31,19 @@ class PromotionRepository extends \Doctrine\ORM\EntityRepository
         $this->_em->persist($promotion);
         $this->_em->flush();
     }
+
+    public function findAllByQueryBuilder()
+    {
+        return $this->createQueryBuilder("promotion")
+            ->orderBy("promotion.endDate", "asc");
+    }
+
+    public function findAllAvailableByQueryBuilder()
+    {
+        return $this->createQueryBuilder("promotion")
+            ->andWhere("promotion.startDate < :date")
+            ->andWhere('promotion.endDate > :date')
+            ->setParameter('date', new \DateTime('now'))
+            ->orderBy("promotion.endDate", "asc");
+    }
 }

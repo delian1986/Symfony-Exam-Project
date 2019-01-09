@@ -1,0 +1,46 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h2 class="text-left">All promotions</h2>
+    <a href="{{ path("admin_promotion_add") }}" class="btn btn-success">Add new promotion</a>
+    <hr>
+    <table class="table table-responsive table-striped">
+        <thead>
+        <tr>
+            <th>{{ knp_pagination_sortable(promotions, '#id', 'promotion.id') }}</th>
+            <th>{{ knp_pagination_sortable(promotions, 'Name', 'promotion.name') }}</th>
+            <th>{{ knp_pagination_sortable(promotions, 'Discount', 'promotion.discount') }}</th>
+            <th>{{ knp_pagination_sortable(promotions, 'Start Date', 'promotion.startDate') }}</th>
+            <th>{{ knp_pagination_sortable(promotions, 'End Date', 'promotion.endDate') }}</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if promotions|length > 0 %}
+            {% for promotion in promotions %}
+                <tr>
+                    <td>{{ promotion.id }}</td>
+                    <td>{{ promotion.name }}</td>
+                    <td>{{ promotion.discount }} %</td>
+                    <td>{{ promotion.startDate|date('Y-m-d') }}</td>
+                    <td>{{ promotion.endDate|date('Y-m-d') }}</td>
+                    <td>
+                        <a href="{{ path("admin_promotions_edit", {"id": promotion.id}) }}"
+                           class="btn btn-warning">Edit</a>
+                    </td>
+                    <td>
+                        <form action="{{ path("admin_promotions_delete", {"id": promotion.id}) }}" method="post">
+                            <button class="btn btn-danger delete-item" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+
+    <div class="navigation text-center">
+        {{ knp_pagination_render(promotions) }}
+    </div>
+{% endblock %}

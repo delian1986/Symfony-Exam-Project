@@ -18,6 +18,7 @@
                         <th>#id</th>
                         <th>Products Name</th>
                         <th>Email</th>
+                        <th>User Balance</th>
                         <th>Date</th>
                         <th>Total Price</th>
                         <th>Status</th>
@@ -42,6 +43,7 @@
                                 </ul>
                             </td>
                             <td>{{ order.user.email }} </td>
+                            <td>{{ order.user.balance|number_format(2) }} </td>
                             <td>{{ order.dateCreated|date }} </td>
                             <td>{{ order.total|number_format(2) }} </td>
                             <td>

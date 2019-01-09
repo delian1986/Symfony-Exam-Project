@@ -13,8 +13,8 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 {% block nav_link %}
-                    <li><a href="#"><i class="fa fa-laptop" aria-hidden="true"></i> Products</a></li>
-                    <li><a href="#" class="fa fa-percent"> Promotions</a></li>
+                    <li><a href="{{ path('products_all') }}"><i class="fa fa-laptop" aria-hidden="true"></i> Products</a></li>
+                    <li><a href="{{ path('promotions_all') }}" class="fa fa-percent"> Promotions</a></li>
                 {% endblock %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
