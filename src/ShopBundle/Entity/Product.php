@@ -129,12 +129,21 @@ class Product
      */
     private $promotions;
 
+    /**
+     * @var User|ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\User", mappedBy="wishList")
+     * @ORM\JoinTable(name="users_wishlist")
+     */
+    private $userWishList;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime('now');
         $this->inOrders = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->promotions = new ArrayCollection();
+        $this->userWishList = new ArrayCollection();
 
     }
 
@@ -477,5 +486,23 @@ class Product
     {
         return $this->quantity > 0;
     }
+
+    /**
+     * @return ArrayCollection|User
+     */
+    public function getUserWishList()
+    {
+        return $this->userWishList;
+    }
+
+    /**
+     * @param User $userWishList
+     */
+    public function setUserWishList(User $userWishList): void
+    {
+        $this->userWishList = $userWishList;
+    }
+
+
 
 }

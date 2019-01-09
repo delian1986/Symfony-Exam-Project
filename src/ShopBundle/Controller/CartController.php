@@ -51,6 +51,10 @@ class CartController extends Controller
             return $this->render('exception/error404.html.twig');
         }
 
+        if (0 === $product->isListed()){
+            return $this->render('exception/unlisted_product.html.twig');
+        }
+
         /** @var User $user */
         $user = $this->getUser();
         $quantity = $request->request->get('product_quantity');
@@ -67,7 +71,6 @@ class CartController extends Controller
     {
         /** @var User $user */
         $user = $this->getUser();
-        $user->getListOfBoughtProducts();
 
         $openOrder = $this->cartService->itemsInCart($user);
         $total = null;
@@ -87,6 +90,7 @@ class CartController extends Controller
     public function cartCheckOut()
     {
         $user = $this->getUser();
+
         if (false === $this->cartService->checkout($user)) {
             return $this->redirectToRoute('cart_show');
         }

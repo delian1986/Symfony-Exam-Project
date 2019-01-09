@@ -124,6 +124,13 @@ class CartService implements CartServiceInterface
         if (null === $userOpenOrder) {
             return null;
         }
+        /** @var OrdersProducts $order */
+        foreach ($userOpenOrder->getProducts() as $order){
+            if (false===$order->getProduct()->isListed()){
+                $this->orderProductsRepository->remove($order);
+                $this->flashBag->add('danger',"We are sorry, but {$order->getProduct()->getName()} is not in the store at this moment!");
+            }
+        }
 
         return $userOpenOrder;
 
@@ -141,7 +148,7 @@ class CartService implements CartServiceInterface
     {
         $product->setQuantity($quantity);
         $this->orderProductsRepository->save($product);
-        $this->flashBag->add('success', "{$product->getProduct()->getName()} edited!");
+        $this->flashBag->add('success', "Product {$product->getProduct()->getName()} quantity edited!");
         return true;
 
     }
@@ -192,6 +199,7 @@ class CartService implements CartServiceInterface
         $this->orderService->saveOrder($userOpenOrder);
 
         $this->mailer->sendCartCheckOut($userOpenOrder);
+        $this->mailer->sendCheckOutToAdmin($user,$userOpenOrder);
 
         $this->flashBag->add('success', 'Your order was received.');
         return true;

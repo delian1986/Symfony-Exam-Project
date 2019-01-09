@@ -47,7 +47,9 @@ class OrdersController extends Controller
      */
     public function completeOrder(Order $order)
     {
-        $this->orderService->completeOrder($order);
+        if (!$this->orderService->completeOrder($order)) {
+            return $this->redirectToRoute('admin_order_decline', ['id' => $order->getId()]);
+        }
 
         return $this->redirectToRoute("admin_show_all_orders", ['param' => 'all']);
     }
@@ -64,8 +66,8 @@ class OrdersController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $reason=$form['Reason']->getData();
-            $this->orderService->declineOrder($order,$reason);
+            $reason = $form['Reason']->getData();
+            $this->orderService->declineOrder($order, $reason);
             return $this->redirectToRoute("admin_show_all_orders", ['param' => 'all']);
         }
 

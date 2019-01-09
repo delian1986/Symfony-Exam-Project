@@ -38,8 +38,17 @@ class ProductController extends Controller
         if (null === $product) {
             return $this->render('exception/error404.html.twig');
         }
+
+        //aways render product to admins and editors
+        if ($this->getUser()->isAdmin() || $this->getUser()->isEditor()){
+            return $this->render('product/details.html.twig', [
+                'product' => $product,
+                "review_add" => $this->createForm(ReviewAddType::class)->createView()
+            ]);
+        }
+
         if (false === $product->isListed()) {
-            return $this->render('exception/error404.html.twig');
+            return $this->render('exception/unlisted_product.html.twig',['productName'=>$product->getName()]);
         }
 
         return $this->render('product/details.html.twig', [

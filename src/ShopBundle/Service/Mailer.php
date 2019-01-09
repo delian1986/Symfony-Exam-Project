@@ -5,11 +5,13 @@ namespace ShopBundle\Service;
 
 
 use ShopBundle\Entity\Order;
+use ShopBundle\Entity\Product;
 use ShopBundle\Entity\User;
 use ShopBundle\Repository\ShopOwnerRepository;
 
 class Mailer implements MailerInterface
 {
+    CONST DEFAULT_EMAIL_ADDRESS='noreplay@shop.eu';
     /**
      * @var \Swift_Mailer
      */
@@ -70,6 +72,15 @@ class Mailer implements MailerInterface
         $this->send($message);
     }
 
+    public function sendCheckOutToAdmin(User $user, Order $order)
+    {
+        $body = $this->templating->render('email/check_out_notify_to_admin.html.twig', ['name' => $order->getUser()->getFullName(), 'order' => $order]);
+        $subject = "You have new order form {$user->getFullName()}!";
+        $message = $this->messageBuilder($subject, self::DEFAULT_EMAIL_ADDRESS, $body);
+        $this->send($message);
+    }
+
+
     /**
      * @param Order $order
      * @param string $reason
@@ -90,6 +101,10 @@ class Mailer implements MailerInterface
     {
         $shopOwner =$this->shopOwnerRepository->getShopOwner();
         $from=$shopOwner->getShopOwner()->getEmail();
+
+        if (null===$from){
+            $from=self::DEFAULT_EMAIL_ADDRESS;
+        }
 
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
@@ -117,6 +132,15 @@ class Mailer implements MailerInterface
 
         $this->send($message);
 
+    }
+
+    public function sendNotifyToWishList(User $user, Product $product)
+    {
+        $body = $this->templating->render('email/wish_list_notify.html.twig', ['user' => $user, 'product' => $product]);
+        $subject = "{$user->getFullName()}, we have new offer for you!";
+        $message = $this->messageBuilder($subject, $user->getEmail(), $body);
+
+        $this->send($message);
     }
 
 

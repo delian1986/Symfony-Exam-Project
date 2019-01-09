@@ -11,21 +11,26 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class ProductService implements ProductServiceInterface
 {
-    const IMGUR_CLIENT_ID = "6d208ccd5a9275b";
     /**
      * @var ProductRepository
      */
     private $productRepository;
 
     /**
+     * @var MailerInterface
+     */
+    private $mailer;
+
+    /**
      * @var FlashBagInterface
      */
     private $flashBag;
 
-    public function __construct(ProductRepository $productRepository, FlashBagInterface $flashBag)
+    public function __construct(ProductRepository $productRepository, FlashBagInterface $flashBag, MailerInterface $mailer)
     {
         $this->productRepository = $productRepository;
         $this->flashBag = $flashBag;
+        $this->mailer=$mailer;
     }
 
     /**
@@ -40,9 +45,15 @@ class ProductService implements ProductServiceInterface
         $this->flashBag->add('success', "{$product->getName()} successfully saved!");
     }
 
-
-
-
+    public function notifyUsersWithProductInTheirWishList($userList, Product $product)
+    {
+        $countOfNotifiedUsers=0;
+        foreach ($userList as $user){
+            $this->mailer->sendNotifyToWishList($user,$product);
+            $countOfNotifiedUsers++;
+        }
+        $this->flashBag->add('success',"{$countOfNotifiedUsers} users notified about the change!");
+    }
 
 
 }

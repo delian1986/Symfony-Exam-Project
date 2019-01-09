@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="panel panel-default col-sm-9">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <h5><i class="fa fa-star"></i> Your Wish List</h5>
+                            </div>
+                            <div class="col-xs-4">
+                                <a href="{{ path('homepage') }}" type="button"
+                                   class="btn btn-primary btn-sm btn-block">
+                                    Continue shopping
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if wishList is empty %}
+                <h3 class="text-center">Your wish list is empty!</h3>
+                {% else %}
+                <div class="panel-body">
+
+                    {# @var product \ShopBundle\Entity\Product#}
+                    {% for product in wishList %}
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <a href="{{ path('product_details',{'slug':product.slug}) }}"> <img
+                                            src="{{ asset('uploads/images/' ~ product.image) }}"
+                                            alt="{{ product.name }}" width="400" height="200"></a>
+                            </div>
+                            <div class="col-xs-4 pull-right">
+
+                                <a href="{{ path('product_details',{'slug':product.slug}) }}">
+                                    <h2>{{ product.name }}</h2>
+                                </a>
+                                {% if product.activePromotion %}
+                                    <p>Price: <s>{{ product.originalPrice|number_format(2) }}</s></p>
+                                    <p>Price: {{ product.price|number_format(2) }}</p>
+                                    <p>Promotion active
+                                        till: {{ product.biggestActivePromotion.endDate|date }}</p>
+                                {% else %}
+                                    <p>
+                                        Price: {{ product.price|number_format(2) }}
+                                    </p>
+                                {% endif %}
+
+                                <form method="post" action="{{ path('wish_list_remove', {'id':product.id}) }}">
+                                    <input type="submit" class="btn-sm btn-danger" value="Remove"/>
+                                </form>
+                                <hr>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

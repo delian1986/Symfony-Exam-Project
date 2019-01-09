@@ -157,7 +157,7 @@ class OrderService implements OrderServiceInterface
             $quantity = $orderProduct->getQuantity();
 
             if ($quantity > $productFromDB->getQuantity()) {
-                $this->flashBag->add('error', "There is not enough quantity of {$productFromDB->getName()}");
+                $this->flashBag->add('danger', "There is not enough quantity of {$productFromDB->getName()}");
                 return false;
             }
             $owner = $orderProduct->getProduct()->getOwner();

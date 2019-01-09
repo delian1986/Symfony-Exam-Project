@@ -4,7 +4,7 @@
     <div class="well">
         <h1>Product Details</h1>
         <div class="thumbnail">
-        <img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}"> <br>
+            <img src="{{ asset('uploads/images/' ~ product.image) }}" alt="{{ product.name }}"> <br>
         </div>
         <h2>{{ product.name }}</h2> <br>
         <p>Description: {{ product.description }}</p> <br>
@@ -27,20 +27,25 @@
         Our Users Rating: {{ product.averageRating }} / 5 <br>
 
         {% if app.user and (app.user.isAdmin or app.user.isEditor) %}
-        <a class="btn btn-primary btn-sm" href="{{ path('admin_product_edit',{'slug':product.slug}) }}">Edit</a>
+            <a class="btn btn-primary btn-sm" href="{{ path('admin_product_edit',{'slug':product.slug}) }}">Edit</a>
         {% else %}
-        <form method="post" action="{{ path("cart_add", {'id':product.id}) }}" style="display: inline-block">
-            <label for="product_quantity"> Choice quantity:
-                <select name="product_quantity">
-                    {% for quantity in range(1,product.quantity) %}
-                        <option value="{{ quantity }}">{{ quantity }}</option>
-                    {% endfor %}
-                </select>
-            </label>
-            <br>
-            <input type="submit" class="btn btn-primary" value="Add To Cart"/>
-            {% endif %}
-        </form>
+            <form method="post" action="{{ path("cart_add", {'id':product.id}) }}">
+                <label for="product_quantity"> Choice quantity:
+                    <select name="product_quantity">
+                        {% for quantity in range(1,product.quantity) %}
+                            <option value="{{ quantity }}">{{ quantity }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <br>
+                <input type="submit" class="btn btn-primary" value="Add To Cart"/>
+            </form>
+
+
+            <form method="post" action="{{ path("wish_list_add", {'id':product.id}) }}">
+                <input type="submit" class="btn btn-default" value="Add To Wish List"/>
+            </form>
+        {% endif %}
     </div>
 
     <h1>Reviews</h1>

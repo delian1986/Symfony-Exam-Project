@@ -80,7 +80,7 @@ class ProductController extends Controller
             9
         );
 
-        return $this->render('admin/products/all.html.twig',['products'=>$products]);
+        return $this->render('admin/products/all.html.twig', ['products' => $products]);
 
     }
 
@@ -96,8 +96,8 @@ class ProductController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($product);
             $em->flush();
-        }catch (DBALException $exception){
-            $this->addFlash('danger','You cannot delete product that is already purchased! You can only unlist it from the shop!');
+        } catch (DBALException $exception) {
+            $this->addFlash('danger', 'You cannot delete product that is already purchased! You can only unlist it from the shop!');
             return $this->redirectToRoute('admin_products_all');
         }
 
@@ -121,7 +121,12 @@ class ProductController extends Controller
             $fileName = $this->uploadPicture($form->get('image')->getData());
             $product->setImage($fileName);
             $this->productService->saveProduct($product);
-            return $this->redirectToRoute('product_details', ['slug' => $product->getSlug()]);
+
+            if ($product->isListed()) {
+                $this->productService->notifyUsersWithProductInTheirWishList($product->getUserWishList(), $product);
+            }
+
+            return $this->redirectToRoute('admin_products_all');
 
         }
 

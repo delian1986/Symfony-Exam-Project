@@ -105,6 +105,14 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $reviews;
 
+    /**
+     * @var ArrayCollection|Product[]
+     *
+     * @ORM\ManyToMany(targetEntity="ShopBundle\Entity\Product", inversedBy="userWishList")
+     * @ORM\JoinTable(name="users_wishlist")
+     */
+    private $wishList;
+
     public function __construct()
     {
         $this->roles = new ArrayCollection();
@@ -327,6 +335,25 @@ class User implements AdvancedUserInterface, \Serializable
         $this->reviews = $reviews;
         return $this;
     }
+
+    /**
+     * @return ArrayCollection|Product[]
+     */
+    public function getWishList()
+    {
+        return $this->wishList;
+    }
+
+    /**
+     * @param ArrayCollection|Product[] $wishList
+     */
+    public function setWishList($wishList): void
+    {
+        $this->wishList = $wishList;
+    }
+
+
+
 
 
 

@@ -40,7 +40,8 @@
                                 </li>
                             </ul>
                         <li><a href="{{ path('cart_show') }}"><span class="fa fa-shopping-cart"> Cart({{ app.user.itemsInCart }} products)</span></a></li>
-                        <li><a>Balance: <span class="fa fa-euro"> {{ app.user.getBalance }}</span></a></li>
+                        <li><a href="{{ path('wish_list_show') }}"><span class="fa fa-star"> Wish List ({{ app.user.wishlist|length }} products)</span></a></li>
+                        <li><a>Balance: <span class="fa fa-euro"> {{ app.user.getBalance|number_format(2) }}</span></a></li>
                     {% endblock %}
                 {% else %}
                     {% block navbar_guest %}

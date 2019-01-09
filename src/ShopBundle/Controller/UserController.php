@@ -18,7 +18,6 @@ use Symfony\Component\Routing\Annotation\Route;
  * @package ShopBundle\Controller
  * @Route("user")
  * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
-
  */
 class UserController extends Controller
 {

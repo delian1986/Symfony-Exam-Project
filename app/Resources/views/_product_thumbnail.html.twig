@@ -1,8 +1,9 @@
 <div class="col-sm-6 col-md-4">
     <div class="thumbnail {{ product.hasActivePromotion ?  "promo" : '' }} fixed-div">
         <h3 class="text-center">{{ product.name }}</h3>
-        <img class="img-thumbnail center-block fixed-image" src="{{ asset('uploads/images/' ~ product.image)}}"
-             alt="{{ product.name }}">
+        <a href="{{ path("product_details", {"slug": product.slug}) }}"> <img
+                    class="img-thumbnail center-block fixed-image" src="{{ asset('uploads/images/' ~ product.image) }}"
+                    alt="{{ product.name }}"></a>
         <div class="caption">
             <div class="text-center">
                 Rating: {{ product.averageRating }} / 5
@@ -23,9 +24,9 @@
             </div>
             <hr>
             <p class="text">
-            <a href="{{ path("product_details", {"slug": product.slug}) }}" class="btn btn-primary"
-               role="button"> Details
-            </a>
+                <a href="{{ path("product_details", {"slug": product.slug}) }}" class="btn btn-primary"
+                   role="button"> Details
+                </a>
         </div>
     </div>
 </div>
