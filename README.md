@@ -8,7 +8,7 @@ Symfony Project for PHP Web Course 2018
 
 •	User roles (user, administrator, editor)
 
-•	First ever registered user becomes Administrator adn shop owner
+•	First ever registered user becomes Administrator and shop owner
 
 •	Shop owner owns all products on the site. Receive payments and send emails to customers.
 
