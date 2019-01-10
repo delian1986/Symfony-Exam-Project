@@ -45,7 +45,7 @@ class ProductController extends Controller
         );
 
         return $this->render('product/all.html.twig', [
-            "products" => $products
+            'products' => $products
         ]);
     }
 
@@ -60,21 +60,23 @@ class ProductController extends Controller
             return $this->render('exception/error404.html.twig');
         }
 
-        //aways render product to admins and editors
-        if ($this->getUser()->isAdmin() || $this->getUser()->isEditor()){
-            return $this->render('product/details.html.twig', [
-                'product' => $product,
-                "review_add" => $this->createForm(ReviewAddType::class)->createView()
-            ]);
+        if ($this->getUser()) {
+            //aways render product to admins and editors
+            if ($this->getUser()->isAdmin() || $this->getUser()->isEditor()) {
+                return $this->render('product/details.html.twig', [
+                    'product' => $product,
+                    'review_add' => $this->createForm(ReviewAddType::class)->createView()
+                ]);
+            }
         }
 
         if (false === $product->isListed()) {
-            return $this->render('exception/unlisted_product.html.twig',['productName'=>$product->getName()]);
+            return $this->render('exception/unlisted_product.html.twig', ['productName' => $product->getName()]);
         }
 
         return $this->render('product/details.html.twig', [
             'product' => $product,
-            "review_add" => $this->createForm(ReviewAddType::class)->createView()
+            'review_add' => $this->createForm(ReviewAddType::class)->createView()
         ]);
     }
 
@@ -92,7 +94,7 @@ class ProductController extends Controller
         );
 
         if ($review) {
-            $this->addFlash("danger", "You already has reviewed this product!");
+            $this->addFlash('danger', 'You already has reviewed this product!');
             return $this->redirectToRoute('product_details', ['slug' => $product->getSlug()]);
         }
         $form = $this->createForm(ReviewAddType::class);
@@ -121,7 +123,7 @@ class ProductController extends Controller
     {
         $product = $review->getProduct();
         if ($review->getAuthor() !== $this->getUser()) {
-            $this->addFlash("danger", "You cannot delete this review!");
+            $this->addFlash('danger', 'You cannot delete this review!');
             return $this->redirectToRoute('product_details', ['slug' => $product->getSlug()]);
         }
 
