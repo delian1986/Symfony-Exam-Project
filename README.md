@@ -1,6 +1,6 @@
 Symfony Project for PHP Web Course 2018 
 =========
-# Shoping cart site build for SoftUni Symfony MVC Course Sepember 2018
+# Shopping cart site build for SoftUni Symfony MVC Course Sepember 2018
 
 ### Functionalities
 
