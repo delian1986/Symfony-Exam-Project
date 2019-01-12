@@ -65,5 +65,5 @@ Open http://localhost:8000
 ```
 
 #### Demo
-http://shop.delyan.eu
+https://shop.delyan.eu
 
