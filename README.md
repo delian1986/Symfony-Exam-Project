@@ -62,7 +62,7 @@ php bin/console doctrine:schema:create
 php bin/console doctrine:fixtures:load
 php bin/console server:run 
 Open http://localhost:8000 
-``
+```
 
 #### Demo
 http://shop.delyan.eu
