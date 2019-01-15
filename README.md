@@ -68,6 +68,6 @@ Open http://localhost:8000
 https://shop.delyan.eu
 
 Admin:
-user: demo@demo.com
-pass: demo
+• demo@demo.com
+• demo
 
