@@ -59,7 +59,7 @@ class CartController extends Controller
         $user = $this->getUser();
         $quantity = $request->request->get('product_quantity');
 
-        if ($quantity<1||$quantity>$product->getQuantity()){
+        if ($quantity <1 ||$quantity>$product->getQuantity()){
             $this->addFlash('danger','Invalid product quantity');
             return $this->redirectToRoute('product_details',['slug'=>$product->getSlug()]);
         }

@@ -185,7 +185,7 @@ class CartService implements CartServiceInterface
             return false;
         }
 
-        if ($userOpenOrder->getTotal() > $user->getBalance() || $userOpenOrder->getTotal()<0 ) {
+        if ($userOpenOrder->getTotal() > $user->getBalance() || $userOpenOrder->getTotal() <0 ) {
             $this->flashBag->add('danger', 'Your balance is too low to complete the order!');
             return false;
         }
