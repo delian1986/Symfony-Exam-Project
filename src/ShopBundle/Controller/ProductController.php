@@ -60,6 +60,7 @@ class ProductController extends Controller
             return $this->render('exception/error404.html.twig');
         }
 
+<<<<<<< HEAD
         if ($this->getUser()) {
             //aways render product to admins and editors
             if ($this->getUser()->isAdmin() || $this->getUser()->isEditor()) {
@@ -72,6 +73,18 @@ class ProductController extends Controller
 
         if (false === $product->isListed()) {
             return $this->render('exception/unlisted_product.html.twig', ['productName' => $product->getName()]);
+
+        if (false === $product->isListed()) {
+            //aways render product to admins and editors
+            if ($this->getUser()->isAdmin() || $this->getUser()->isEditor()){
+                return $this->render('product/details.html.twig', [
+                    'product' => $product,
+                    "review_add" => $this->createForm(ReviewAddType::class)->createView()
+                ]);
+            }
+
+            return $this->render('exception/unlisted_product.html.twig',['productName'=>$product->getName()]);
+
         }
 
         return $this->render('product/details.html.twig', [

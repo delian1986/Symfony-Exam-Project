@@ -54,7 +54,7 @@ Symfony Project for PHP Web Course 2018
   - Composer
 
 #### Steps
-``
+```sh
 git clone https://github.com/delian1986/Symfony-Exam-Project.git
 composer install  
 php bin/console doctrine:database:create
@@ -62,8 +62,14 @@ php bin/console doctrine:schema:create
 php bin/console doctrine:fixtures:load
 php bin/console server:run 
 Open http://localhost:8000 
-``
+```
 
 #### Demo
-http://shop.delyan.eu
+https://shop.delyan.eu
+
+Admin:
+
+• demo@demo.com
+
+• demo
 
