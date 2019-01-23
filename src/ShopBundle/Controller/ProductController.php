@@ -60,7 +60,7 @@ class ProductController extends Controller
             return $this->render('exception/error404.html.twig');
         }
 
-<<<<<<< HEAD
+
         if ($this->getUser()) {
             //aways render product to admins and editors
             if ($this->getUser()->isAdmin() || $this->getUser()->isEditor()) {
@@ -72,21 +72,20 @@ class ProductController extends Controller
         }
 
         if (false === $product->isListed()) {
-            return $this->render('exception/unlisted_product.html.twig', ['productName' => $product->getName()]);
 
-        if (false === $product->isListed()) {
-            //aways render product to admins and editors
-            if ($this->getUser()->isAdmin() || $this->getUser()->isEditor()){
-                return $this->render('product/details.html.twig', [
-                    'product' => $product,
-                    "review_add" => $this->createForm(ReviewAddType::class)->createView()
-                ]);
+            if (false === $product->isListed()) {
+                //aways render product to admins and editors
+                if ($this->getUser()->isAdmin() || $this->getUser()->isEditor()) {
+                    return $this->render('product/details.html.twig', [
+                        'product' => $product,
+                        "review_add" => $this->createForm(ReviewAddType::class)->createView()
+                    ]);
+                }
+
+                return $this->render('exception/unlisted_product.html.twig', ['productName' => $product->getName()]);
+
             }
-
-            return $this->render('exception/unlisted_product.html.twig',['productName'=>$product->getName()]);
-
         }
-
         return $this->render('product/details.html.twig', [
             'product' => $product,
             'review_add' => $this->createForm(ReviewAddType::class)->createView()
@@ -132,7 +131,8 @@ class ProductController extends Controller
      * @Route("/reviews/{id}/delete", name="product_delete_review", methods={"POST"})
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteReview(Review $review)
+    public
+    function deleteReview(Review $review)
     {
         $product = $review->getProduct();
         if ($review->getAuthor() !== $this->getUser()) {
@@ -153,7 +153,8 @@ class ProductController extends Controller
      * @Route("/reviews/{id}/edit", name="product_edit_review")
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editReview(Review $review, Request $request)
+    public
+    function editReview(Review $review, Request $request)
     {
         $product = $review->getProduct();
 
