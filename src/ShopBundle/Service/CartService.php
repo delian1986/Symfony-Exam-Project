@@ -146,7 +146,11 @@ class CartService implements CartServiceInterface
      */
     public function editItemQuantity(User $user, OrdersProducts $product, int $quantity): bool
     {
-
+        if ($quantity<1){
+            $this->flashBag->add('danger','Invalid quantity');
+            return false;
+        }
+        
         $product->setQuantity($quantity);
         $this->orderProductsRepository->save($product);
         $this->flashBag->add('success', "Product {$product->getProduct()->getName()} quantity edited!");
