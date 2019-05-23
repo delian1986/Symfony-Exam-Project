@@ -1,8 +1,8 @@
-Symfony Project for PHP Web Course 2018 
+# Symfony Project for PHP Web Course 2018 
 ## Demo
 https://shop.delyan.eu
 =========
-# Shopping cart site build for SoftUni Symfony MVC Course Sepember 2018
+# Shopping cart site for SoftUni Symfony MVC Course Sepember 2018
 
 ### Functionalities
 
